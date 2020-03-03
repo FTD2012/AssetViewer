@@ -8,6 +8,8 @@ namespace ResourceFormat
     public class TableConst
     {
         public static float TopBarHeight = 25;
+        public static float RootPathHeight = 25;
+        public static float ModeHeight = 25;
         public static int InspectorWidth = 400;
         public static int TableBorder = 10;
         public static float SplitterRatio = 0.3f;
@@ -40,7 +42,6 @@ namespace ResourceFormat
     {
         public static GUIStyle Toolbar = "Toolbar";
         public static GUIStyle ToolbarButton = "ToolbarButton";
-
         public static GUIStyle TextField = "TextField";
     }
 }

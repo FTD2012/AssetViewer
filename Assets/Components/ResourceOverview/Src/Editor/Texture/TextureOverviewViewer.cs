@@ -7,25 +7,36 @@ namespace ResourceFormat
 {
     public class TextureOverviewViewer
     {
+        // data
+        protected bool[] _modeInit;
+        protected List<object>[] _modeData; // object is TextureOverviewData
+        protected List<TextureInfo> _texInfoList;
+        protected string _rootPath = string.Empty;
+        protected TextureOverviewMode _mode = TextureOverviewMode.ReadWrite;
+
+        // view
+        protected TableView _dataTable;
+        protected TableView _showTable;
+
         public TextureOverviewViewer(EditorWindow hostWindow)
         {
-            m_data = new List<object>[(int)TextureOverviewMode.Count];
-            m_flag = new bool[(int)TextureOverviewMode.Count];
+            _modeInit = new bool[(int)TextureOverviewMode.Count];
+            _modeData = new List<object>[(int)TextureOverviewMode.Count];
             for (int i = 0; i < (int)TextureOverviewMode.Count; ++i)
             {
-                m_flag[i] = false;
-                m_data[i] = new List<object>();
+                _modeInit[i] = false;
+                _modeData[i] = new List<object>();
             }
-            m_dataTable = new TableView(hostWindow, typeof(TextureOverviewData));
+            _dataTable = new TableView(hostWindow, typeof(TextureOverviewData));
 
-            TextureOverviewData.SwitchDataTableMode(m_mode, m_dataTable);
+            TextureOverviewData.switchDataTableMode(_mode, _dataTable);
 
-            m_showTable = new TableView(hostWindow, typeof(TextureInfo));
-            m_showTable.AddColumn("Path", "Path", 0.8f, TextAnchor.MiddleLeft);
-            m_showTable.AddColumn("MemSize", "Memory", 0.2f, TextAnchor.MiddleCenter, "<fmt_bytes>");
+            _showTable = new TableView(hostWindow, typeof(TextureInfo));
+            _showTable.AddColumn("Path", "Path", 0.8f, TextAnchor.MiddleLeft);
+            _showTable.AddColumn("MemSize", "Memory", 0.2f, TextAnchor.MiddleCenter, "<fmt_bytes>");
 
-            m_dataTable.OnSelected += OnDataSelected;
-            m_showTable.OnSelected += OnInfoSelected;
+            _dataTable.OnSelected += OnDataSelected;
+            _showTable.OnSelected += OnInfoSelected;
         }
 
         public void OnDataSelected(object selected, int col)
@@ -33,9 +44,9 @@ namespace ResourceFormat
             TextureOverviewData overViewData = selected as TextureOverviewData;
             if (overViewData == null)
                 return;
-            if (m_showTable != null)
+            if (_showTable != null)
             {
-                m_showTable.RefreshData(overViewData.GetObjects());
+                _showTable.RefreshData(overViewData.getObject());
             }
         }
 
@@ -44,131 +55,100 @@ namespace ResourceFormat
             TextureInfo texInfo = selected as TextureInfo;
             if (texInfo == null)
                 return;
-            UnityEngine.Object obj = AssetDatabase.LoadAssetAtPath(texInfo.Path, typeof(UnityEngine.Object));
+            Object obj = AssetDatabase.LoadAssetAtPath(texInfo.Path, typeof(Object));
             EditorGUIUtility.PingObject(obj);
             Selection.activeObject = obj;
         }
 
-        public void SwitchMode(int mode)
+        public void SwitchMode(int mode, bool forceRefresh = false)
         {
-            m_mode = (TextureOverviewMode)mode;
-            if (!m_flag[mode] && m_texInfoList != null)
+            if (_mode == (TextureOverviewMode)mode && !forceRefresh)
             {
-                m_flag[mode] = true;
+                return;
+            }
 
-                List<object> data = m_data[mode];
-                for (int i = 0; i < m_texInfoList.Count; ++i)
-                { 
-                    TextureInfo texInfo = m_texInfoList[i];
+            _mode = (TextureOverviewMode)mode;
+            if (!_modeInit[mode] && _texInfoList != null)
+            {
+                _modeInit[mode] = true;
 
-                    EditorUtility.DisplayProgressBar("刷新数据", System.IO.Path.GetFileName(texInfo.Path), (i * 1.0f) / m_texInfoList.Count);
+                for (int i = 0; i < _texInfoList.Count; ++i)
+                {
+                    // 1. show progress bar
+                    EditorUtility.DisplayProgressBar("刷新数据", System.IO.Path.GetFileName(_texInfoList[i].Path), (i * 1.0f) / _texInfoList.Count);
+
+                    // 2. find data
                     bool find = false;
-                    for (int j = 0; j < data.Count; ++j)
+                    for (int j = 0; j < _modeData[mode].Count; j++)
                     {
-                        TextureOverviewData overViewData = data[j] as TextureOverviewData;
-                        if (overViewData.IsMatch(texInfo))
+                        TextureOverviewData overViewData = _modeData[mode][j] as TextureOverviewData;
+                        if (overViewData.isMatch(_texInfoList[i]))
                         {
                             find = true;
-                            overViewData.AddObject(texInfo);
+                            overViewData.addObject(_texInfoList[i]);
                             break;
-                        } 
+                        }
                     }
 
                     if (!find)
                     {
-                        TextureOverviewData overViewData = TextureOverviewData.CreateNew(m_mode, texInfo);
-                        overViewData.AddObject(texInfo);
-                        data.Add(overViewData);
+                        TextureOverviewData overViewData = TextureOverviewData.create(_mode, _texInfoList[i]);
+                        overViewData.addObject(_texInfoList[i]);
+                        _modeData[mode].Add(overViewData);
                     }
                 }
 
                 EditorUtility.ClearProgressBar();
             }
 
-            if (m_dataTable != null)
-            {
-                TextureOverviewData.SwitchDataTableMode(m_mode, m_dataTable);
-                m_dataTable.RefreshData(m_data[mode]);
-            }
+            TextureOverviewData.switchDataTableMode(_mode, _dataTable);
+            _dataTable.RefreshData(_modeData[mode]);
         }
 
         public void RefreshData()
         {
-            for (int i = 0; i < m_data.Length; ++i)
+            for (int i = 0; i < _modeData.Length; ++i)
             {
-                m_data[i].Clear();
-                m_flag[i] = false;
+                _modeData[i].Clear();
+                _modeInit[i] = false;
             }
 
-            m_texInfoList = TextureInfo.GetTextureInfoByDirectory("Assets/" + m_rootPath);
-            SwitchMode((int)m_mode);
+            _texInfoList = TextureInfo.GetTextureInfoByDirectory("Assets/" + _rootPath);
+            SwitchMode((int)_mode);
         }
 
-        public void Draw(Rect r)
+        public void Draw(Rect rect)
         {
-            int border = TableConst.TableBorder;
-            float split = TableConst.SplitterRatio;
-            int toolbarHeight = 50;
-
-            //GUILayout.BeginArea(r);
             GUILayout.BeginVertical();
-
-            GUILayout.BeginHorizontal(TableStyles.Toolbar);
             {
-                GUILayout.Label("RootPath: ", GUILayout.Width(100));
-                string rootPath = EditorGUILayout.TextField(m_rootPath, TableStyles.TextField, GUILayout.Width(360));
-                if (rootPath != m_rootPath)
+
+                // 1. root path
+                GUILayout.BeginHorizontal(TableStyles.Toolbar);
                 {
-                    m_rootPath = rootPath;
+                    GUILayout.Label("RootPath: ", GUILayout.Width(100));
+                    _rootPath = EditorGUILayout.TextField(_rootPath, TableStyles.TextField, GUILayout.Width(360)); /// TODO: ljm >>> change to select path
+                    if (GUILayout.Button("Refresh Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(120)))
+                    {
+                        RefreshData();
+                    }
                 }
-                if (GUILayout.Button("Refresh Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(120)))
+                GUILayout.EndHorizontal();
+
+                // 2. mode
+                GUILayout.BeginHorizontal(TableStyles.Toolbar);
                 {
-                    RefreshData();
+                    GUILayout.Label("Mode: ", GUILayout.Width(100));
+                    SwitchMode(GUILayout.SelectionGrid((int)_mode, OverviewTableConst.TextureModeName, OverviewTableConst.TextureModeName.Length, TableStyles.ToolbarButton)); /// TODO: ljm >>> add default detail info area selection 
                 }
-            }
-            GUILayout.EndHorizontal();
+                GUILayout.EndHorizontal();
 
-            GUILayout.BeginHorizontal(TableStyles.Toolbar);
-            {
-                GUILayout.Label("Mode: ", GUILayout.Width(100));
-                int selAlphaMode = GUILayout.SelectionGrid((int)m_mode,
-                    OverviewTableConst.TextureModeName, OverviewTableConst.TextureModeName.Length, TableStyles.ToolbarButton);
-                if (selAlphaMode != (int)m_mode)
-                {
-                    SwitchMode(selAlphaMode);
-                }
+                // 3. select area
+                float startY = TableConst.RootPathHeight + TableConst.ModeHeight + TableConst.TableBorder;
+                float height = rect.height - startY - 5;
+                _dataTable.Draw(new Rect(TableConst.TableBorder, startY, rect.width * TableConst.SplitterRatio - 1.5f * TableConst.TableBorder, height));
+                _showTable.Draw(new Rect(rect.width * TableConst.SplitterRatio + 0.5f * TableConst.TableBorder, startY, rect.width * (1.0f - TableConst.SplitterRatio) - 1.5f * TableConst.TableBorder, height));
             }
-            GUILayout.EndHorizontal();
-
-            int startY = toolbarHeight + border;
-            int height = (int)(r.height - startY - 5);
-            if (m_dataTable != null)
-            {
-                m_dataTable.Draw(new Rect(
-                    border, startY,
-                    r.width * split - 1.5f * border,
-                    height));
-            }
-
-            if (m_showTable != null)
-            {
-                m_showTable.Draw(new Rect(
-                    r.width * split + 0.5f * border,
-                    startY,
-                    r.width * (1.0f - split) - 1.5f * border,
-                    height));
-            }
-
             GUILayout.EndVertical();
-            //GUILayout.EndArea();
         }
-
-        protected TextureOverviewMode m_mode = TextureOverviewMode.ReadWrite;
-        protected string m_rootPath = string.Empty;
-        protected TableView m_dataTable;
-        protected TableView m_showTable;
-        protected List<object>[] m_data;
-        protected List<TextureInfo> m_texInfoList;
-        protected bool[] m_flag;
     }
 }

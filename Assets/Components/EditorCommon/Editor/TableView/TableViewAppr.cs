@@ -5,12 +5,16 @@ namespace EditorCommon
 {
     public class TableViewAppr
     {
+        private float _lineHeight = 25;
+        private GUIStyle _styleTitle;
+        private Texture2D _titleOrdinary;
+        private Texture2D _titleSelected;
+
         public float LineHeight
         {
             get { return _lineHeight; }
             set { _lineHeight = value; }
         }
-        float _lineHeight = 25;
 
         public string GetSortMark(bool descending)
         {
@@ -31,9 +35,6 @@ namespace EditorCommon
             _styleTitle.normal.textColor = selected ? Color.yellow : Color.white;
             return _styleTitle;
         }
-        private GUIStyle _styleTitle;
-        private Texture2D _titleOrdinary;
-        private Texture2D _titleSelected;
 
         public GUIStyle Style_Line
         {

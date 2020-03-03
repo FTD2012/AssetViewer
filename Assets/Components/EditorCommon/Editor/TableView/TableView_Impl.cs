@@ -7,16 +7,65 @@ namespace EditorCommon
 {
     public partial class TableView
     {
+        private int _sortSlot = 0;
+        private int _selectedCol = -1;
+        private object _selected = null;
+        private bool _descending = true;
+
+        private Type _itemType = null;
+        private EditorWindow _hostWindow = null;
+        private Vector2 _scrollPos = Vector2.zero;
+        private List<object> _lines = new List<object>();
+        private TableViewAppr _appearance = new TableViewAppr();
+        private Dictionary<object, Color> _specialTextColors = null;
+        private List<TableViewColDesc> _descArray = new List<TableViewColDesc>();
+
+        public bool Descending
+        {
+            get
+            {
+                return _descending;
+            }
+            set
+            {
+                _descending = value;
+            }
+        }
+
+        private Rect LabelRect(float width, int slot, int pos)
+        {
+            float accumPercent = 0.0f;
+            int count = Mathf.Min(slot, _descArray.Count);
+            for (int i = 0; i < count; i++)
+            {
+                accumPercent += _descArray[i].WidthInPercent;
+            }
+            return new Rect(width * accumPercent, pos * _appearance.LineHeight, width * _descArray[slot].WidthInPercent, _appearance.LineHeight);
+        }
+
+        private void SortData()
+        {
+            _lines.Sort((s1, s2) =>
+            {
+                if (_sortSlot >= _descArray.Count)
+                    return 0;
+
+                return _descArray[_sortSlot].Compare(s1, s2) * (_descending ? -1 : 1);
+            });
+        }
+
         private void DrawTitle(float width)
         {
-            for (int i = 0; i < m_descArray.Count; i++)
+            for (int i = 0; i < _descArray.Count; i++)
             {
-                var desc = m_descArray[i];
-
-                Rect r = LabelRect(width, i, 0);
+                TableViewColDesc desc = _descArray[i];
+                Rect rect = LabelRect(width, i, 0);
                 bool selected = _sortSlot == i;
-                GUI.Label(r, desc.TitleText + (selected ? _appearance.GetSortMark(_descending) : ""), _appearance.GetTitleStyle(selected));
-                if (Event.current.type == EventType.MouseDown && r.Contains(Event.current.mousePosition))
+
+                // title label
+                GUI.Label(rect, desc.TitleText + (selected ? _appearance.GetSortMark(_descending) : ""), _appearance.GetTitleStyle(selected));
+
+                if (Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition))
                 {
                     if (_sortSlot == i)
                     {
@@ -26,9 +75,8 @@ namespace EditorCommon
                     {
                         _sortSlot = i;
                     }
-
                     SortData();
-                    m_hostWindow.Repaint();
+                    _hostWindow.Repaint();
                 }
             }
         }
@@ -41,26 +89,26 @@ namespace EditorCommon
             GUIStyle style = new GUIStyle((pos % 2 != 0) ? _appearance.Style_Line : _appearance.Style_LineAlt);
             if (selectionHappens)
             {
-                m_selected = obj;
+                _selected = obj;
             }
 
             // note that the 'selected-style' assignment below should be isolated from the if-conditional statement above
             // since the above if is a one-time event, on the contrary, the 'selected-style' assignment below should be done every time in the drawing process
-            if (m_selected == obj)
+            if (_selected == obj)
             {
                 style = _appearance.Style_Selected;
             }
             else
             {
                 Color specialColor;
-                if (m_specialTextColors != null &&
-                    m_specialTextColors.TryGetValue(obj, out specialColor))
+                if (_specialTextColors != null &&
+                    _specialTextColors.TryGetValue(obj, out specialColor))
                 {
                     style.normal.textColor = specialColor;
                 }
             }
 
-            for (int i = 0; i < m_descArray.Count; i++)
+            for (int i = 0; i < _descArray.Count; i++)
                 DrawLineCol(pos, i, width, obj, style, selectionHappens);
         }
 
@@ -68,17 +116,17 @@ namespace EditorCommon
         {
             var rect = LabelRect(width, col, pos);
 
-            var desc = m_descArray[col];
+            var desc = _descArray[col];
             string text = desc.FormatObject(obj);
 
             if (selectionHappens && rect.Contains(Event.current.mousePosition))
             {
-                m_selectedCol = col;
+                _selectedCol = col;
                 if (OnSelected != null)
                     OnSelected(obj, col);
 
                 EditorGUIUtility.systemCopyBuffer = text;
-                m_hostWindow.Repaint();
+                _hostWindow.Repaint();
             }
 
             // internal sequential id
@@ -87,7 +135,7 @@ namespace EditorCommon
 
             // note that the 'selected-style' assignment below should be isolated from the if-conditional statement above
             // since the above if is a one-time event, on the contrary, the 'selected-style' assignment below should be done every time in the drawing process
-            if (m_selectedCol == col && m_selected == obj)
+            if (_selectedCol == col && _selected == obj)
             {
                 style = _appearance.Style_SelectedCell;
             }
@@ -96,50 +144,9 @@ namespace EditorCommon
             GUI.Label(rect, new GUIContent(text, text), style);
         }
 
-        private void SortData()
-        {
-            m_lines.Sort((s1, s2) =>
-            {
-                if (_sortSlot >= m_descArray.Count)
-                    return 0;
 
-                return m_descArray[_sortSlot].Compare(s1, s2) * (_descending ? -1 : 1);
-            });
-        }
 
-        private Rect LabelRect(float width, int slot, int pos)
-        {
-            float accumPercent = 0.0f;
-            int count = Mathf.Min(slot, m_descArray.Count);
-            for (int i = 0; i < count; i++)
-            {
-                accumPercent += m_descArray[i].WidthInPercent;
-            }
-            return new Rect(width * accumPercent, pos * _appearance.LineHeight, width * m_descArray[slot].WidthInPercent, _appearance.LineHeight);
-        }
 
-        List<TableViewColDesc> m_descArray = new List<TableViewColDesc>();
-        TableViewAppr _appearance = new TableViewAppr();
 
-        Vector2 _scrollPos = Vector2.zero;
-
-        int _sortSlot = 0;
-        bool _descending = true;
-        public bool Descending
-        {
-            get { return _descending; }
-            set
-            {
-                _descending = value;
-            }
-        }
-        Type m_itemType = null;
-        EditorWindow m_hostWindow = null;
-        List<object> m_lines = new List<object>();
-
-        object m_selected = null;
-        int m_selectedCol = -1;
-
-        Dictionary<object, Color> m_specialTextColors;
     }
 }

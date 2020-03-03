@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using EditorCommon;
 
 namespace ResourceFormat
 {
@@ -11,51 +12,42 @@ namespace ResourceFormat
 
     public class ResourceOverviewWin : EditorWindow
     {
-        [MenuItem("UComponents/ResourceOverviewWin")]
+        private TextureOverviewViewer _textureViewer;
+        private ModelOverviewViewer _modelViewer;
+        private OverviewWinType _currentMode = OverviewWinType.Texture;
+
+        [MenuItem("UComponents/ResourceOverviewWin " + EditorHotkeys.Ctrl_ + "X")]
         static void Create()
         {
-            ResourceOverviewWin resourceInfoWin = EditorWindow.GetWindow<ResourceOverviewWin>();
-            resourceInfoWin.minSize = new Vector2(800, 600);
+            ResourceOverviewWin resourceInfoWin = GetWindow<ResourceOverviewWin>();
+            resourceInfoWin.minSize = new Vector2(400, 300);
+            resourceInfoWin.titleContent = new GUIContent("ResViewer", (Texture)Resources.Load("icon1"));    /// TODO: ljm >>> refractor load meathod
+                                                                                                                    /// TODO: ljm >>> reset texture
         }
 
         void OnEnable()
         {
-            if (m_texOViewer == null)
-            {
-                m_texOViewer = new TextureOverviewViewer(this);
-                m_modelOViewer = new ModelOverviewViewer(this);
-            }
+            _textureViewer = new TextureOverviewViewer(this);
+            _modelViewer = new ModelOverviewViewer(this);
         }
 
         void OnGUI()
         {
-            if (m_texOViewer != null)
+            GUILayout.BeginHorizontal(TableStyles.Toolbar);
             {
-                GUILayout.BeginHorizontal(TableStyles.Toolbar);
-                GUILayout.Label("ResourceType: ", GUILayout.MaxWidth(100));
-                int selMode = GUILayout.SelectionGrid((int)m_currentMode,
-                    OverviewTableConst.OverviewModeName, OverviewTableConst.OverviewModeName.Length, TableStyles.ToolbarButton);
-                if (selMode != (int)m_currentMode)
-                {
-                    m_currentMode = (OverviewWinType)selMode;
-                }
-                GUILayout.EndHorizontal();
+                _currentMode = (OverviewWinType)GUILayout.SelectionGrid((int)_currentMode, OverviewTableConst.OverviewModeName, OverviewTableConst.OverviewModeName.Length, TableStyles.ToolbarButton);
+            }
+            GUILayout.EndHorizontal();
 
-                float yOffset = TableConst.TopBarHeight;
-                Rect viewRect = new Rect(0, yOffset, position.width, position.height - yOffset);
-
-                if (m_currentMode == OverviewWinType.Texture)
-                {
-                    m_texOViewer.Draw(viewRect);
-                }
-                else if (m_currentMode == OverviewWinType.Model)
-                {
-                    m_modelOViewer.Draw(viewRect);
-                }
+            Rect viewRect = new Rect(0, TableConst.TopBarHeight, position.width, position.height - TableConst.TopBarHeight);
+            if (_currentMode == OverviewWinType.Texture)
+            {
+                _textureViewer.Draw(viewRect);
+            }
+            else if (_currentMode == OverviewWinType.Model)
+            {
+                _modelViewer.Draw(viewRect);
             }
         }
-        private OverviewWinType m_currentMode = OverviewWinType.Texture;
-        private TextureOverviewViewer m_texOViewer;
-        private ModelOverviewViewer m_modelOViewer;
     }
 }
