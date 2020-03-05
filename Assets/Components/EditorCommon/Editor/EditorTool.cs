@@ -227,5 +227,10 @@ namespace EditorCommon
             File.WriteAllText(path, jsonStr);
         }
 
+        public static bool MouseClickInRect(Rect rect)
+        {
+            return Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition);
+        }
+
     }
 }

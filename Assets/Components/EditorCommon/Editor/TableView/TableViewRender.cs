@@ -22,14 +22,8 @@ namespace EditorCommon
 
         public bool Descending
         {
-            get
-            {
-                return _descending;
-            }
-            set
-            {
-                _descending = value;
-            }
+            get { return _descending; }
+            set { _descending = value; }
         }
 
         private Rect LabelRect(float width, int slot, int pos)
@@ -45,27 +39,18 @@ namespace EditorCommon
 
         private void SortData()
         {
-            _lines.Sort((s1, s2) =>
-            {
-                if (_sortSlot >= _descArray.Count)
-                    return 0;
-
-                return _descArray[_sortSlot].Compare(s1, s2) * (_descending ? -1 : 1);
-            });
+            _lines.Sort((s1, s2) => { return (_sortSlot >= _descArray.Count) ?  0 : _descArray[_sortSlot].Compare(s1, s2) * (_descending ? -1 : 1); });
         }
 
         private void DrawTitle(float width)
         {
             for (int i = 0; i < _descArray.Count; i++)
             {
-                TableViewColDesc desc = _descArray[i];
-                Rect rect = LabelRect(width, i, 0);
-                bool selected = _sortSlot == i;
-
                 // title label
-                GUI.Label(rect, desc.TitleText + (selected ? _appearance.GetSortMark(_descending) : ""), _appearance.GetTitleStyle(selected));
+                GUI.Label(LabelRect(width, i, 0), _descArray[i].TitleText + (_sortSlot == i ? _appearance.GetSortMark(_descending) : ""), _appearance.GetTitleStyle(_sortSlot == i));
 
-                if (Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition))
+                // click event
+                if (EditorTool.MouseClickInRect(LabelRect(width, i, 0)))
                 {
                     if (_sortSlot == i)
                     {
@@ -83,10 +68,10 @@ namespace EditorCommon
 
         private void DrawLine(int pos, object obj, float width)
         {
-            Rect r = new Rect(0, pos * _appearance.LineHeight, width, _appearance.LineHeight);
-            bool selectionHappens = Event.current.type == EventType.MouseDown && r.Contains(Event.current.mousePosition);
+            bool selectionHappens = EditorTool.MouseClickInRect(new Rect(0, pos * _appearance.LineHeight, width, _appearance.LineHeight));
+            GUIStyle style = new GUIStyle((pos % 2 != 0) ? _appearance.StyleLine : _appearance.StyleLineAlt);
 
-            GUIStyle style = new GUIStyle((pos % 2 != 0) ? _appearance.Style_Line : _appearance.Style_LineAlt);
+            // click event
             if (selectionHappens)
             {
                 _selected = obj;
@@ -96,34 +81,36 @@ namespace EditorCommon
             // since the above if is a one-time event, on the contrary, the 'selected-style' assignment below should be done every time in the drawing process
             if (_selected == obj)
             {
-                style = _appearance.Style_Selected;
+                style = _appearance.StyleSelected;
             }
             else
             {
                 Color specialColor;
-                if (_specialTextColors != null &&
-                    _specialTextColors.TryGetValue(obj, out specialColor))
+                if (_specialTextColors != null && _specialTextColors.TryGetValue(obj, out specialColor))
                 {
                     style.normal.textColor = specialColor;
                 }
             }
 
+            // draw line column
             for (int i = 0; i < _descArray.Count; i++)
+            {
                 DrawLineCol(pos, i, width, obj, style, selectionHappens);
+            }
         }
 
         private void DrawLineCol(int pos, int col, float width, object obj, GUIStyle style, bool selectionHappens = false)
         {
-            var rect = LabelRect(width, col, pos);
+            string text = _descArray[col].FormatObject(obj);
 
-            var desc = _descArray[col];
-            string text = desc.FormatObject(obj);
-
-            if (selectionHappens && rect.Contains(Event.current.mousePosition))
+            // set selection area
+            if (selectionHappens)
             {
                 _selectedCol = col;
                 if (OnSelected != null)
+                {
                     OnSelected(obj, col);
+                }
 
                 EditorGUIUtility.systemCopyBuffer = text;
                 _hostWindow.Repaint();
@@ -131,22 +118,19 @@ namespace EditorCommon
 
             // internal sequential id
             if (ShowInternalSeqID && col == 0)
+            {
                 text = pos.ToString() + ". " + text;
+            }
 
             // note that the 'selected-style' assignment below should be isolated from the if-conditional statement above
             // since the above if is a one-time event, on the contrary, the 'selected-style' assignment below should be done every time in the drawing process
             if (_selectedCol == col && _selected == obj)
             {
-                style = _appearance.Style_SelectedCell;
+                style = _appearance.StyleSelectedCell;
             }
 
-            style.alignment = desc.Alignment;
-            GUI.Label(rect, new GUIContent(text, text), style);
+            style.alignment = _descArray[col].Alignment;
+            GUI.Label(LabelRect(width, col, pos), new GUIContent(text, text), style);
         }
-
-
-
-
-
     }
 }

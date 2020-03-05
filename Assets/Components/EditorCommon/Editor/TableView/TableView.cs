@@ -84,7 +84,7 @@ namespace EditorCommon
                 Rect r = EditorGUILayout.BeginVertical(guiStyle);
                 {
                     // this silly line (empty label) is required by Unity to ensure the scroll bar appear as expected.
-                    PAEditorUtil.DrawLabel("", _appearance.Style_Line);
+                    PAEditorUtil.DrawLabel("", _appearance.StyleLine);
 
                     // these first/last calculatings are for smart clipping 
                     int firstLine = Mathf.Max((int)(_scrollPos.y / _appearance.LineHeight) - 1, 0);

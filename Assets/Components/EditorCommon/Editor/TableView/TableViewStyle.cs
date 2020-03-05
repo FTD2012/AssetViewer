@@ -36,7 +36,7 @@ namespace EditorCommon
             return _styleTitle;
         }
 
-        public GUIStyle Style_Line
+        public GUIStyle StyleLine
         {
             get
             {
@@ -51,7 +51,7 @@ namespace EditorCommon
         }
         private GUIStyle _styleLine;
 
-        public GUIStyle Style_LineAlt
+        public GUIStyle StyleLineAlt
         {
             get
             {
@@ -66,7 +66,7 @@ namespace EditorCommon
         }
         private GUIStyle _styleLineAlt;
 
-        public GUIStyle Style_Selected
+        public GUIStyle StyleSelected
         {
             get
             {
@@ -81,7 +81,7 @@ namespace EditorCommon
         }
         private GUIStyle _styleSelected;
 
-        public GUIStyle Style_SelectedCell
+        public GUIStyle StyleSelectedCell
         {
             get
             {

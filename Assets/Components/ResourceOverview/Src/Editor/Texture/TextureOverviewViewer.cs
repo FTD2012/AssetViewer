@@ -105,7 +105,7 @@ namespace ResourceFormat
             _dataTable.RefreshData(_modeData[mode]);
         }
 
-        public void RefreshData()
+        public void RefreshData(bool forceRefresh = true)
         {
             for (int i = 0; i < _modeData.Length; ++i)
             {
@@ -114,7 +114,7 @@ namespace ResourceFormat
             }
 
             _texInfoList = TextureInfo.GetTextureInfoByDirectory("Assets/" + _rootPath);
-            SwitchMode((int)_mode);
+            SwitchMode((int)_mode, forceRefresh);
         }
 
         public void Draw(Rect rect)
@@ -129,7 +129,7 @@ namespace ResourceFormat
                     _rootPath = EditorGUILayout.TextField(_rootPath, TableStyles.TextField, GUILayout.Width(360)); /// TODO: ljm >>> change to select path
                     if (GUILayout.Button("Refresh Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(120)))
                     {
-                        RefreshData();
+                        RefreshData(forceRefresh: true);
                     }
                 }
                 GUILayout.EndHorizontal();

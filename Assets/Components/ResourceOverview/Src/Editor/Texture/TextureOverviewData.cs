@@ -11,6 +11,7 @@ namespace ResourceFormat{
         Type,
         Size,
         WidthVSHeight,
+        StandaloneFormat,
         AndroidFormat,
         iOSFormat,
 
@@ -19,11 +20,13 @@ namespace ResourceFormat{
 
     public class TextureOverviewData
     {
+        /// Dont modify variable name
         public int Count;
         public int Memory;
         public bool ReadWriteEnable;
         public bool MipmapEnable;
         public TextureImporterType ImportType;
+        public TextureImporterFormat StandaloneFormat;
         public TextureImporterFormat AndroidFormat;
         public TextureImporterFormat IosFormat;
         public int SizeIndex;
@@ -31,13 +34,16 @@ namespace ResourceFormat{
         public bool WidthAndHeight;
         public TextureOverviewMode Mode;
 
-        public static TextureOverviewData CreateNew(TextureOverviewMode mode, TextureInfo texInfo)
+        protected List<object> _object = new List<object>();
+
+        public static TextureOverviewData create(TextureOverviewMode mode, TextureInfo texInfo)
         {
             TextureOverviewData retData = new TextureOverviewData();
             retData.Mode = mode;
             retData.ReadWriteEnable = texInfo.ReadWriteEnable;
             retData.MipmapEnable = texInfo.MipmapEnable;
             retData.ImportType = texInfo.ImportType;
+            retData.StandaloneFormat= texInfo.StandaloneFormat;
             retData.AndroidFormat = texInfo.AndroidFormat;
             retData.IosFormat = texInfo.IosFormat;
             retData.WidthAndHeight = texInfo.Width == texInfo.Height;
@@ -47,7 +53,7 @@ namespace ResourceFormat{
             return retData;
         }
 
-        public static void SwitchDataTableMode(TextureOverviewMode mode, TableView tableView)
+        public static void switchDataTableMode(TextureOverviewMode mode, TableView tableView)
         {
             float leftWide = 0.4f;
             tableView.ClearColumns();
@@ -68,6 +74,9 @@ namespace ResourceFormat{
             case TextureOverviewMode.WidthVSHeight:
                 tableView.AddColumn("WidthAndHeight", "Width VS Height", leftWide);
                 break;
+            case TextureOverviewMode.StandaloneFormat:
+                tableView.AddColumn("StandaloneFormat", "StandaloneFormat", leftWide);
+                break;
             case TextureOverviewMode.AndroidFormat:
                 tableView.AddColumn("AndroidFormat", "AndroidFormat", leftWide);
                 break;
@@ -79,7 +88,7 @@ namespace ResourceFormat{
             tableView.AddColumn("Memory", "Memory", (1.0f - leftWide) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>");
         }
 
-        public bool IsMatch(TextureInfo texInfo)
+        public bool isMatch(TextureInfo texInfo)
         {
             switch (Mode)
             {
@@ -93,6 +102,8 @@ namespace ResourceFormat{
                 return SizeIndex == OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
             case TextureOverviewMode.WidthVSHeight:
                 return WidthAndHeight == (texInfo.Width == texInfo.Height);
+            case TextureOverviewMode.StandaloneFormat:
+                return StandaloneFormat == texInfo.StandaloneFormat;
             case TextureOverviewMode.AndroidFormat:
                 return AndroidFormat == texInfo.AndroidFormat;
             case TextureOverviewMode.iOSFormat:
@@ -101,23 +112,23 @@ namespace ResourceFormat{
             return false;
         }
 
-        public void AddObject(TextureInfo texInfo)
+        public void addObject(TextureInfo texInfo)
         {
             Count = Count + 1;
             if (Mode == TextureOverviewMode.AndroidFormat)
                 Memory += texInfo.AndroidSize;
             else if (Mode == TextureOverviewMode.iOSFormat)
                 Memory += texInfo.IosSize;
+            else if (Mode == TextureOverviewMode.StandaloneFormat)
+                Memory += texInfo.StandaloneSize;
             else 
                 Memory += texInfo.MemSize;
-            m_objects.Add(texInfo);
+            _object.Add(texInfo);
         }
 
-        public List<object> GetObjects()
+        public List<object> getObject()
         {
-            return m_objects;
+            return _object;
         }
-
-        protected List<object> m_objects = new List<object>();
     }
 }

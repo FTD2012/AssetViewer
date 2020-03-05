@@ -22,12 +22,14 @@ namespace ResourceFormat
     {
         public bool ReadWriteEnable = false;
         public bool MipmapEnable = false;
+        public TextureImporterFormat StandaloneFormat;
         public TextureImporterFormat AndroidFormat;
         public TextureImporterFormat IosFormat;
         public TextureImporterType ImportType;
         public TextureWrapMode WrapMode;
         public FilterMode FilterMode;
         public TextureImporterShape ImportShape;
+        public int StandaloneSize;
         public int AndroidSize;
         public int IosSize;
         public int Width;
@@ -58,12 +60,12 @@ namespace ResourceFormat
             tInfo.MipmapEnable = tImport.mipmapEnabled;
             tInfo.WrapMode = tImport.wrapMode;
             tInfo.FilterMode = tImport.filterMode;
-            TextureImporterPlatformSettings settingAndroid = tImport.GetPlatformTextureSettings(EditorConst.PlatformAndroid);
-            tInfo.AndroidFormat = settingAndroid.format;
-            TextureImporterPlatformSettings settingIos = tImport.GetPlatformTextureSettings(EditorConst.PlatformIos);
-            tInfo.IosFormat = settingIos.format;
+            tInfo.StandaloneFormat = tImport.GetPlatformTextureSettings(EditorConst.PlatformStandalones).format;
+            tInfo.AndroidFormat = tImport.GetPlatformTextureSettings(EditorConst.PlatformAndroid).format;
+            tInfo.IosFormat = tImport.GetPlatformTextureSettings(EditorConst.PlatformIos).format;
             tInfo.Width = texture.width;
             tInfo.Height = texture.height;
+            tInfo.StandaloneSize = EditorTool.CalculateTextureSizeBytes(texture, tInfo.StandaloneFormat);
             tInfo.AndroidSize = EditorTool.CalculateTextureSizeBytes(texture, tInfo.AndroidFormat);
             tInfo.IosSize = EditorTool.CalculateTextureSizeBytes(texture, tInfo.IosFormat);
             tInfo.MemSize = Mathf.Max(tInfo.AndroidSize, tInfo.IosSize);
