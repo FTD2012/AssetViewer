@@ -13,7 +13,7 @@ namespace EditorCommon
 
         public static string PlatformAndroid = "Android";
         public static string PlatformIos = "iPhone";
-        public static string PlatformStandalones = "Standalones";
+        public static string PlatformStandalone = "Standalone";
 
         public static string EDITOR_ANICLIP_NAME = "__preview__Take 001";
         public static string[] EDITOR_CONTROL_NAMES = {"AnimatorStateMachine",

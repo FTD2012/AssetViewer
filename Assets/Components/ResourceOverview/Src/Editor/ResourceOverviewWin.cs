@@ -15,6 +15,7 @@ namespace ResourceFormat
         private TextureOverviewViewer _textureViewer;
         private ModelOverviewViewer _modelViewer;
         private OverviewWinType _currentMode = OverviewWinType.Texture;
+        private KeyCode _pressedKey;
 
         [MenuItem("UComponents/ResourceOverviewWin " + EditorHotkeys.Ctrl_ + "X")]
         static void Create()
@@ -31,6 +32,14 @@ namespace ResourceFormat
             _modelViewer = new ModelOverviewViewer(this);
         }
 
+        void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.F5)) // I don't know why this not working.
+            {
+                _pressedKey = KeyCode.F5;
+            }
+        }
+
         void OnGUI()
         {
             GUILayout.BeginHorizontal(TableStyles.Toolbar);
@@ -42,12 +51,14 @@ namespace ResourceFormat
             Rect viewRect = new Rect(0, TableConst.TopBarHeight, position.width, position.height - TableConst.TopBarHeight);
             if (_currentMode == OverviewWinType.Texture)
             {
-                _textureViewer.Draw(viewRect);
+                _textureViewer.Draw(viewRect, _pressedKey);
             }
             else if (_currentMode == OverviewWinType.Model)
             {
                 _modelViewer.Draw(viewRect);
             }
+
+            _pressedKey = KeyCode.None;
         }
     }
 }

@@ -35,40 +35,108 @@ namespace EditorCommon
             }
         }
 
-        public static int GetBitsPerPixel(TextureImporterFormat format)
+        public static TextureImporterFormat GetPlatformTextureSettings(TextureImporter textureImporter, string platform)
+        {
+            if (textureImporter == null)
+            {
+                Debug.LogError("Invalid texture importer.");
+                return TextureImporterFormat.Automatic;
+            }
+
+            if (platform == string.Empty)
+            {
+                Debug.LogError("Invlid platform.");
+                return TextureImporterFormat.Automatic;
+            }
+
+            TextureImporterFormat textureImporterFormat = textureImporter.GetPlatformTextureSettings(platform).format;
+            return (textureImporterFormat == TextureImporterFormat.Automatic) ? textureImporter.GetAutomaticFormat(platform) : textureImporterFormat;
+        }
+
+        public static bool IsTextureOverriden(TextureImporter textureImporter, string platform)
+        {
+            if (textureImporter == null)
+            {
+                Debug.LogError("Invalid texture importer.");
+                return false;
+            }
+
+            if (platform == string.Empty)
+            {
+                Debug.LogError("Invlid platform.");
+                return false;
+            }
+
+            return textureImporter.GetPlatformTextureSettings(platform).overridden;
+        }
+
+        // https://docs.unity3d.com/2017.4/Documentation/ScriptReference/TextureFormat.html
+        public static float GetBitsPerPixel(TextureImporterFormat format)
         {
             switch (format)
             {
-                case TextureImporterFormat.Alpha8: //	 Alpha-only texture format.
+                case TextureImporterFormat.Alpha8:      // Alpha-only texture format.
                     return 8;
-                case TextureImporterFormat.RGB24: // A color texture format.
+                case TextureImporterFormat.ARGB16:      // A 16 bits/pixel texture format. Texture stores color with an alpha channel.
+                    return 16;
+                case TextureImporterFormat.RGB24:       // Color texture format, 8-bits per channel.
                     return 24;
-                case TextureImporterFormat.RGBA32: //Color with an alpha channel texture format.
+                case TextureImporterFormat.RGBA32:      // Color with alpha texture format, 8-bits per channel.
                     return 32;
-                case TextureImporterFormat.ARGB32: //Color with an alpha channel texture format.
+                case TextureImporterFormat.ARGB32:      // Color with alpha texture format, 8-bits per channel.
                     return 32;
-                case TextureImporterFormat.DXT1: // Compressed color texture format.
+                case TextureImporterFormat.RGB16:       // A 16 bit color texture format.
+                    return 16;
+                case TextureImporterFormat.DXT1:        // Compressed color texture format.(Maybe: DXT is short for DirectX Texture)
                     return 4;
-                case TextureImporterFormat.DXT5: // Compressed color with alpha channel texture format.
+                case TextureImporterFormat.DXT5:        // Compressed color with alpha channel texture format.
                     return 8;
-                case TextureImporterFormat.PVRTC_RGB2: //	 PowerVR (iOS) 2 bits/pixel compressed color texture format.
+                case TextureImporterFormat.RGBA16:      // Color and alpha texture format, 4 bit per channel.
+                    return 16;
+                case TextureImporterFormat.RGBAHalf:    // RGB color and alpha texture format, 16 bit floating point per channel.
+                    return 64;
+                case TextureImporterFormat.PVRTC_RGB2:  // PowerVR (iOS) 2 bits/pixel compressed color texture format.
                     return 2;
-                case TextureImporterFormat.PVRTC_RGBA2: //	 PowerVR (iOS) 2 bits/pixel compressed with alpha channel texture format
+                case TextureImporterFormat.PVRTC_RGBA2: // PowerVR (iOS) 2 bits/pixel compressed with alpha channel texture format
                     return 2;
-                case TextureImporterFormat.PVRTC_RGB4: //	 PowerVR (iOS) 4 bits/pixel compressed color texture format.
+                case TextureImporterFormat.PVRTC_RGB4:  // PowerVR (iOS) 4 bits/pixel compressed color texture format.
                     return 4;
-                case TextureImporterFormat.PVRTC_RGBA4: //	 PowerVR (iOS) 4 bits/pixel compressed with alpha channel texture format
+                case TextureImporterFormat.PVRTC_RGBA4: // PowerVR (iOS) 4 bits/pixel compressed with alpha channel texture format
                     return 4;
-                case TextureImporterFormat.ETC_RGB4: //	 ETC (GLES2.0) 4 bits/pixel compressed RGB texture format.
+                case TextureImporterFormat.ETC_RGB4:    // ETC (GLES2.0) 4 bits/pixel compressed RGB texture format.
                     return 4;
-                case TextureImporterFormat.ETC2_RGB4:
+                case TextureImporterFormat.ETC2_RGB4:   // ETC2 (GLES 3.0) 4 bits/pixel compressed RGB texture format.
                     return 4;
-                case TextureImporterFormat.ETC2_RGBA8:
+                case TextureImporterFormat.ETC2_RGBA8:  // ETC2 (GLES 3.0) 8 bits/pixel compressed RGBA texture format.
                     return 8;
-                case TextureImporterFormat.ATC_RGB4: //	 ATC (ATITC) 4 bits/pixel compressed RGB texture format.
+                case TextureImporterFormat.ATC_RGB4:    // ATC (ATITC) 4 bits/pixel compressed RGB texture format.
                     return 4;
-                case TextureImporterFormat.ATC_RGBA8: //	 ATC (ATITC) 8 bits/pixel compressed RGB texture format.
+                case TextureImporterFormat.ATC_RGBA8:   // ATC (ATITC) 8 bits/pixel compressed RGB texture format.
                     return 8;
+                case TextureImporterFormat.ASTC_RGB_4x4:    // ASTC (4x4 pixel block in 128 bits) compressed RGB texture format. 4x4: 8 bits per pixel (64KB for a 256x256 Texture)
+                    return 8;
+                case TextureImporterFormat.ASTC_RGB_5x5:    // ASTC (5x5 pixel block in 128 bits) compressed RGB texture format. 5x5: 5.12 bits per pixel (43264 bytes for a 256x256 Texture)
+                    return 5.12f;
+                case TextureImporterFormat.ASTC_RGB_6x6:    // ASTC (6x6 pixel block in 128 bits) compressed RGB texture format. 6x6: 3.56 bits per pixel (29584 bytes for a 256x256 Texture)
+                    return 3.56f;
+                case TextureImporterFormat.ASTC_RGB_8x8:    // ASTC (8x8 pixel block in 128 bits) compressed RGB texture format. 8x8: 2 bits per pixel(16KB for a 256x256 Texture) ;
+                    return 2;
+                case TextureImporterFormat.ASTC_RGB_10x10:  // ASTC (10x10 pixel block in 128 bits) compressed RGB texture format. 10x10: 1.28 bits per pixel (10816 bytes for a 256x256 Textures)
+                    return 1.28f;
+                case TextureImporterFormat.ASTC_RGB_12x12:  // ASTC (12x12 pixel block in 128 bits) compressed RGB texture format. 12x12: 0.89 bits per pixel (7744 bytes for a 256x256 Texture)
+                    return 0.89f;
+                case TextureImporterFormat.ASTC_RGBA_4x4:    // ASTC (4x4 pixel block in 128 bits) compressed RGBA texture format. 4x4: 8 bits per pixel (64KB for a 256x256 Texture)
+                    return 8;
+                case TextureImporterFormat.ASTC_RGBA_5x5:    // ASTC (5x5 pixel block in 128 bits) compressed RGBA texture format. 5x5: 5.12 bits per pixel (43264 bytes for a 256x256 Texture)
+                    return 5.12f;
+                case TextureImporterFormat.ASTC_RGBA_6x6:    // ASTC (6x6 pixel block in 128 bits) compressed RGBA texture format. 6x6: 3.56 bits per pixel (29584 bytes for a 256x256 Texture)
+                    return 3.56f;
+                case TextureImporterFormat.ASTC_RGBA_8x8:    // ASTC (8x8 pixel block in 128 bits) compressed RGBA texture format. 8x8: 2 bits per pixel(16KB for a 256x256 Texture) ;
+                    return 2;
+                case TextureImporterFormat.ASTC_RGBA_10x10:  // ASTC (10x10 pixel block in 128 bits) compressed RGBA texture format. 10x10: 1.28 bits per pixel (10816 bytes for a 256x256 Textures)
+                    return 1.28f;
+                case TextureImporterFormat.ASTC_RGBA_12x12:  // ASTC (12x12 pixel block in 128 bits) compressed RGBA texture format. 12x12: 0.89 bits per pixel (7744 bytes for a 256x256 Texture)
+                    return 0.89f;
 #pragma warning disable 0618
                 case TextureImporterFormat.AutomaticCompressed:
                     return 4;
@@ -90,21 +158,21 @@ namespace EditorCommon
                 var bitsPerPixel = GetBitsPerPixel(format);
                 var mipMapCount = tTex2D.mipmapCount;
                 var mipLevel = 1;
-                var tSize = 0;
+                var tSize = 0.0f;
                 while (mipLevel <= mipMapCount)
                 {
-                    tSize += tWidth * tHeight * bitsPerPixel / 8;
+                    tSize += tWidth * tHeight * bitsPerPixel / 8; 
                     tWidth = tWidth / 2;
                     tHeight = tHeight / 2;
                     mipLevel++;
                 }
-                return tSize;
+                return (int)tSize;
             }
 
             if (tTexture is Cubemap)
             {
                 var bitsPerPixel = GetBitsPerPixel(format);
-                return tWidth * tHeight * 6 * bitsPerPixel / 8;
+                return (int)(tWidth * tHeight * 6 * bitsPerPixel / 8);
             }
             return 0;
         }

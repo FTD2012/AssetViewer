@@ -66,9 +66,9 @@ namespace EditorCommon
             }
         }
 
-        private void DrawLine(int pos, object obj, float width)
+        private void DrawLine(int pos, object obj, float width, bool rebuild)
         {
-            bool selectionHappens = EditorTool.MouseClickInRect(new Rect(0, pos * _appearance.LineHeight, width, _appearance.LineHeight));
+            bool selectionHappens = EditorTool.MouseClickInRect(new Rect(0, pos * _appearance.LineHeight, width, _appearance.LineHeight)) || (rebuild && pos == 0);
             GUIStyle style = new GUIStyle((pos % 2 != 0) ? _appearance.StyleLine : _appearance.StyleLineAlt);
 
             // click event

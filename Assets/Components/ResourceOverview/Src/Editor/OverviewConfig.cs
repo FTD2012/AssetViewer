@@ -34,7 +34,7 @@ namespace ResourceFormat
         }
 
         public static string[] TextureModeName = {
-            "ReadWrite", "MipMap", "Type", "Size",
+            "ReadWrite", "MipMap", "Type", "Resolution",
             "WidthVSHeight", "StandaloneFormat", "AndroidFormat", "iOSFormat" };
 
         public static string[] ModelModeName = {

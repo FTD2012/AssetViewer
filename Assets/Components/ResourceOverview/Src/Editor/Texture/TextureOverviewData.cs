@@ -9,7 +9,7 @@ namespace ResourceFormat{
         ReadWrite = 0,
         MipMap,
         Type,
-        Size,
+        Resolution,
         WidthVSHeight,
         StandaloneFormat,
         AndroidFormat,
@@ -55,37 +55,7 @@ namespace ResourceFormat{
 
         public static void switchDataTableMode(TextureOverviewMode mode, TableView tableView)
         {
-            float leftWide = 0.4f;
-            tableView.ClearColumns();
-            switch (mode)
-            {
-            case TextureOverviewMode.ReadWrite:
-                tableView.AddColumn("ReadWriteEnable", "R/W Enable", leftWide);
-                break;
-            case TextureOverviewMode.MipMap:
-                tableView.AddColumn("MipmapEnable", "MipmapEnable", leftWide);
-                break;
-            case TextureOverviewMode.Type:
-                tableView.AddColumn("ImportType", "TextureType", leftWide);
-                break;
-            case TextureOverviewMode.Size:
-                tableView.AddColumn("SizeStr", "Size Range", leftWide);
-                break;
-            case TextureOverviewMode.WidthVSHeight:
-                tableView.AddColumn("WidthAndHeight", "Width VS Height", leftWide);
-                break;
-            case TextureOverviewMode.StandaloneFormat:
-                tableView.AddColumn("StandaloneFormat", "StandaloneFormat", leftWide);
-                break;
-            case TextureOverviewMode.AndroidFormat:
-                tableView.AddColumn("AndroidFormat", "AndroidFormat", leftWide);
-                break;
-            case TextureOverviewMode.iOSFormat:
-                tableView.AddColumn("IosFormat", "iOSFormat", leftWide);
-                break;
-            }
-            tableView.AddColumn("Count", "Count", (1.0f - leftWide) / 2.0f);
-            tableView.AddColumn("Memory", "Memory", (1.0f - leftWide) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>");
+            
         }
 
         public bool isMatch(TextureInfo texInfo)
@@ -98,7 +68,7 @@ namespace ResourceFormat{
                 return MipmapEnable == texInfo.MipmapEnable;
             case TextureOverviewMode.Type:
                 return ImportType == texInfo.ImportType;
-            case TextureOverviewMode.Size:
+            case TextureOverviewMode.Resolution:
                 return SizeIndex == OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
             case TextureOverviewMode.WidthVSHeight:
                 return WidthAndHeight == (texInfo.Width == texInfo.Height);
@@ -114,16 +84,25 @@ namespace ResourceFormat{
 
         public void addObject(TextureInfo texInfo)
         {
-            Count = Count + 1;
             if (Mode == TextureOverviewMode.AndroidFormat)
+            {
                 Memory += texInfo.AndroidSize;
+            }
             else if (Mode == TextureOverviewMode.iOSFormat)
+            {
                 Memory += texInfo.IosSize;
+            }
             else if (Mode == TextureOverviewMode.StandaloneFormat)
+            {
                 Memory += texInfo.StandaloneSize;
-            else 
+            }
+            else
+            {
                 Memory += texInfo.MemSize;
+            }
+
             _object.Add(texInfo);
+            Count++;
         }
 
         public List<object> getObject()

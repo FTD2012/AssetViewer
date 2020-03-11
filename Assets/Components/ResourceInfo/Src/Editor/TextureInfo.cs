@@ -34,6 +34,9 @@ namespace ResourceFormat
         public int IosSize;
         public int Width;
         public int Height;
+        public bool StandaloneOverriden;
+        public bool AndroidOverriden;
+        public bool IosOverriden;
 
         public static TextureInfo CreateTextureInfo(string assetPath)
         {
@@ -60,15 +63,18 @@ namespace ResourceFormat
             tInfo.MipmapEnable = tImport.mipmapEnabled;
             tInfo.WrapMode = tImport.wrapMode;
             tInfo.FilterMode = tImport.filterMode;
-            tInfo.StandaloneFormat = tImport.GetPlatformTextureSettings(EditorConst.PlatformStandalones).format;
-            tInfo.AndroidFormat = tImport.GetPlatformTextureSettings(EditorConst.PlatformAndroid).format;
-            tInfo.IosFormat = tImport.GetPlatformTextureSettings(EditorConst.PlatformIos).format;
-            tInfo.Width = texture.width;
-            tInfo.Height = texture.height;
+            tInfo.StandaloneFormat = EditorTool.GetPlatformTextureSettings(tImport, EditorConst.PlatformStandalone);
+            tInfo.AndroidFormat = EditorTool.GetPlatformTextureSettings(tImport, EditorConst.PlatformAndroid);
+            tInfo.IosFormat = EditorTool.GetPlatformTextureSettings(tImport, EditorConst.PlatformIos);
+            tInfo.StandaloneOverriden = EditorTool.IsTextureOverriden(tImport, EditorConst.PlatformStandalone);
+            tInfo.AndroidOverriden = EditorTool.IsTextureOverriden(tImport, EditorConst.PlatformAndroid);
+            tInfo.IosOverriden = EditorTool.IsTextureOverriden(tImport, EditorConst.PlatformIos);
             tInfo.StandaloneSize = EditorTool.CalculateTextureSizeBytes(texture, tInfo.StandaloneFormat);
             tInfo.AndroidSize = EditorTool.CalculateTextureSizeBytes(texture, tInfo.AndroidFormat);
             tInfo.IosSize = EditorTool.CalculateTextureSizeBytes(texture, tInfo.IosFormat);
-            tInfo.MemSize = Mathf.Max(tInfo.AndroidSize, tInfo.IosSize);
+            tInfo.MemSize = Mathf.Max(tInfo.StandaloneSize, tInfo.AndroidSize, tInfo.IosSize);
+            tInfo.Width = texture.width;
+            tInfo.Height = texture.height;
 
             if (Selection.activeObject != texture)
             {

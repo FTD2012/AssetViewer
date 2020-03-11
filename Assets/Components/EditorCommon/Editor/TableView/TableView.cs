@@ -68,7 +68,7 @@ namespace EditorCommon
             _specialTextColors = specialTextColors;
         }
 
-        public void Draw(Rect area)
+        public void Draw(Rect area, bool rebuild = false)
         {
             GUILayout.BeginArea(area);
             DrawTitle(area.width - 15);
@@ -93,7 +93,7 @@ namespace EditorCommon
 
                     for (int i = firstLine; i < lastLine; i++)
                     {
-                        DrawLine(i, _lines[i], r.width);
+                        DrawLine(i, _lines[i], r.width, rebuild);
                     }
                 }
                 EditorGUILayout.EndVertical();
