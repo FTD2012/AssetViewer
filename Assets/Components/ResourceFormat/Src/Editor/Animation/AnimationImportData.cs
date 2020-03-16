@@ -32,17 +32,17 @@ namespace ResourceFormat
         {
             TotalCount = TotalCount + 1;
             TotalMemuse = TotalMemuse + textureInfo.MemSize;
-            m_objects.Add(textureInfo);
+            _object.Add(textureInfo);
             if (m_initUnFormatList && !IsFormatAnimation(textureInfo))
             {
-                m_unFortmatObjects.Add(textureInfo);
+                _unFortmatObject.Add(textureInfo);
             }
         }
         public List<object> GetObjects(bool unformat)
         {
             if (!unformat)
             {
-                return m_objects;
+                return _object;
             }
             else
             {
@@ -51,7 +51,7 @@ namespace ResourceFormat
                     m_initUnFormatList = true;
                     _InitUnFormatList();
                 }
-                return m_unFortmatObjects;
+                return _unFortmatObject;
             }
         }
         public bool IsFormatAnimation(AnimationInfo tInfo)
@@ -64,16 +64,16 @@ namespace ResourceFormat
         }
         private void _InitUnFormatList()
         {
-            for (int i = 0; i < m_objects.Count; ++i)
+            for (int i = 0; i < _object.Count; ++i)
             {
-                AnimationInfo aniInfo = m_objects[i] as AnimationInfo;
+                AnimationInfo aniInfo = _object[i] as AnimationInfo;
                 if (aniInfo == null)
                     continue;
                 string name = System.IO.Path.GetFileName(aniInfo.Path);
-                EditorUtility.DisplayProgressBar("更新非法动作数据", name, (i * 1.0f) / m_objects.Count);
+                EditorUtility.DisplayProgressBar("更新非法动作数据", name, (i * 1.0f) / _object.Count);
                 if (!IsFormatAnimation(aniInfo))
                 {
-                    m_unFortmatObjects.Add(aniInfo);
+                    _unFortmatObject.Add(aniInfo);
                 }
             }
             EditorUtility.ClearProgressBar();

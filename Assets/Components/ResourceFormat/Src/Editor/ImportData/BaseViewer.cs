@@ -5,11 +5,11 @@ namespace ResourceFormat
 {
     public class BaseViewer
     {
+        protected TableView _dataTable;
+        protected TableView _showTable;
+
         public virtual void OnLeave() { }
         public virtual void OnEnter() { }
         public virtual void Draw(Rect view) { }
-
-        protected TableView m_dataTable;
-        protected TableView m_showTable;
     }
 }

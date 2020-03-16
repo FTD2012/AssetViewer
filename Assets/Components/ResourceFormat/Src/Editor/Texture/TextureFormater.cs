@@ -9,13 +9,13 @@ namespace ResourceFormat
     {
         public static void ApplyFormatToObject(TextureImportData data)
         {
-            List<object> unFortmatObject = data.GetObjects(true);
+            List<object> unformatObject = data.GetObject(true);
 
-            for (int i = 0; i < unFortmatObject.Count; ++i)
+            for (int i = 0; i < unformatObject.Count; ++i)
             {
-                TextureInfo texInfo = unFortmatObject[i] as TextureInfo;
+                TextureInfo texInfo = unformatObject[i] as TextureInfo;
                 string name = System.IO.Path.GetFileName(texInfo.Path);
-                if (EditorUtility.DisplayCancelableProgressBar("设置贴图格式", name, (i * 1.0f) / unFortmatObject.Count))
+                if (EditorUtility.DisplayCancelableProgressBar("设置贴图格式", name, (i * 1.0f) / unformatObject.Count))
                 {
                     Debug.LogWarning("ApplyFormatTextureObject Stop.");
                     break;
@@ -57,11 +57,11 @@ namespace ResourceFormat
             }
             EditorUtility.ClearProgressBar();
 
-            for (int i = 0; i < unFortmatObject.Count; ++i)
+            for (int i = 0; i < unformatObject.Count; ++i)
             {
-                TextureInfo texInfo = unFortmatObject[i] as TextureInfo;
+                TextureInfo texInfo = unformatObject[i] as TextureInfo;
                 string name = System.IO.Path.GetFileName(texInfo.Path);
-                EditorUtility.DisplayProgressBar("更新贴图数据", name, (i * 1.0f) / unFortmatObject.Count);
+                EditorUtility.DisplayProgressBar("更新贴图数据", name, (i * 1.0f) / unformatObject.Count);
                 TextureInfo.CreateTextureInfo(texInfo.Path);
             }
             EditorUtility.ClearProgressBar();

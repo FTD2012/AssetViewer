@@ -13,6 +13,12 @@ namespace ResourceFormat
         public static int InspectorWidth = 400;
         public static int TableBorder = 10;
         public static float SplitterRatio = 0.3f;
+        public static float Space2 = 2;
+        public static float Space4 = 4;
+        public static float Space5 = 5;
+        public static float Space6 = 6;
+        public static float Space7 = 7;
+        public static float Space8 = 8;
 
         public static string CurrentMode = "Resource Format Current Mode";
         public static string[] Modes = new string[] { "Texture", "Model", "Animation" };
@@ -43,5 +49,9 @@ namespace ResourceFormat
         public static GUIStyle Toolbar = "Toolbar";
         public static GUIStyle ToolbarButton = "ToolbarButton";
         public static GUIStyle TextField = "TextField";
+        public static GUIStyle CircularToggle = "CircularToggle";
+        public static GUIStyle AnimationEventBackground = "AnimationEventBackground";
+        public static GUIStyle BoldLabel = "BoldLabel";
+        public static GUIStyle HeaderLabel = "HeaderLabel";
     }
 }

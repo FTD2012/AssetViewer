@@ -1,3 +1,4 @@
+using EditorCommon;
 using UnityEditor;
 using UnityEngine;
 
@@ -5,29 +6,27 @@ namespace ResourceFormat
 {
     public class ResourceFormatWin : EditorWindow
     {
-        private ViewerMgr m_modeMgr;
+        private ModeManager _modeManager;
 
-        [MenuItem("UComponents/ResourceFormatWin")]
+        [MenuItem("UComponents/ResourceFormatWin " + EditorHotkeys.Ctrl_ + "F")]
         static void Create()
         {
-            ResourceFormatWin resourceInfoWin = EditorWindow.GetWindow<ResourceFormatWin>();
-            resourceInfoWin.minSize = new Vector2(1000, 800);
+            ResourceFormatWin resourceFormatWin = GetWindow<ResourceFormatWin>();
+            resourceFormatWin.minSize = new Vector2(1000, 800);
+            resourceFormatWin.titleContent = new GUIContent("ResFormat", (Texture)Resources.Load("icon1"));    /// TODO: ljm >>> refractor load meathod
         }
 
         void OnEnable()
         {
-            if (m_modeMgr == null)
+            if (_modeManager == null)
             {
-                m_modeMgr = new ViewerMgr(this);
+                _modeManager = new ModeManager(this);
             }
         }
 
         void OnGUI()
         {
-            if (m_modeMgr != null)
-            {
-                m_modeMgr.OnGUI(position);
-            }
+            _modeManager.OnGUI(position);
         }
     }
 }

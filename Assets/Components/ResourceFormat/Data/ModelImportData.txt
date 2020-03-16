@@ -1,3 +1,21 @@
 [
     
+    {
+        "ReadWriteEnable" : false,        
+        "OptimizeMesh" : false,        
+        "ImportMaterials" : false,        
+        "ImportAnimation" : false,        
+        "ImportUV2" : true,        
+        "ImportUV3" : true,        
+        "ImportUV4" : true,        
+        "ImportNormal" : true,        
+        "ImportTangent" : true,        
+        "MeshCompression" : 0,        
+        "RootPath" : "",        
+        "FileNameMatch" : "*.*",        
+        "Index" : 0,        
+        "TotalCount" : 0,        
+        "TotalMemuse" : 0,        
+        "PreBuild" : true
+    }
 ]

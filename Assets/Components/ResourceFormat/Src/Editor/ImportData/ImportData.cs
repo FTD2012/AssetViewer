@@ -11,6 +11,9 @@ namespace ResourceFormat
         public int TotalMemuse = 0;
         public bool PreBuild = true;
 
+        protected List<object> _object = new List<object>();
+        protected List<object> _unFortmatObject = new List<object>();
+
         public virtual bool IsMatch(string path)
         {
             return ImportRegex.IsMatch(this, path);
@@ -22,21 +25,17 @@ namespace ResourceFormat
             FileNameMatch = data.FileNameMatch;
             PreBuild = data.PreBuild;
         }
+        public virtual List<object> GetObject()
+        {
+            return _object;
+        }
 
         public virtual void ClearObject()
         {
-            m_objects.Clear();
-            m_unFortmatObjects.Clear();
+            _object.Clear();
+            _unFortmatObject.Clear();
             TotalCount = 0;
             TotalMemuse = 0;
         }
-
-        public virtual List<object> GetObjects()
-        {
-            return m_objects;
-        }
-
-        protected List<object> m_objects = new List<object>();
-        protected List<object> m_unFortmatObjects = new List<object>();
     }
 }

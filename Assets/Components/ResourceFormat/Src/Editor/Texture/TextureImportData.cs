@@ -91,17 +91,17 @@ namespace ResourceFormat
         {
             TotalCount = TotalCount + 1;
             TotalMemuse = TotalMemuse + textureInfo.MemSize;
-            m_objects.Add(textureInfo);
+            _object.Add(textureInfo);
             if (m_initUnFormatList && IsFormatTexture(textureInfo))
             {
-                m_unFortmatObjects.Add(textureInfo);
+                _unFortmatObject.Add(textureInfo);
             }
         }
-        public List<object> GetObjects(bool unformat)
+        public List<object> GetObject(bool unformat)
         {
             if (!unformat)
             {
-                return m_objects;
+                return _object;
             }
             else
             {
@@ -110,7 +110,7 @@ namespace ResourceFormat
                     m_initUnFormatList = true;
                     _InitUnFormatList();
                 }
-                return m_unFortmatObjects;
+                return _unFortmatObject;
             }
         }
         public TextureImporterFormat GetFormatByAlphaMode(TextureImporterFormat format, TextureImporter tImporter)
@@ -161,16 +161,16 @@ namespace ResourceFormat
         }
         private void _InitUnFormatList()
         {
-            for (int i = 0; i < m_objects.Count; ++i)
+            for (int i = 0; i < _object.Count; ++i)
             {
-                TextureInfo texInfo = m_objects[i] as TextureInfo;
+                TextureInfo texInfo = _object[i] as TextureInfo;
                 if (texInfo == null)
                     continue;
                 string name = System.IO.Path.GetFileName(texInfo.Path);
-                EditorUtility.DisplayProgressBar("更新非法贴图数据", name, (i * 1.0f) / m_objects.Count);
+                EditorUtility.DisplayProgressBar("更新非法贴图数据", name, (i * 1.0f) / _object.Count);
                 if (!IsFormatTexture(texInfo))
                 {
-                    m_unFortmatObjects.Add(texInfo);
+                    _unFortmatObject.Add(texInfo);
                 }
             }
             EditorUtility.ClearProgressBar();

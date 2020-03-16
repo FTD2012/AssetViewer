@@ -9,18 +9,18 @@ namespace ResourceFormat
     {
         public ModelDataControl(TableView dataTable, TableView showTable)
         {
-            m_dataTable = dataTable;
-            m_showTable = showTable;
+            _dataTable = dataTable;
+            _showTable = showTable;
 
-            m_dataList = ConfigData.ModelSelectData;
-            for (int i = 0; i < m_dataList.Count; ++i)
+            _dataList = ConfigData.ModelSelectData;
+            for (int i = 0; i < _dataList.Count; ++i)
             {
-                m_dataList[i].ClearObject();
+                _dataList[i].ClearObject();
             }
 
-            if (m_dataTable != null)
+            if (_dataTable != null)
             {
-                m_dataTable.RefreshData(EditorTool.ToObjectList<ModelImportData>(m_dataList));
+                _dataTable.RefreshData(EditorTool.ToObjectList<ModelImportData>(_dataList));
             }
         }
 
@@ -30,7 +30,7 @@ namespace ResourceFormat
             set { m_showUnformatObject = value; }
         }
 
-        protected override void _RefreshList(List<string> list)
+        protected override void RefreshList(List<string> list)
         {
             m_modelInfo = new List<ModelInfo>();
             for (int i = 0; i < list.Count; ++i)
@@ -60,11 +60,11 @@ namespace ResourceFormat
                 {
                     string name = System.IO.Path.GetFileName(m_modelInfo[i].Path);
                     EditorUtility.DisplayProgressBar("更新模型表数据", name, (i * 1.0f) / m_modelInfo.Count);
-                    for (int j = m_dataList.Count - 1; j >= 0; --j)
+                    for (int j = _dataList.Count - 1; j >= 0; --j)
                     {
-                        if (m_dataList[j].IsMatch(m_modelInfo[i].Path))
+                        if (_dataList[j].IsMatch(m_modelInfo[i].Path))
                         {
-                            m_dataList[j].AddObject(m_modelInfo[i]);
+                            _dataList[j].AddObject(m_modelInfo[i]);
                             break;
                         }
                     }
@@ -79,11 +79,11 @@ namespace ResourceFormat
             if (texSelectData == null)
                 return;
 
-            m_editorData.CopyData(texSelectData);
-            m_index = texSelectData.Index;
+            _editorData.CopyData(texSelectData);
+            _index = texSelectData.Index;
             if (texSelectData != null)
             {
-                m_showTable.RefreshData(texSelectData.GetObjects(m_showUnformatObject));
+                _showTable.RefreshData(texSelectData.GetObjects(m_showUnformatObject));
             }
         }
 

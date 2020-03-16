@@ -11,35 +11,35 @@ namespace ResourceFormat
             // m_hostWindow = hostWindow;
 
             // create the table with a specified object type
-            m_dataTable = new TableView(hostWindow, typeof(AnimationImportData));
+            _dataTable = new TableView(hostWindow, typeof(AnimationImportData));
 
             // setup the description for content
-            m_dataTable.AddColumn("RootPath", "PackageRootPath", 0.35f, TextAnchor.MiddleLeft);
-            m_dataTable.AddColumn("FileNameMatch", "Name", 0.05f);
-            m_dataTable.AddColumn("Index", "Priority", 0.05f);
-            m_dataTable.AddColumn("TotalCount", "Count", 0.05f);
-            m_dataTable.AddColumn("TotalMemuse", "Memory", 0.1f, TextAnchor.MiddleCenter, "<fmt_bytes>");
-            m_dataTable.AddColumn("AnimationType", "AnimationType", 0.2f);
-            m_dataTable.AddColumn("AnimationCompression", "AnimationCompression", 0.2f);
+            _dataTable.AddColumn("RootPath", "PackageRootPath", 0.35f, TextAnchor.MiddleLeft);
+            _dataTable.AddColumn("FileNameMatch", "Name", 0.05f);
+            _dataTable.AddColumn("Index", "Priority", 0.05f);
+            _dataTable.AddColumn("TotalCount", "Count", 0.05f);
+            _dataTable.AddColumn("TotalMemuse", "Memory", 0.1f, TextAnchor.MiddleCenter, "<fmt_bytes>");
+            _dataTable.AddColumn("AnimationType", "AnimationType", 0.2f);
+            _dataTable.AddColumn("AnimationCompression", "AnimationCompression", 0.2f);
 
 
             // sorting
-            m_dataTable.SetSortParams(2, false);
+            _dataTable.SetSortParams(2, false);
 
-            m_showTable = new TableView(hostWindow, typeof(AnimationInfo));
+            _showTable = new TableView(hostWindow, typeof(AnimationInfo));
 
-            m_showTable.AddColumn("Path", "Path", 0.5f, TextAnchor.MiddleLeft);
-            m_showTable.AddColumn("MemSize", "Memory", 0.1f, TextAnchor.MiddleCenter, "<fmt_bytes>");
-            m_showTable.AddColumn("AnimationType", "AnimationType", 0.2f);
-            m_showTable.AddColumn("AnimationCompression", "AnimationCompression", 0.2f);
+            _showTable.AddColumn("Path", "Path", 0.5f, TextAnchor.MiddleLeft);
+            _showTable.AddColumn("MemSize", "Memory", 0.1f, TextAnchor.MiddleCenter, "<fmt_bytes>");
+            _showTable.AddColumn("AnimationType", "AnimationType", 0.2f);
+            _showTable.AddColumn("AnimationCompression", "AnimationCompression", 0.2f);
 
-            m_showTable.SetSortParams(1, true);
+            _showTable.SetSortParams(1, true);
 
-            m_control = new AnimationDataControl(m_dataTable, m_showTable);
+            m_control = new AnimationDataControl(_dataTable, _showTable);
 
             // register the event-handling function
-            m_dataTable.OnSelected += m_control.OnDataSelected;
-            m_showTable.OnSelected += m_control.OnInfoSelected;
+            _dataTable.OnSelected += m_control.OnDataSelected;
+            _showTable.OnSelected += m_control.OnInfoSelected;
         }
         public override void Draw(Rect r)
         {
@@ -122,14 +122,14 @@ namespace ResourceFormat
 
             int startY = toolbarHeight + border;
             int height = (int)(r.height - startY - border * 2);
-            if (m_dataTable != null)
+            if (_dataTable != null)
             {
-                m_dataTable.Draw(new Rect(border, startY, r.width - 2 * border, (int)(height * split - border * 1.5f)));
+                _dataTable.Draw(new Rect(border, startY, r.width - 2 * border, (int)(height * split - border * 1.5f)));
             }
 
-            if (m_showTable != null)
+            if (_showTable != null)
             {
-                m_showTable.Draw(new Rect(border, (int)(height * split + border * 0.5f + startY), r.width - 2 * border, (int)(height * (1.0f - split) - border * 1.5f)));
+                _showTable.Draw(new Rect(border, (int)(height * split + border * 0.5f + startY), r.width - 2 * border, (int)(height * (1.0f - split) - border * 1.5f)));
             }
 
             GUILayout.EndVertical();

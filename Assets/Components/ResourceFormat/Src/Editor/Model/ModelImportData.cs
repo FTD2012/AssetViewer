@@ -63,17 +63,17 @@ namespace ResourceFormat
         {
             TotalCount = TotalCount + 1;
             TotalMemuse = TotalMemuse + textureInfo.MemSize;
-            m_objects.Add(textureInfo);
+            _object.Add(textureInfo);
             if (m_initUnFormatList && IsFormatModel(textureInfo))
             {
-                m_unFortmatObjects.Add(textureInfo);
+                _unFortmatObject.Add(textureInfo);
             }
         }
         public List<object> GetObjects(bool unformat)
         {
             if (!unformat)
             {
-                return m_objects;
+                return _object;
             }
             else
             {
@@ -82,22 +82,22 @@ namespace ResourceFormat
                     m_initUnFormatList = true;
                     _InitUnFormatList();
                 }
-                return m_unFortmatObjects;
+                return _unFortmatObject;
             }
         }
 
         private void _InitUnFormatList()
         {
-            for (int i = 0; i < m_objects.Count; ++i)
+            for (int i = 0; i < _object.Count; ++i)
             {
-                ModelInfo modelInfo = m_objects[i] as ModelInfo;
+                ModelInfo modelInfo = _object[i] as ModelInfo;
                 if (modelInfo == null)
                     continue;
                 string name = System.IO.Path.GetFileName(modelInfo.Path);
-                EditorUtility.DisplayProgressBar("更新非法模型数据", name, (i * 1.0f) / m_objects.Count);
+                EditorUtility.DisplayProgressBar("更新非法模型数据", name, (i * 1.0f) / _object.Count);
                 if (!IsFormatModel(modelInfo))
                 {
-                    m_unFortmatObjects.Add(modelInfo);
+                    _unFortmatObject.Add(modelInfo);
                 }
             }
             EditorUtility.ClearProgressBar();

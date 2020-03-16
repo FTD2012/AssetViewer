@@ -51,10 +51,13 @@ namespace ResourceFormat
                 tInfo = new TextureInfo();
                 m_dictTexInfo.Add(assetPath, tInfo);
             }
+
             TextureImporter tImport = AssetImporter.GetAtPath(assetPath) as TextureImporter;
             Texture texture = AssetDatabase.LoadAssetAtPath<Texture>(assetPath);
             if (tImport == null || texture == null)
+            {
                 return null;
+            }
 
             tInfo.Path = tImport.assetPath;
             tInfo.ImportType = tImport.textureType;

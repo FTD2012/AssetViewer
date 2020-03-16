@@ -9,18 +9,18 @@ namespace ResourceFormat
     {
         public AnimationDataControl(TableView dataTable, TableView showTable)
         {
-            m_dataTable = dataTable;
-            m_showTable = showTable;
+            _dataTable = dataTable;
+            _showTable = showTable;
 
-            m_dataList = ConfigData.AnimationImportData;
-            for (int i = 0; i < m_dataList.Count; ++i)
+            _dataList = ConfigData.AnimationImportData;
+            for (int i = 0; i < _dataList.Count; ++i)
             {
-                m_dataList[i].ClearObject();
+                _dataList[i].ClearObject();
             }
 
-            if (m_dataTable != null)
+            if (_dataTable != null)
             {
-                m_dataTable.RefreshData(EditorTool.ToObjectList<AnimationImportData>(m_dataList));
+                _dataTable.RefreshData(EditorTool.ToObjectList<AnimationImportData>(_dataList));
             }
         }
 
@@ -30,7 +30,7 @@ namespace ResourceFormat
             set { m_showUnformatObject = value; }
         }
 
-        protected override void _RefreshList(List<string> list)
+        protected override void RefreshList(List<string> list)
         {
             m_aniInfo = new List<AnimationInfo>();
             for (int i = 0; i < list.Count; ++i)
@@ -60,11 +60,11 @@ namespace ResourceFormat
                 {
                     string name = System.IO.Path.GetFileName(m_aniInfo[i].Path);
                     EditorUtility.DisplayProgressBar("更新动作表数据", name, (i * 1.0f) / m_aniInfo.Count);
-                    for (int j = m_dataList.Count - 1; j >= 0; --j)
+                    for (int j = _dataList.Count - 1; j >= 0; --j)
                     {
-                        if (m_dataList[j].IsMatch(m_aniInfo[i].Path))
+                        if (_dataList[j].IsMatch(m_aniInfo[i].Path))
                         {
-                            m_dataList[j].AddObject(m_aniInfo[i]);
+                            _dataList[j].AddObject(m_aniInfo[i]);
                             break;
                         }
                     }
@@ -79,12 +79,12 @@ namespace ResourceFormat
             if (aniSelectData == null)
                 return;
 
-            m_editorData.CopyData(aniSelectData);
-            m_index = aniSelectData.Index;
+            _editorData.CopyData(aniSelectData);
+            _index = aniSelectData.Index;
             ;
             if (aniSelectData != null)
             {
-                m_showTable.RefreshData(aniSelectData.GetObjects(m_showUnformatObject));
+                _showTable.RefreshData(aniSelectData.GetObjects(m_showUnformatObject));
             }
         }
 

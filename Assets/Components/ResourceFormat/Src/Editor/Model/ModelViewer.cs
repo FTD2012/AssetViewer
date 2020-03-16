@@ -12,45 +12,45 @@ namespace ResourceFormat
             // m_hostWindow = hostWindow;
 
             // create the table with a specified object type
-            m_dataTable = new TableView(hostWindow, typeof(ModelImportData));
+            _dataTable = new TableView(hostWindow, typeof(ModelImportData));
 
             // setup the description for content
-            m_dataTable.AddColumn("RootPath", "PackageRootPath", 0.2f, TextAnchor.MiddleLeft);
-            m_dataTable.AddColumn("FileNameMatch", "Name", 0.05f);
-            m_dataTable.AddColumn("Index", "Priority", 0.05f);
-            m_dataTable.AddColumn("TotalCount", "Count", 0.05f);
-            m_dataTable.AddColumn("TotalMemuse", "Memory", 0.05f, TextAnchor.MiddleCenter, "<fmt_bytes>");
-            m_dataTable.AddColumn("ReadWriteEnable", "R/W", 0.05f);
-            m_dataTable.AddColumn("ImportUV2", "uv2", 0.05f);
-            m_dataTable.AddColumn("ImportUV3", "uv3", 0.05f);
-            m_dataTable.AddColumn("ImportUV4", "uv4", 0.05f);
-            m_dataTable.AddColumn("ImportNormal", "normal", 0.05f);
-            m_dataTable.AddColumn("ImportTangent", "tangent", 0.05f);
-            m_dataTable.AddColumn("MeshCompression", "MeshCompress", 0.075f);
-            m_dataTable.AddColumn("OptimizeMesh", "OptimizeMesh", 0.075f);
-            m_dataTable.AddColumn("ImportAnimation", "ImportAnimation", 0.075f);
-            m_dataTable.AddColumn("ImportMaterials", "ImportMaterials", 0.075f);
+            _dataTable.AddColumn("RootPath", "PackageRootPath", 0.2f, TextAnchor.MiddleLeft);
+            _dataTable.AddColumn("FileNameMatch", "Name", 0.05f);
+            _dataTable.AddColumn("Index", "Priority", 0.05f);
+            _dataTable.AddColumn("TotalCount", "Count", 0.05f);
+            _dataTable.AddColumn("TotalMemuse", "Memory", 0.05f, TextAnchor.MiddleCenter, "<fmt_bytes>");
+            _dataTable.AddColumn("ReadWriteEnable", "R/W", 0.05f);
+            _dataTable.AddColumn("ImportUV2", "uv2", 0.05f);
+            _dataTable.AddColumn("ImportUV3", "uv3", 0.05f);
+            _dataTable.AddColumn("ImportUV4", "uv4", 0.05f);
+            _dataTable.AddColumn("ImportNormal", "normal", 0.05f);
+            _dataTable.AddColumn("ImportTangent", "tangent", 0.05f);
+            _dataTable.AddColumn("MeshCompression", "MeshCompress", 0.075f);
+            _dataTable.AddColumn("OptimizeMesh", "OptimizeMesh", 0.075f);
+            _dataTable.AddColumn("ImportAnimation", "ImportAnimation", 0.075f);
+            _dataTable.AddColumn("ImportMaterials", "ImportMaterials", 0.075f);
 
             // sorting
-            m_dataTable.SetSortParams(2, false);
+            _dataTable.SetSortParams(2, false);
 
-            m_showTable = new TableView(hostWindow, typeof(ModelInfo));
+            _showTable = new TableView(hostWindow, typeof(ModelInfo));
 
-            m_showTable.AddColumn("Path", "Path", 0.4f, TextAnchor.MiddleLeft);
-            m_showTable.AddColumn("MemSize", "Memory", 0.1f, TextAnchor.MiddleCenter, "<fmt_bytes>");
-            m_showTable.AddColumn("MeshCompression", "MeshCompress", 0.1f);
-            m_showTable.AddColumn("ReadWriteEnable", "R/W", 0.1f);
-            m_showTable.AddColumn("OptimizeMesh", "OptimizeMesh", 0.1f);
-            m_showTable.AddColumn("ImportAnimation", "ImportAnimation", 0.1f);
-            m_showTable.AddColumn("ImportMaterials", "ImportMaterials", 0.1f);
+            _showTable.AddColumn("Path", "Path", 0.4f, TextAnchor.MiddleLeft);
+            _showTable.AddColumn("MemSize", "Memory", 0.1f, TextAnchor.MiddleCenter, "<fmt_bytes>");
+            _showTable.AddColumn("MeshCompression", "MeshCompress", 0.1f);
+            _showTable.AddColumn("ReadWriteEnable", "R/W", 0.1f);
+            _showTable.AddColumn("OptimizeMesh", "OptimizeMesh", 0.1f);
+            _showTable.AddColumn("ImportAnimation", "ImportAnimation", 0.1f);
+            _showTable.AddColumn("ImportMaterials", "ImportMaterials", 0.1f);
 
-            m_showTable.SetSortParams(1, true);
+            _showTable.SetSortParams(1, true);
 
-            m_control = new ModelDataControl(m_dataTable, m_showTable);
+            m_control = new ModelDataControl(_dataTable, _showTable);
 
             // register the event-handling function
-            m_dataTable.OnSelected += m_control.OnDataSelected;
-            m_showTable.OnSelected += m_control.OnInfoSelected;
+            _dataTable.OnSelected += m_control.OnDataSelected;
+            _showTable.OnSelected += m_control.OnInfoSelected;
         }
         public override void Draw(Rect r)
         {
@@ -171,14 +171,14 @@ namespace ResourceFormat
 
             int startY = toolbarHeight + border;
             int height = (int)(r.height - startY - border * 2);
-            if (m_dataTable != null)
+            if (_dataTable != null)
             {
-                m_dataTable.Draw(new Rect(border, startY, r.width - 2 * border, (int)(height * split - border * 1.5f)));
+                _dataTable.Draw(new Rect(border, startY, r.width - 2 * border, (int)(height * split - border * 1.5f)));
             }
 
-            if (m_showTable != null)
+            if (_showTable != null)
             {
-                m_showTable.Draw(new Rect(border, (int)(height * split + border * 0.5f + startY), r.width - 2 * border, (int)(height * (1.0f - split) - border * 1.5f)));
+                _showTable.Draw(new Rect(border, (int)(height * split + border * 0.5f + startY), r.width - 2 * border, (int)(height * (1.0f - split) - border * 1.5f)));
             }
 
             GUILayout.EndVertical();

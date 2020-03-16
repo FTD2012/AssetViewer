@@ -6,56 +6,61 @@ namespace ResourceFormat
 {
     public class TextureDataControl : FormatDataControl<TextureImportData>
     {
+        private bool _showUnformatObject = false;
+        private List<TextureInfo> _texInfoList = new List<TextureInfo>();
+
         public TextureDataControl(TableView dataTable, TableView showTable)
         {
-            m_dataTable = dataTable;
-            m_showTable = showTable;
+            _dataTable = dataTable;
+            _showTable = showTable;
 
-            m_dataList = ConfigData.TextureImportData;
+            _dataList = ConfigData.TextureImportData;
             base.RefreshDataWithSelect();
         }
 
-        public bool UnFormat
+        public bool Unformat
         {
-            get { return m_showUnformatObject; }
-            set { m_showUnformatObject = value; }
+            get { return _showUnformatObject; }
+            set { _showUnformatObject = value; }
         }
 
-        protected override void _RefreshList(List<string> list)
+        protected override void RefreshList(List<string> list)
         {
-            m_texInfoList = new List<TextureInfo>();
+            _texInfoList = new List<TextureInfo>();
             for (int i = 0; i < list.Count; ++i)
             {
                 string path = EditorPath.FormatAssetPath(list[i]);
                 string name = System.IO.Path.GetFileName(path);
                 EditorUtility.DisplayProgressBar("获取贴图数据", name, (i * 1.0f) / list.Count);
                 if (!EditorPath.IsTexture(path))
+                {
                     continue;
+                }
+
                 TextureInfo texInfo = TextureInfo.CreateTextureInfo(path);
                 if (texInfo != null)
                 {
-                    m_texInfoList.Add(texInfo);
+                    _texInfoList.Add(texInfo);
                 }
             }
             EditorUtility.ClearProgressBar();
-
             RefreshDataWithSelect();
         }
+
         public override void RefreshDataWithSelect()
         {
             base.RefreshDataWithSelect();
-            if (m_texInfoList != null)
+            if (_texInfoList != null)
             {
-                for (int i = 0; i < m_texInfoList.Count; ++i)
+                for (int i = 0; i < _texInfoList.Count; i++)
                 {
-                    string name = System.IO.Path.GetFileName(m_texInfoList[i].Path);
-                    EditorUtility.DisplayProgressBar("更新贴图表数据", name, (i * 1.0f) / m_texInfoList.Count);
-                    for (int j = m_dataList.Count - 1; j >= 0; --j)
+                    string name = System.IO.Path.GetFileName(_texInfoList[i].Path);
+                    EditorUtility.DisplayProgressBar("更新贴图表数据", name, (i * 1.0f) / _texInfoList.Count);
+                    for (int j = _dataList.Count - 1; j >= 0; --j)
                     {
-                        if (m_dataList[j].IsMatch(m_texInfoList[i].Path))
+                        if (_dataList[j].IsMatch(_texInfoList[i].Path))
                         {
-                            m_dataList[j].AddObject(m_texInfoList[i]);
-                            break;
+                            _dataList[j].AddObject(_texInfoList[i]);
                         }
                     }
                 }
@@ -67,18 +72,17 @@ namespace ResourceFormat
         {
             TextureImportData texSelectData = selected as TextureImportData;
             if (texSelectData == null)
+            {
                 return;
+            }
 
-            m_editorData.CopyData(texSelectData);
-            m_index = texSelectData.Index;
-            ;
+            _editorData.CopyData(texSelectData);
+            _index = texSelectData.Index;
             if (texSelectData != null)
             {
-                m_showTable.RefreshData(texSelectData.GetObjects(m_showUnformatObject));
+                _showTable.RefreshData(texSelectData.GetObject(_showUnformatObject));
             }
         }
 
-        private bool m_showUnformatObject = false;
-        private List<TextureInfo> m_texInfoList = new List<TextureInfo>();
     }
 }

@@ -5,21 +5,25 @@ namespace ResourceFormat
 {
     public class ConfigData
     {
+        private static List<AnimationImportData> _aniSelectData = null;
+        private static List<ModelImportData> _modelSelectData = null;
+        private static List<TextureImportData> _texSelectData = null;
+
         public static List<TextureImportData> TextureImportData
         {
             get
             {
-                if (m_texSelectData == null)
+                if (_texSelectData == null)
                 {
-                    m_texSelectData = EditorTool.LoadJsonData<List<TextureImportData>>(FormatConfig.TextureImportPath);
+                    _texSelectData = EditorTool.LoadJsonData<List<TextureImportData>>(FormatConfig.TextureImportPath);
                 }
 
-                if (m_texSelectData == null)
+                if (_texSelectData == null)
                 {
-                    m_texSelectData = new List<TextureImportData>();
+                    _texSelectData = new List<TextureImportData>();
                 }
 
-                return m_texSelectData;
+                return _texSelectData;
             }
         }
 
@@ -27,17 +31,17 @@ namespace ResourceFormat
         {
             get
             {
-                if (m_modelSelectData == null)
+                if (_modelSelectData == null)
                 {
-                    m_modelSelectData = EditorTool.LoadJsonData<List<ModelImportData>>(FormatConfig.ModelImportPath);
+                    _modelSelectData = EditorTool.LoadJsonData<List<ModelImportData>>(FormatConfig.ModelImportPath);
                 }
 
-                if (m_modelSelectData == null)
+                if (_modelSelectData == null)
                 {
-                    m_modelSelectData = new List<ModelImportData>();
+                    _modelSelectData = new List<ModelImportData>();
                 }
 
-                return m_modelSelectData;
+                return _modelSelectData;
             }
         }
 
@@ -45,38 +49,34 @@ namespace ResourceFormat
         {
             get
             {
-                if (m_aniSelectData == null)
+                if (_aniSelectData == null)
                 {
-                    m_aniSelectData = EditorTool.LoadJsonData<List<AnimationImportData>>(FormatConfig.AnimationImportPath);
+                    _aniSelectData = EditorTool.LoadJsonData<List<AnimationImportData>>(FormatConfig.AnimationImportPath);
                 }
 
-                if (m_aniSelectData == null)
+                if (_aniSelectData == null)
                 {
-                    m_aniSelectData = new List<AnimationImportData>();
+                    _aniSelectData = new List<AnimationImportData>();
                 }
 
-                return m_aniSelectData;
+                return _aniSelectData;
             }
         }
 
         public static void SaveData()
         {
-            if (m_texSelectData != null)
+            if (_texSelectData != null)
             {
-                EditorTool.SaveJsonData<List<TextureImportData>>(m_texSelectData, FormatConfig.TextureImportPath);
+                EditorTool.SaveJsonData<List<TextureImportData>>(_texSelectData, FormatConfig.TextureImportPath);
             }
-            if (m_modelSelectData != null)
+            if (_modelSelectData != null)
             {
-                EditorTool.SaveJsonData<List<ModelImportData>>(m_modelSelectData, FormatConfig.ModelImportPath);
+                EditorTool.SaveJsonData<List<ModelImportData>>(_modelSelectData, FormatConfig.ModelImportPath);
             }
-            if (m_aniSelectData != null)
+            if (_aniSelectData != null)
             {
-                EditorTool.SaveJsonData<List<AnimationImportData>>(m_aniSelectData, FormatConfig.AnimationImportPath);
+                EditorTool.SaveJsonData<List<AnimationImportData>>(_aniSelectData, FormatConfig.AnimationImportPath);
             }
         }
-
-        private static List<AnimationImportData> m_aniSelectData = null;
-        private static List<ModelImportData> m_modelSelectData = null;
-        private static List<TextureImportData> m_texSelectData = null;
     }
 }
