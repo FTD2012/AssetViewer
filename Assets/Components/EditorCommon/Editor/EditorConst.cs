@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
+
 namespace EditorCommon
 {
     public static class EditorConst
@@ -18,5 +22,7 @@ namespace EditorCommon
         public static string EDITOR_ANICLIP_NAME = "__preview__Take 001";
         public static string[] EDITOR_CONTROL_NAMES = {"AnimatorStateMachine",
             "AnimatorStateTransition", "AnimatorState", "AnimatorTransition", "BlendTree" };
+
+
     }
 }

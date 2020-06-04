@@ -10,7 +10,7 @@ namespace ResourceFormat
         [MenuItem(OverviewConfig.TextureReportMenu)]
         public static void GenerateRportByConfig()
         {
-            List<TextureInfo> texInfoList = TextureInfo.GetTextureInfoByDirectory(OverviewConfig.RootPath);
+            List<TextureInfo> texInfoList = TextureInfo.GetInfoByDirectory(OverviewConfig.RootPath);
             GenerateReport(OverviewConfig.TextureReportPath, texInfoList);
         }
 

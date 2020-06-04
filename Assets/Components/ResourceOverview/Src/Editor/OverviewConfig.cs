@@ -1,3 +1,7 @@
+using EditorCommon;
+using System.Collections.Generic;
+using UnityEngine;
+
 namespace ResourceFormat
 {
     public static class OverviewConfig
@@ -8,7 +12,6 @@ namespace ResourceFormat
 
         public const string TextureReportMenu = "UComponents/ResourcesOverview/TextureOverviewReport";
         public const string ModelReportMenu = "UComponents/ResourcesOverview/ModelOverviewReport";
-
     }
 
     public static class OverviewTableConst
@@ -33,14 +36,12 @@ namespace ResourceFormat
             return index;
         }
 
-        public static string[] TextureModeName = {
-            "ReadWrite", "MipMap", "Type", "Resolution",
-            "WidthVSHeight", "StandaloneFormat", "AndroidFormat", "iOSFormat" };
-
         public static string[] ModelModeName = {
             "ReadWrite", "ImportMaterial", "OptimizeMesh", "MeshData",
             "MeshCompress", "VertexCount", "TriangleCount" };
 
         public static string[] OverviewModeName = { "Texture", "Model" };
+
+        public static float LeftWidth = 0.4f;
     }
 }

@@ -1,26 +1,11 @@
-using EditorCommon;
-using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
+using System;
 
-namespace ResourceFormat{
-    public enum TextureOverviewMode
+namespace ResourceFormat
+{
+    public class TextureOverviewData : OverviewData
     {
-        ReadWrite = 0,
-        MipMap,
-        Type,
-        Resolution,
-        WidthVSHeight,
-        StandaloneFormat,
-        AndroidFormat,
-        iOSFormat,
-
-        Count,
-    }
-
-    public class TextureOverviewData
-    {
-        /// Dont modify variable name
+        /// Don't modify variable name
         public int Count;
         public int Memory;
         public bool ReadWriteEnable;
@@ -32,35 +17,31 @@ namespace ResourceFormat{
         public int SizeIndex;
         public string SizeStr;
         public bool WidthAndHeight;
-        public TextureOverviewMode Mode;
 
-        protected List<object> _object = new List<object>();
+        private TextureOverviewMode _mode;
 
-        public static TextureOverviewData create(TextureOverviewMode mode, TextureInfo texInfo)
+        public TextureOverviewData(string mode, TextureInfo texInfo)
         {
-            TextureOverviewData retData = new TextureOverviewData();
-            retData.Mode = mode;
-            retData.ReadWriteEnable = texInfo.ReadWriteEnable;
-            retData.MipmapEnable = texInfo.MipmapEnable;
-            retData.ImportType = texInfo.ImportType;
-            retData.StandaloneFormat= texInfo.StandaloneFormat;
-            retData.AndroidFormat = texInfo.AndroidFormat;
-            retData.IosFormat = texInfo.IosFormat;
-            retData.WidthAndHeight = texInfo.Width == texInfo.Height;
-            retData.SizeIndex = OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
-            retData.SizeStr = OverviewTableConst.TextureSizeStr[retData.SizeIndex];
-
-            return retData;
+            _mode = (TextureOverviewMode)Enum.Parse(typeof(TextureOverviewMode), mode);
+            ReadWriteEnable = texInfo.ReadWriteEnable;
+            MipmapEnable = texInfo.MipmapEnable;
+            ImportType = texInfo.ImportType;
+            StandaloneFormat = texInfo.StandaloneFormat;
+            AndroidFormat = texInfo.AndroidFormat;
+            IosFormat = texInfo.IosFormat;
+            WidthAndHeight = texInfo.Width == texInfo.Height;
+            SizeIndex = OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
+            SizeStr = OverviewTableConst.TextureSizeStr[SizeIndex];
         }
 
-        public static void switchDataTableMode(TextureOverviewMode mode, TableView tableView)
+        public override bool IsMatch(BaseInfo texInfo)
         {
-            
+           return isMatch((TextureInfo)texInfo);
         }
 
-        public bool isMatch(TextureInfo texInfo)
+        private bool isMatch(TextureInfo texInfo)
         {
-            switch (Mode)
+            switch (_mode)
             {
             case TextureOverviewMode.ReadWrite:
                 return ReadWriteEnable == texInfo.ReadWriteEnable;
@@ -82,17 +63,21 @@ namespace ResourceFormat{
             return false;
         }
 
-        public void addObject(TextureInfo texInfo)
+        public override void AddObject(BaseInfo texInfo)
         {
-            if (Mode == TextureOverviewMode.AndroidFormat)
+            addObject((TextureInfo)texInfo);
+        }
+        private void addObject(TextureInfo texInfo)
+        {
+            if (_mode == TextureOverviewMode.AndroidFormat)
             {
                 Memory += texInfo.AndroidSize;
             }
-            else if (Mode == TextureOverviewMode.iOSFormat)
+            else if (_mode == TextureOverviewMode.iOSFormat)
             {
                 Memory += texInfo.IosSize;
             }
-            else if (Mode == TextureOverviewMode.StandaloneFormat)
+            else if (_mode == TextureOverviewMode.StandaloneFormat)
             {
                 Memory += texInfo.StandaloneSize;
             }
@@ -103,11 +88,6 @@ namespace ResourceFormat{
 
             _object.Add(texInfo);
             Count++;
-        }
-
-        public List<object> getObject()
-        {
-            return _object;
         }
     }
 }

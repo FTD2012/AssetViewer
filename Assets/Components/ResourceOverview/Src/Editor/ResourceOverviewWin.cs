@@ -12,7 +12,7 @@ namespace ResourceFormat
 
     public class ResourceOverviewWin : EditorWindow
     {
-        private TextureOverviewViewer _textureViewer;
+        private TextureOverviewViewer _textureViewerr;
         private ModelOverviewViewer _modelViewer;
         private OverviewWinType _currentMode = OverviewWinType.Texture;
         private KeyCode _pressedKey;
@@ -28,7 +28,7 @@ namespace ResourceFormat
 
         void OnEnable()
         {
-            _textureViewer = new TextureOverviewViewer(this);
+            _textureViewerr = new TextureOverviewViewer(this);
             _modelViewer = new ModelOverviewViewer(this);
         }
 
@@ -51,7 +51,7 @@ namespace ResourceFormat
             Rect viewRect = new Rect(0, TableConst.TopBarHeight, position.width, position.height - TableConst.TopBarHeight);
             if (_currentMode == OverviewWinType.Texture)
             {
-                _textureViewer.Draw(viewRect, _pressedKey);
+                _textureViewerr.Draw(viewRect, _pressedKey);
             }
             else if (_currentMode == OverviewWinType.Model)
             {

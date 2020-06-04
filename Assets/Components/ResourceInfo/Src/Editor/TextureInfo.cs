@@ -92,7 +92,7 @@ namespace ResourceFormat
             return tInfo;
         }
 
-        public static List<TextureInfo> GetTextureInfoByDirectory(string dir)
+        public static List<TextureInfo> GetInfoByDirectory(string dir)
         {
             List<TextureInfo> texInfoList = new List<TextureInfo>();
             List<string> list = new List<string>();

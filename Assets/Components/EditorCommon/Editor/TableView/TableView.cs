@@ -9,6 +9,25 @@ namespace EditorCommon
 {
     public delegate void SelectionHandler(object selected, int col);
 
+    public struct ColumnType 
+    {
+        public string colDataPropertyName;
+        public string colTitleText;
+        public float widthByPercent;
+        public TextAnchor alignment;
+        public string fmt;
+
+        public ColumnType(string _colDataPropertyName, string _colTitleText, float _widthByPercent, TextAnchor _alignment, string _fmt)
+        {
+            colDataPropertyName = _colDataPropertyName;
+            colTitleText = _colTitleText;
+            widthByPercent = _widthByPercent;
+            alignment = _alignment;
+            fmt = _fmt;
+        }
+    }
+
+
     public partial class TableView : IDisposable
     {
         // show internal sequential ID in the first column
