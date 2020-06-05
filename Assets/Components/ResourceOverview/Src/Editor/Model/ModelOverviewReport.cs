@@ -10,7 +10,7 @@ namespace ResourceFormat
         [MenuItem(OverviewConfig.ModelReportMenu)]
         public static void GenerateRportByConfig()
         {
-            List<ModelInfo> modelInfoList = ModelInfo.GetModelInfoByDirectory(OverviewConfig.RootPath);
+            List<ModelInfo> modelInfoList = ModelInfo.GetInfoByDirectory(OverviewConfig.RootPath);
             GenerateReport(OverviewConfig.ModelReportPath, modelInfoList);
         }
 

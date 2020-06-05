@@ -36,29 +36,29 @@ namespace ResourceFormat
 
         public override bool IsMatch(BaseInfo texInfo)
         {
-           return isMatch((TextureInfo)texInfo);
+            return isMatch((TextureInfo)texInfo);
         }
 
         private bool isMatch(TextureInfo texInfo)
         {
             switch (_mode)
             {
-            case TextureOverviewMode.ReadWrite:
-                return ReadWriteEnable == texInfo.ReadWriteEnable;
-            case TextureOverviewMode.MipMap:
-                return MipmapEnable == texInfo.MipmapEnable;
-            case TextureOverviewMode.Type:
-                return ImportType == texInfo.ImportType;
-            case TextureOverviewMode.Resolution:
-                return SizeIndex == OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
-            case TextureOverviewMode.WidthVSHeight:
-                return WidthAndHeight == (texInfo.Width == texInfo.Height);
-            case TextureOverviewMode.StandaloneFormat:
-                return StandaloneFormat == texInfo.StandaloneFormat;
-            case TextureOverviewMode.AndroidFormat:
-                return AndroidFormat == texInfo.AndroidFormat;
-            case TextureOverviewMode.iOSFormat:
-                return IosFormat == texInfo.IosFormat;
+                case TextureOverviewMode.ReadWrite:
+                    return ReadWriteEnable == texInfo.ReadWriteEnable;
+                case TextureOverviewMode.MipMap:
+                    return MipmapEnable == texInfo.MipmapEnable;
+                case TextureOverviewMode.Type:
+                    return ImportType == texInfo.ImportType;
+                case TextureOverviewMode.Resolution:
+                    return SizeIndex == OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
+                case TextureOverviewMode.WidthVSHeight:
+                    return WidthAndHeight == (texInfo.Width == texInfo.Height);
+                case TextureOverviewMode.StandaloneFormat:
+                    return StandaloneFormat == texInfo.StandaloneFormat;
+                case TextureOverviewMode.AndroidFormat:
+                    return AndroidFormat == texInfo.AndroidFormat;
+                case TextureOverviewMode.iOSFormat:
+                    return IosFormat == texInfo.IosFormat;
             }
             return false;
         }
@@ -67,6 +67,7 @@ namespace ResourceFormat
         {
             addObject((TextureInfo)texInfo);
         }
+
         private void addObject(TextureInfo texInfo)
         {
             if (_mode == TextureOverviewMode.AndroidFormat)

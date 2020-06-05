@@ -137,7 +137,7 @@ namespace ResourceFormat
             return tInfo;
         }
 
-        public static List<ModelInfo> GetModelInfoByDirectory(string dir)
+        public static List<ModelInfo> GetInfoByDirectory(string dir)
         {
             List<ModelInfo> modelInfoList = new List<ModelInfo>();
             List<string> list = new List<string>();

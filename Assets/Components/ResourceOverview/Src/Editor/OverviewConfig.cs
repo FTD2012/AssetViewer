@@ -36,12 +36,6 @@ namespace ResourceFormat
             return index;
         }
 
-        public static string[] ModelModeName = {
-            "ReadWrite", "ImportMaterial", "OptimizeMesh", "MeshData",
-            "MeshCompress", "VertexCount", "TriangleCount" };
-
-        public static string[] OverviewModeName = { "Texture", "Model" };
-
         public static float LeftWidth = 0.4f;
     }
 }

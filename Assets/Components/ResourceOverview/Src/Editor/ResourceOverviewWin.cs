@@ -1,13 +1,14 @@
 using UnityEditor;
 using UnityEngine;
 using EditorCommon;
+using System;
 
 namespace ResourceFormat
 {
     enum OverviewWinType
     {
         Texture,
-        Model,
+        Model
     }
 
     public class ResourceOverviewWin : EditorWindow
@@ -44,7 +45,7 @@ namespace ResourceFormat
         {
             GUILayout.BeginHorizontal(TableStyles.Toolbar);
             {
-                _currentMode = (OverviewWinType)GUILayout.SelectionGrid((int)_currentMode, OverviewTableConst.OverviewModeName, OverviewTableConst.OverviewModeName.Length, TableStyles.ToolbarButton);
+                _currentMode = (OverviewWinType)GUILayout.SelectionGrid((int)_currentMode, Enum.GetNames(typeof(OverviewWinType)), Enum.GetNames(typeof(OverviewWinType)).Length, TableStyles.ToolbarButton);
             }
             GUILayout.EndHorizontal();
 
@@ -55,9 +56,8 @@ namespace ResourceFormat
             }
             else if (_currentMode == OverviewWinType.Model)
             {
-                _modelViewer.Draw(viewRect);
+                _modelViewer.Draw(viewRect, _pressedKey);
             }
-
             _pressedKey = KeyCode.None;
         }
     }
