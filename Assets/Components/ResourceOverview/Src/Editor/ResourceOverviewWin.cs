@@ -8,13 +8,15 @@ namespace ResourceFormat
     enum OverviewWinType
     {
         Texture,
-        Model
+        Model,
+        Particle
     }
 
     public class ResourceOverviewWin : EditorWindow
     {
         private TextureOverviewViewer _textureViewerr;
         private ModelOverviewViewer _modelViewer;
+        private ParticleOverviewViewer _particleViewer;
         private OverviewWinType _currentMode = OverviewWinType.Texture;
         private KeyCode _pressedKey;
 
@@ -24,13 +26,13 @@ namespace ResourceFormat
             ResourceOverviewWin resourceInfoWin = GetWindow<ResourceOverviewWin>();
             resourceInfoWin.minSize = new Vector2(400, 300);
             resourceInfoWin.titleContent = new GUIContent("ResViewer", (Texture)Resources.Load("icon1"));    /// TODO: ljm >>> refractor load meathod
-                                                                                                                    /// TODO: ljm >>> reset texture
         }
 
         void OnEnable()
         {
             _textureViewerr = new TextureOverviewViewer(this);
             _modelViewer = new ModelOverviewViewer(this);
+            _particleViewer = new ParticleOverviewViewer(this);
         }
 
         void Update()
@@ -57,6 +59,10 @@ namespace ResourceFormat
             else if (_currentMode == OverviewWinType.Model)
             {
                 _modelViewer.Draw(viewRect, _pressedKey);
+            }
+            else if (_currentMode == OverviewWinType.Particle)
+            {
+                _particleViewer.Draw(viewRect, _pressedKey);
             }
             _pressedKey = KeyCode.None;
         }

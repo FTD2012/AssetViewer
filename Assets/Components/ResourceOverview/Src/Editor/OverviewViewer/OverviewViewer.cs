@@ -22,7 +22,7 @@ namespace ResourceFormat
         protected TableView _dataTable;
         protected TableView _showTable;
 
-        /// meta-data
+        // meta-data
         protected V _overviewModeManager;
 
         public OverviewViewer(EditorWindow hostWindow)

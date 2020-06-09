@@ -28,6 +28,11 @@ namespace EditorCommon
             return PathEndWithExt(path, EditorConst.MaterialExts);
         }
 
+        public static bool IsPrefab(string path)
+        {
+            return PathEndWithExt(path, EditorConst.PrefabExts);
+        }
+
         public static bool IsModel(string path)
         {
             return PathEndWithExt(path, EditorConst.ModelExts);
