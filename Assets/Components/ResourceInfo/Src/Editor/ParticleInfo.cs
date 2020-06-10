@@ -13,9 +13,7 @@ namespace ResourceFormat
         public bool PlayOnAwake;
         public bool Looping;
 
-        private static int _loadCount = 0;
         private static Dictionary<string, ParticleInfo> _dictParticleInfo = new Dictionary<string, ParticleInfo>();
-
 
         public static ParticleInfo[] CreateParticleInfo(string assetPath)
         {
