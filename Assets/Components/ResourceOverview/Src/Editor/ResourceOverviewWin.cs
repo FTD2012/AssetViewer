@@ -9,7 +9,8 @@ namespace ResourceFormat
     {
         Texture,
         Model,
-        Particle
+        Particle,
+        Shader
     }
 
     public class ResourceOverviewWin : EditorWindow
@@ -17,6 +18,7 @@ namespace ResourceFormat
         private TextureOverviewViewer _textureViewerr;
         private ModelOverviewViewer _modelViewer;
         private ParticleOverviewViewer _particleViewer;
+        private ShaderOverviewViewer _shaderViewer;
         private OverviewWinType _currentMode = OverviewWinType.Texture;
         private KeyCode _pressedKey;
 
@@ -33,6 +35,7 @@ namespace ResourceFormat
             _textureViewerr = new TextureOverviewViewer(this);
             _modelViewer = new ModelOverviewViewer(this);
             _particleViewer = new ParticleOverviewViewer(this);
+            _shaderViewer = new ShaderOverviewViewer(this);
         }
 
         void Update()
@@ -63,6 +66,10 @@ namespace ResourceFormat
             else if (_currentMode == OverviewWinType.Particle)
             {
                 _particleViewer.Draw(viewRect, _pressedKey);
+            }
+            else if (_currentMode == OverviewWinType.Shader)
+            {
+                _shaderViewer.Draw(viewRect, _pressedKey);
             }
             _pressedKey = KeyCode.None;
         }

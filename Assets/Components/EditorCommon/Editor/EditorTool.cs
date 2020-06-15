@@ -3,11 +3,68 @@ using UnityEngine;
 using System.IO;
 using LitJson;
 using System.Collections.Generic;
+using System;
+using System.Text.RegularExpressions;
 
 namespace EditorCommon
 {
     public static class EditorTool
     {
+        // shader instruction cost.md
+        public enum Instruction
+        {
+            // Unity api
+            UnityObjectToClipPos,
+            UnityObjectToViewPos,
+            UnityObjectToWorldNormal,
+            ComputeScreenPos,
+            COMPUTE_EYEDEPTH,
+            // common cg/hlsl/glsl api
+            abs,
+            saturate,
+            floor,
+            frac,
+            ceil,
+            dot,
+            min,
+            max,
+            sin,
+            cos,
+            tan,
+            sincos,
+            ddx,
+            ddy,
+            sqrt,
+            rsqrt,
+            clamp,
+            exp,
+            log,
+            log10,
+            cross,
+            length,
+            faceforward,
+            step,
+            lerp,
+            round,
+            any,
+            pow,
+            sign,
+            distance,
+            normalize,
+            reflect,
+            all,
+            fmod,
+            fwidth,
+            mul,
+            transpose,
+            smoothstep,
+            asin,
+            acos,
+            atan,
+            atan2,
+            tex2D
+        };
+
         public static List<object> ToObjectList<T>(List<T> data)
         {
             if (data == null) return null;
@@ -202,6 +259,96 @@ namespace EditorCommon
             return retSize;
         }
 
+        public static int GetInstrcutionCount(Instruction instruction)
+        {
+            switch(instruction)
+            {
+                case Instruction.UnityObjectToClipPos:
+                    return 4;
+                case Instruction.UnityObjectToViewPos:
+                    return 8;
+                case Instruction.UnityObjectToWorldNormal:
+                    return 3;
+                case Instruction.ComputeScreenPos:
+                    return 2;
+                case Instruction.COMPUTE_EYEDEPTH:
+                    return 8;
+                case Instruction.abs:
+                case Instruction.saturate:
+                    return 0;
+                case Instruction.floor:
+                case Instruction.frac:
+                case Instruction.ceil:
+                case Instruction.dot:
+                case Instruction.min:
+                case Instruction.max:
+                case Instruction.sin:
+                case Instruction.cos:
+                case Instruction.tan:
+                case Instruction.sincos:
+                case Instruction.ddx:
+                case Instruction.ddy:
+                case Instruction.sqrt:
+                case Instruction.rsqrt:
+                    return 1;
+                case Instruction.clamp:
+                case Instruction.exp:
+                case Instruction.log:
+                case Instruction.log10:
+                case Instruction.cross:
+                case Instruction.length:
+                case Instruction.faceforward:
+                case Instruction.step:
+                case Instruction.lerp:
+                    return 2;
+                case Instruction.round:
+                case Instruction.any:
+                case Instruction.pow:
+                case Instruction.sign:
+                case Instruction.distance:
+                case Instruction.normalize:
+                case Instruction.reflect:
+                    return 3;
+                case Instruction.all:
+                case Instruction.fmod:
+                case Instruction.fwidth:
+                case Instruction.mul:
+                case Instruction.transpose:
+                    return 4;
+                case Instruction.smoothstep:
+                    return 7;
+                case Instruction.acos:
+                    return 10;
+                case Instruction.asin:
+                    return 11;
+                case Instruction.atan:
+                    return 16;
+                case Instruction.atan2:
+                    return 22;
+                case Instruction.tex2D:
+                    return 10;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int GetShaderInstruction(string shaderText)
+        {
+            if (shaderText == string.Empty)
+            {
+                return 0;
+            }
+            int count = 0;
+
+            foreach(var instruction in Enum.GetNames(typeof(Instruction)))
+            {
+                MatchCollection matches = Regex.Matches(shaderText, instruction + @"\s*\(");
+                count += GetInstrcutionCount((Instruction)Enum.Parse(typeof(Instruction), instruction)) * matches.Count;
+            }
+
+            return count;
+        }
+
         public static int GetRuntimeMemorySize(UnityEngine.Object asset)
         {
 #pragma warning disable 0618
@@ -212,7 +359,7 @@ namespace EditorCommon
         public static int CalculateModelSizeBytes(string path)
         {
             int size = 0;
-            Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
+            UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
             for (int i = 0; i < assets.Length; ++i)
             {
                 if (assets[i] is Mesh)
@@ -230,7 +377,7 @@ namespace EditorCommon
         public static int CalculateAnimationSizeBytes(string path)
         {
             int size = 0;
-            Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
+            UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
             for (int i = 0; i < assets.Length; ++i)
             {
                 if ((assets[i] is AnimationClip) && assets[i].name != EditorConst.EDITOR_ANICLIP_NAME)

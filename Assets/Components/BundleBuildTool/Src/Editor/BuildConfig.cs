@@ -41,7 +41,7 @@ namespace BundleManager
 #elif UNITY_IOS
                 return InterpretedRootPath + EditorConst.PlatformIos;
 #else
-                return InterpretedRootPath + EditorConst.PlatformStandalones;
+                return InterpretedRootPath + EditorConst.PlatformStandalone;
 #endif
             }
         }

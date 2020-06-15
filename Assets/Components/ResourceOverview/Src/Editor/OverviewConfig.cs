@@ -32,7 +32,22 @@ namespace ResourceFormat
         public static string[] ParticleSizeStr = { "[0 - 10]", "(10 - 100]", "(100 - 1000]", "(1000 - 1000]", "(1000 - 10000]", "(10000 - ...]" };
 
         public static float[] DurationSize = { 5, 10, 100 };
-        public static string[] DurationSizeStr = { "[0 - 5]", "(5 - 10]", "(10 - 100]", "100 - ..." };
+        public static string[] DurationSizeStr = { "[0 - 5]", "(5 - 10]", "(10 - 100]", "(100 - ..." };
+
+        public static float[] LodSize = { 0, 50, 150, 300 };
+        public static string[] LoadSizeStr = { "Unlimited", "[0 - 50]", "(50 - 150]", "(150 - 300]", "(300 - ... ]" };
+
+        public static int[] RenderQueue = { 1000, 2000, 2450, 2500, 3000, 4000 };
+        // https://www.jianshu.com/p/0341f0ab9020
+        public static string[] RenderQueueStr = {"Not Avaiable [... - 1000)", "BackGroud [1000 - 2000)", "Geometry [2000 - 2450)",
+                                                 "AlphaTest [2450 - 2500)", "Geometry [2500 - 3000)", "Transparent [3000 - 4000)",
+                                                 "Overlay [4000 - ...]" };
+
+        public static int[] InstructionSize = { 10, 30, 60, 100 };
+        public static string[] InstructionSizeStr = { "[0 - 10]", "(10 - 30]", "(30 - 60]", "(60 - 100]", "(100 - ...]" };
+
+        public static int[] VariantSize = { 10, 20, 40, 80 };
+        public static string[] VariantSizeStr = { "[0 - 10]", "(10 - 20]", "(20 - 40]", "(40 - 80]", "[80 - ...)" };
 
         public static int GetTextureSizeIndex(int width, int height)
         {
@@ -54,6 +69,37 @@ namespace ResourceFormat
         {
             int index = 0;
             while (index < DurationSize.Length && size > DurationSize[index])
+                ++index;
+            return index;
+        }
+
+        public static int GetLodIndex(float size)
+        {
+            int index = 0;
+            while (index < LodSize.Length && size > LodSize[index])
+                ++index;
+            return index;
+        }
+
+        public static int GetRenderQueueIndex(float size)
+        {
+            int index = 0;
+            while (index < RenderQueue.Length && size+1 > RenderQueue[index])
+                ++index;
+            return index;
+        }
+
+        public static int GetInstructionIndex(float size)
+        {
+            int index = 0;
+            while (index < InstructionSize.Length && size > InstructionSize[index])
+                ++index;
+            return index;
+        }
+        public static int GetVariantIndex(float size)
+        {
+            int index = 0;
+            while (index < VariantSize.Length && size > VariantSize[index])
                 ++index;
             return index;
         }

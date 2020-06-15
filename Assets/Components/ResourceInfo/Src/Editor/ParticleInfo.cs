@@ -13,8 +13,6 @@ namespace ResourceFormat
         public bool PlayOnAwake;
         public bool Looping;
 
-        private static Dictionary<string, ParticleInfo> _dictParticleInfo = new Dictionary<string, ParticleInfo>();
-
         public static ParticleInfo[] CreateParticleInfo(string assetPath)
         {
             if (!EditorPath.IsPrefab(assetPath))

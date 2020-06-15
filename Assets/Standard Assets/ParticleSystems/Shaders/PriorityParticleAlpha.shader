@@ -16,11 +16,13 @@ Category {
 		Bind "Vertex", vertex
 		Bind "TexCoord", texcoord
 	}
+		LOD 300
 	
 	// ---- Fragment program cards
 	SubShader {
 		Pass {
-		
+		LOD 3000
+
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
