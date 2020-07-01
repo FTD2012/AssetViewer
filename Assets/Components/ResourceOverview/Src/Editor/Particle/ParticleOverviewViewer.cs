@@ -13,7 +13,7 @@ namespace ResourceFormat
         Looping
     }
 
-    public class ParticleOverviewViewer : OverviewViewer<ParticleOverviewData, ParticleInfo, ParticleOverviewModeManager>
+    public class ParticleOverviewViewer : OverviewViewer<ParticleOverviewData, ParticleInfo, ParticleOverviewModeManager, ParticleHealthInfoManager>
     {
         public ParticleOverviewViewer(EditorWindow hostWindow) : base(hostWindow)
         {
@@ -80,6 +80,11 @@ namespace ResourceFormat
                     throw new NotImplementedException();
             }
         }
+    }
+
+    public class ParticleHealthInfoManager : HealthInfoManager
+    {
+
     }
 
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reflection;
-
-namespace CommonComponent
+﻿namespace CommonComponent
 {
     public class Singleton<T> where T : class, new()
     {

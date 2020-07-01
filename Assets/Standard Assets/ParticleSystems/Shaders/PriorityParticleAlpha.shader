@@ -60,6 +60,7 @@ Category {
 				COMPUTE_EYEDEPTH(o.projPos.z);
 				#endif
 				o.color = v.color;
+				o.color = tex2Dlod(_MainTex, v.vertex);
 				o.texcoord = TRANSFORM_TEX(v.texcoord,_MainTex);
 				return o;
 			}
@@ -80,6 +81,9 @@ Category {
 			}
 			ENDCG 
 		}
+		Pass{
+
+}
 	} 	
 	
 	// ---- Dual texture cards

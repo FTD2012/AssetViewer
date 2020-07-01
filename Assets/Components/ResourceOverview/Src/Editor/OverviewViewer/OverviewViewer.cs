@@ -6,14 +6,16 @@ using System;
 using UnityEngine.Assertions;
 using CommonComponent;
 using System.Reflection;
+using System.Text;
 
 namespace ResourceFormat
 {
-    public class OverviewViewer<T, U, V> where T : OverviewData where U : BaseInfo where V : OverviewModeManager
+    public class OverviewViewer<T, U, V, H> where T : OverviewData where U : BaseInfo where V : OverviewModeManager where H : HealthInfoManager
     {
         // data
         protected Dictionary<string, bool> _modeInit;
         protected Dictionary<string, List<object>> _modeData; // object is XXXOverviewData
+        protected Dictionary<string, Health> _modeHealth;
         protected List<U> _infoList;
         protected string _rootPath = string.Empty;
         protected string _mode;
@@ -24,15 +26,18 @@ namespace ResourceFormat
 
         // meta-data
         protected V _overviewModeManager;
+        protected H _healthInfoManager;
 
         public OverviewViewer(EditorWindow hostWindow)
         {
             Assert.IsNotNull(hostWindow);
 
-            _overviewModeManager = (V)typeof(Singleton<>).MakeGenericType(typeof(V)).GetMethod("Instance", BindingFlags.Static | BindingFlags.Public).Invoke(null, null);
+            _overviewModeManager = OverviewTableConst.GetSingletonInstance<V>();
+            _healthInfoManager = OverviewTableConst.GetSingletonInstance<H>();
 
             _modeInit = new Dictionary<string, bool>();
             _modeData = new Dictionary<string, List<object>>();
+            _modeHealth = new Dictionary<string, Health>();
             _mode = _overviewModeManager.GetMode()[0];
             foreach (var key in _overviewModeManager.GetMode())
             {
@@ -87,6 +92,24 @@ namespace ResourceFormat
                         _modeData[mode].Add(overViewData);
                     }
                 }
+
+                if (_healthInfoManager.GetEnableCondition(mode))
+                {
+                    int validCount = 0; // config
+                    foreach (T overViewData in _modeData[mode])
+                    {
+                        foreach (object condition in _healthInfoManager.GetConditionList(mode))
+                        {
+                            validCount += overViewData.GetMatchHealthCount(condition);
+                        }
+                    }
+                    _modeHealth[mode] = new Health(OverviewTableConst.GetHealthState(_healthInfoManager.GetThreshold(mode), validCount), _healthInfoManager.GetTip(mode), _healthInfoManager.GetThreshold(mode), validCount);
+                }
+                else
+                {
+                    _modeHealth[mode] = new Health(Health.HealthEnum.NONE, _healthInfoManager.GetTip(mode), 0, 0);
+                }
+
 
                 EditorUtility.ClearProgressBar();
             }
@@ -187,9 +210,33 @@ namespace ResourceFormat
                 }
                 GUILayout.EndHorizontal();
 
-                // 3. select area
+                // 3. health
+                int healthHeight = 38;
                 {
-                    float startY = TableConst.RootPathHeight + TableConst.ModeHeight + TableConst.TableBorder;
+                    if (_modeHealth.ContainsKey(_mode))
+                    {
+                        StringBuilder sb = new StringBuilder(100);
+                        sb.Append(OverviewTableConst.GetHealthStateDesc(_modeHealth[_mode].State));
+                        sb.Append(_modeHealth[_mode].Desc);
+                        if (_modeHealth[_mode].State != Health.HealthEnum.NONE)
+                        {
+                            sb.Append(string.Format(OverviewTableString.Recommand, _modeHealth[_mode].Threshold, _modeHealth[_mode].Value));
+                        }
+                        else
+                        {
+                            healthHeight = 17;
+                        }
+                        EditorGUILayout.HelpBox(sb.ToString(), (MessageType)Enum.ToObject(typeof(MessageType), (int)_modeHealth[_mode].State));
+                    }
+                    else
+                    {
+                        EditorGUILayout.HelpBox(OverviewTableString.NotInitTip, MessageType.Warning);
+                    }
+                }
+
+                // 4. select area
+                {
+                    float startY = TableConst.RootPathHeight + TableConst.ModeHeight + TableConst.TableBorder + healthHeight;
                     float height = rect.height - startY - 5;
                     _dataTable.Draw(new Rect(TableConst.TableBorder, startY, rect.width * TableConst.SplitterRatio - 1.5f * TableConst.TableBorder, height), rebuild);
                     _showTable.Draw(new Rect(rect.width * TableConst.SplitterRatio + 0.5f * TableConst.TableBorder, startY, rect.width * (1.0f - TableConst.SplitterRatio) - 1.5f * TableConst.TableBorder, height));

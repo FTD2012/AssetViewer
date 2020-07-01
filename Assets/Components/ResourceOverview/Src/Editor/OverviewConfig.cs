@@ -1,6 +1,9 @@
-using EditorCommon;
-using System.Collections.Generic;
+using CommonComponent;
+using System;
+using System.Reflection;
 using UnityEngine;
+using UnityEngine.Assertions;
+
 
 namespace ResourceFormat
 {
@@ -14,10 +17,25 @@ namespace ResourceFormat
         public const string ModelReportMenu = "UComponents/ResourcesOverview/ModelOverviewReport";
     }
 
+    public static class OverviewTableString
+    {
+        public static string Comma = "，";
+        public static string Pass = "通过";
+        public static string Warning = "警告";
+        public static string Error = "未通过";
+        public static string Recommand = "推荐值 < {0}，当前值{1}。";
+        public static string NotInitTip = "请点击上方按钮刷新以获得数据。";
+        public static string Texture_ReadWrite = "开启Read/Write选项的纹理。Read/Write 选项启用后，将会允许从脚本来访问纹理数据，所以在系统内存中会保留纹理数据的副本，占用额外内存，等同于一个纹理数据会有双倍的内存消耗。";
+        public static string Texture_MipMap = "开启Mipmap选项的Sprite纹理。Mipmap开启后，内存会是未开启 Mipmap 的 1.33 倍，因为 Mipmap 会生成一组长宽依次减少一倍的纹理序列，一直生成到 1*1。 Mipmap 提升 GPU 效率，一般用于 3D 场景或角色，UI 不建议开启。";
+        public static string Texture_Resolution = "尺寸过大的纹理。一般来说，纹理尺寸越大，占用的内存也就越大，一般情况我们推荐纹理尺寸为 512*512，如果 512*512 显示效果已经够用，那么就不要用 1024*1024 的纹理，因为后者的内存占用是前者的 4 倍。";
+    }
+
     public static class OverviewTableConst
     {
         public const int VertexCountMod = 1000;
         public const int TriangleCountMod = 1000;
+
+        public static float LeftWidth = 0.4f;
 
         public static int[] TextureSize = { 64 * 64, 128 * 128, 256 * 256, 512 * 512, 1024 * 1024, 2048 * 2048, 4096 * 4096 };
         public static string[] TextureSizeStr = { "[0 - 64 X 64]", " (64 X 64 - 128 X 128]", "(128 X 128 - 256 * 256]",
@@ -115,6 +133,43 @@ namespace ResourceFormat
             return path;
         }
 
-        public static float LeftWidth = 0.4f;
+        public static Health.HealthEnum GetHealthState(float threshold, float conditionCount)
+        {
+            Assert.IsTrue(threshold > 0 && conditionCount > 0, "threshold and conditionCount must greater than zero.");
+            if (conditionCount <= 0.8 * threshold)
+            {
+                return Health.HealthEnum.INFO;
+            }
+            else if (conditionCount <= threshold)
+            {
+                return Health.HealthEnum.WARNING;
+            }
+            else
+            {
+                return Health.HealthEnum.ERROR;
+            }
+        }
+
+        public static string GetHealthStateDesc(Health.HealthEnum healthEnum)
+        {
+            switch (healthEnum)
+            {
+                case Health.HealthEnum.NONE:
+                    return string.Empty;
+                case Health.HealthEnum.INFO:
+                    return OverviewTableString.Pass + OverviewTableString.Comma;
+                case Health.HealthEnum.WARNING:
+                    return OverviewTableString.Warning + OverviewTableString.Comma;
+                case Health.HealthEnum.ERROR:
+                    return OverviewTableString.Error + OverviewTableString.Comma;
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+        public static T GetSingletonInstance<T>()
+        {
+            return (T)typeof(Singleton<>).MakeGenericType(typeof(T)).GetMethod("Instance", BindingFlags.Static | BindingFlags.Public).Invoke(null, null);
+        }
+
     }
 }

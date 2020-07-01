@@ -6,7 +6,6 @@ namespace ResourceFormat
     public class TextureOverviewData : OverviewData
     {
         /// Don't modify variable name
-        public int Count;
         public int Memory;
         public bool ReadWriteEnable;
         public bool MipmapEnable;
@@ -17,6 +16,8 @@ namespace ResourceFormat
         public int SizeIndex;
         public string SizeStr;
         public bool WidthAndHeight;
+        public int Width;
+        public int Height;
 
         private TextureOverviewMode _mode;
 
@@ -32,6 +33,8 @@ namespace ResourceFormat
             WidthAndHeight = texInfo.Width == texInfo.Height;
             SizeIndex = OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
             SizeStr = OverviewTableConst.TextureSizeStr[SizeIndex];
+            Width = texInfo.Width;
+            Height = texInfo.Height;
         }
 
         public override bool IsMatch(BaseInfo texInfo)
@@ -61,6 +64,43 @@ namespace ResourceFormat
                     return IosFormat == texInfo.IosFormat;
             }
             return false;
+        }
+
+        public override int GetMatchHealthCount(object obj)
+        {
+            int count = 0;
+
+            foreach (TextureInfo texInfo in _object)
+            {
+                switch (_mode)
+                {
+                    case TextureOverviewMode.ReadWrite:
+                        count += texInfo.ReadWriteEnable == (bool)obj ? 1 : 0;
+                        break;
+                    case TextureOverviewMode.MipMap:
+                        count += texInfo.MipmapEnable == (bool)obj ? 1 : 0;
+                        break;
+                        //case TextureOverviewMode.Type:
+                        //return ImportType == texInfo.ImportType;
+                        //break;
+                    case TextureOverviewMode.Resolution:
+                        count += texInfo.Width * texInfo.Height >= (int)obj ? 1 : 0;
+                        break;
+                        //case TextureOverviewMode.WidthVSHeight:
+                        //    return WidthAndHeight == (texInfo.Width == texInfo.Height);
+                        //break;
+                        //case TextureOverviewMode.StandaloneFormat:
+                        //    return StandaloneFormat == texInfo.StandaloneFormat;
+                        //break;
+                        //case TextureOverviewMode.AndroidFormat:
+                        //    return AndroidFormat == texInfo.AndroidFormat;
+                        //break;
+                        //case TextureOverviewMode.iOSFormat:
+                        //    return IosFormat == texInfo.IosFormat;
+                        //break;
+                }
+            }
+            return count;
         }
 
         public override void AddObject(BaseInfo texInfo)

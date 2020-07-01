@@ -14,10 +14,11 @@ namespace ResourceFormat
         public int Pass;
         public int Instruction;
         public string InstructionStr;
-        public int Variant;
-        public string VariantStr;
+        public ulong Variant;
         public int Property;
-
+        public int SubShader;
+        public int Sample;
+        public string RenderType;
 
         private ShaderOverviewMode _mode;
 
@@ -31,9 +32,11 @@ namespace ResourceFormat
             Pass = shaderInfo.Pass;
             Instruction = OverviewTableConst.GetInstructionIndex(shaderInfo.Instruction);
             InstructionStr = OverviewTableConst.InstructionSizeStr[Instruction];
-            Variant = OverviewTableConst.GetVariantIndex(shaderInfo.Variant);
-            VariantStr = OverviewTableConst.VariantSizeStr[Variant];
+            Variant = shaderInfo.Variant;
             Property = shaderInfo.Property;
+            SubShader = shaderInfo.SubShader;
+            Sample = shaderInfo.Sample;
+            RenderType = shaderInfo.RenderType;
         }
 
         public override bool IsMatch(BaseInfo shaderInfo)
@@ -55,9 +58,15 @@ namespace ResourceFormat
                 case ShaderOverviewMode.Instruction:
                     return Instruction == OverviewTableConst.GetInstructionIndex(shaderInfo.Instruction);
                 case ShaderOverviewMode.Variant:
-                    return Variant == OverviewTableConst.GetVariantIndex(shaderInfo.Variant);
+                    return Variant == shaderInfo.Variant;
                 case ShaderOverviewMode.Property:
                     return Property == shaderInfo.Property;
+                case ShaderOverviewMode.SubShader:
+                    return SubShader == shaderInfo.SubShader;
+                case ShaderOverviewMode.Sample:
+                    return Sample == shaderInfo.Sample;
+                case ShaderOverviewMode.RenderType:
+                    return RenderType == shaderInfo.RenderType;
             }
             return false;
         }

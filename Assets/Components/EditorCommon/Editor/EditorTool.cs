@@ -427,7 +427,7 @@ namespace EditorCommon
 
                 return data;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Debug.LogException(e);
                 return default(T);

@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using EditorCommon;
 using System;
+using System.Collections.Generic;
 
 namespace ResourceFormat
 {
@@ -36,7 +37,21 @@ namespace ResourceFormat
             _modelViewer = new ModelOverviewViewer(this);
             _particleViewer = new ParticleOverviewViewer(this);
             _shaderViewer = new ShaderOverviewViewer(this);
+
+            InitHealthData();
         }
+
+
+        void InitHealthData()
+        {
+            // TODO: ljm >>> read from file
+            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().Clear();
+            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.ReadWrite.ToString(), true, OverviewTableString.Texture_ReadWrite, 10, new List<object> { true });
+            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.MipMap.ToString(), true, OverviewTableString.Texture_MipMap, 5, new List<object> { true });
+            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.Resolution.ToString(), true, OverviewTableString.Texture_Resolution, 5, new List<object> { 512 * 512 });
+
+        }
+
 
         void Update()
         {

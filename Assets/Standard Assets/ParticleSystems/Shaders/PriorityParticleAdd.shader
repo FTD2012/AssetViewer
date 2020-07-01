@@ -16,6 +16,7 @@ Category {
 		Bind "Vertex", vertex
 		Bind "TexCoord", texcoord
 	}
+		LOD 300
 	
 	// ---- Fragment program cards
 	SubShader {

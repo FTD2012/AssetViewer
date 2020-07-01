@@ -16,7 +16,7 @@ namespace ResourceFormat
         TriangleCount
     }
 
-    public class ModelOverviewViewer : OverviewViewer<ModelOverviewData, ModelInfo, ModelOverviewModeManager>
+    public class ModelOverviewViewer : OverviewViewer<ModelOverviewData, ModelInfo, ModelOverviewModeManager, ModelHealthInfoManager>
     {
         public ModelOverviewViewer(EditorWindow hostWindow) : base(hostWindow)
         {
@@ -104,6 +104,9 @@ namespace ResourceFormat
 
     }
 
+    public class ModelHealthInfoManager : HealthInfoManager
+    {
 
+    }
 
 }
