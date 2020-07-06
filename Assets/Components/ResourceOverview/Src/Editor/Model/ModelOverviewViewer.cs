@@ -39,37 +39,37 @@ namespace ResourceFormat
                 case ModelOverviewModer.ReadWrite:
                     return new ColumnType[] {
                         new ColumnType("ReadWriteEnable", "R/W Enable", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
+                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 case ModelOverviewModer.ImportMaterial:
                     return new ColumnType[] {
                         new ColumnType("ImportMaterials", "ImportMaterials", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
+                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 case ModelOverviewModer.OptimizeMesh:
                     return new ColumnType[] {
                         new ColumnType("OptimizeMesh", "OptimizeMesh", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
+                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 case ModelOverviewModer.MeshData:
                     return new ColumnType[] {
                         new ColumnType("MeshDataStr", "MeshData", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
+                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 case ModelOverviewModer.MeshCompress:
                     return new ColumnType[] {
                         new ColumnType("MeshCompression", "MeshCompression", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
+                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 case ModelOverviewModer.VertexCount:
                     return new ColumnType[] {
                         new ColumnType("VertexRangeStr", "Vertex", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
+                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 case ModelOverviewModer.TriangleCount:
                     return new ColumnType[] {
                         new ColumnType("TriangleRangeStr", "Triangle", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
+                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 default:
                     throw new NotImplementedException();

@@ -1,5 +1,6 @@
 using UnityEditor;
 using System;
+using UnityEngine;
 
 namespace ResourceFormat
 {
@@ -18,6 +19,7 @@ namespace ResourceFormat
         public bool WidthAndHeight;
         public int Width;
         public int Height;
+        public FilterMode FilterMode;
 
         private TextureOverviewMode _mode;
 
@@ -35,6 +37,7 @@ namespace ResourceFormat
             SizeStr = OverviewTableConst.TextureSizeStr[SizeIndex];
             Width = texInfo.Width;
             Height = texInfo.Height;
+            FilterMode = texInfo.FilterMode;
         }
 
         public override bool IsMatch(BaseInfo texInfo)
@@ -62,6 +65,8 @@ namespace ResourceFormat
                     return AndroidFormat == texInfo.AndroidFormat;
                 case TextureOverviewMode.iOSFormat:
                     return IosFormat == texInfo.IosFormat;
+                case TextureOverviewMode.FilterMode:
+                    return FilterMode == texInfo.FilterMode;
             }
             return false;
         }
@@ -86,18 +91,21 @@ namespace ResourceFormat
                     case TextureOverviewMode.Resolution:
                         count += texInfo.Width * texInfo.Height >= (int)obj ? 1 : 0;
                         break;
-                        //case TextureOverviewMode.WidthVSHeight:
-                        //    return WidthAndHeight == (texInfo.Width == texInfo.Height);
-                        //break;
-                        //case TextureOverviewMode.StandaloneFormat:
-                        //    return StandaloneFormat == texInfo.StandaloneFormat;
-                        //break;
-                        //case TextureOverviewMode.AndroidFormat:
-                        //    return AndroidFormat == texInfo.AndroidFormat;
-                        //break;
-                        //case TextureOverviewMode.iOSFormat:
-                        //    return IosFormat == texInfo.IosFormat;
-                        //break;
+                    //case TextureOverviewMode.WidthVSHeight:
+                    //    return WidthAndHeight == (texInfo.Width == texInfo.Height);
+                    //break;
+                    //case TextureOverviewMode.StandaloneFormat:
+                    //    return StandaloneFormat == texInfo.StandaloneFormat;
+                    //break;
+                    //case TextureOverviewMode.AndroidFormat:
+                    //    return AndroidFormat == texInfo.AndroidFormat;
+                    //break;
+                    //case TextureOverviewMode.iOSFormat:
+                    //    return IosFormat == texInfo.IosFormat;
+                    //break;
+                    case TextureOverviewMode.FilterMode:
+                        count += texInfo.FilterMode == (FilterMode)obj ? 1 : 0;
+                        break;
                 }
             }
             return count;

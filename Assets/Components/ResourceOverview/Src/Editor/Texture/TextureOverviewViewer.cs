@@ -9,6 +9,7 @@ namespace ResourceFormat
     {
         ReadWrite = 0,
         MipMap,
+        FilterMode,
         Type,
         Resolution,
         WidthVSHeight,
@@ -29,7 +30,7 @@ namespace ResourceFormat
     {
         public override string[] GetMode()
         {
-            return Enum.GetNames(typeof(TextureOverviewMode));
+            return EditorTool.RemoveAt(Enum.GetNames(typeof(TextureOverviewMode)), 5);
         }
 
         public override ColumnType[] GetDataTable(string textureOverviewMode)
@@ -77,6 +78,11 @@ namespace ResourceFormat
                         new ColumnType("IosFormat", "iOSFormat", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
                         new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case TextureOverviewMode.FilterMode:
+                    return new ColumnType[] {
+                        new ColumnType("FilterMode", "FilterMode", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 default:
                     throw new NotImplementedException();
             }
@@ -113,6 +119,11 @@ namespace ResourceFormat
                         new ColumnType("IosFormat", "Format", 0.2f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("IosOverriden", "Overriden", 0.2f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("IosSize", "Memory", 0.2f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case TextureOverviewMode.FilterMode:
+                    return new ColumnType[] {
+                        new ColumnType("Path", "Path", 0.6f, TextAnchor.MiddleLeft, ""),
+                        new ColumnType("FilterMode", "FilterMode", 0.2f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("MemSize", "Memory", 0.2f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 default:
                     throw new NotImplementedException();
             }

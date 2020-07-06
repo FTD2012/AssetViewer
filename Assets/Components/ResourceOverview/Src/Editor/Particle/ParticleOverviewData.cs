@@ -53,6 +53,23 @@ namespace ResourceFormat
             return false;
         }
 
+        public override int GetMatchHealthCount(object obj)
+        {
+            int count = 0;
+
+            foreach (ParticleInfo particleInfo in _object)
+            {
+                switch (_mode)
+                {
+                    case ParticleOverviewMode.MaxParticle:
+                        count += particleInfo.MaxParticles >= (int)obj ? 1 : 0;
+                        break;
+                }
+            }
+
+            return count;
+        }
+
         public override void AddObject(BaseInfo modelInfo)
         {
             addObject((ParticleInfo)modelInfo);

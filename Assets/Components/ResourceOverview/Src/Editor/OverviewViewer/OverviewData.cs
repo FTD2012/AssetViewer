@@ -56,6 +56,12 @@ namespace ResourceFormat
 
         public void AddHealthInfo(string modeEnum, bool enableConditon, string tip, int threshold, List<object> conditionList)
         {
+            if (enableConditon && conditionList == null)
+            {
+                Debug.LogError("Condition is enable, but none method is provided");
+                return;
+            }
+
             if (healthInfoMetaDic.ContainsKey(modeEnum))
             {
                 Debug.LogWarning("Append same healdinfo.");

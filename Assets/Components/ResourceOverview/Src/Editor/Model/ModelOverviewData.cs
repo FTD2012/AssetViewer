@@ -17,7 +17,6 @@ namespace ResourceFormat
     public class ModelOverviewData : OverviewData
     {
         /// Don't modify variable name
-        public int Count;
         public int Memory;
         public bool ReadWriteEnable;
         public bool ImportMaterials;

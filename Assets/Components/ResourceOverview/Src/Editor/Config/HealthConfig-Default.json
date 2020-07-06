@@ -1,0 +1,14 @@
+{
+    "Name" : "Default",
+    "Texture": {
+        "ReadWrite" : 10,
+        "MipMap": 5,
+        "Resolution" : 26244,
+        "ResolutionCount" : 5,
+        "Trilinear": 10
+    },
+    "Particle": {
+        "MaxParticle" : 30,
+        "MaxParticleCount" : 5
+    }
+}

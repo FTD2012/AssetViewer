@@ -212,7 +212,7 @@ namespace EditorCommon
             if (tTexture is Texture2D)
             {
                 var tTex2D = tTexture as Texture2D;
-                var bitsPerPixel = GetBitsPerPixel(format);
+                var bitsPerPixel = GetBitsPerPixel(format); //TODO: ljm >>> ETC/DXT/BC multiple of 4, PVRTC POT
                 var mipMapCount = tTex2D.mipmapCount;
                 var mipLevel = 1;
                 var tSize = 0.0f;
@@ -446,6 +446,16 @@ namespace EditorCommon
         {
             return Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition);
         }
+        public static T[] RemoveAt<T>(this T[] source, int index)
+        {
+            T[] dest = new T[source.Length - 1];
+            if (index > 0)
+                Array.Copy(source, 0, dest, 0, index);
 
+            if (index < source.Length - 1)
+                Array.Copy(source, index + 1, dest, index, source.Length - index - 1);
+
+            return dest;
+        }
     }
 }

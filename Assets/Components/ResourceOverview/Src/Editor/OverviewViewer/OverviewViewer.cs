@@ -184,20 +184,36 @@ namespace ResourceFormat
 
         public void Draw(Rect rect, KeyCode keyCode)
         {
+            bool rebuild = false;
+
             GUILayout.BeginVertical();
             {
-                bool rebuild = false;
-
                 // 1. root path
                 GUILayout.BeginHorizontal(TableStyles.Toolbar);
                 {
                     GUILayout.Label("RootPath: ", GUILayout.Width(100));
-                    _rootPath = EditorGUILayout.TextField(_rootPath, TableStyles.TextField, GUILayout.Width(360)); /// TODO: ljm >>> change to select path
+                    _rootPath = EditorGUILayout.TextField(_rootPath, TableStyles.TextField, GUILayout.Width(360));
+                    Color origColor = GUI.backgroundColor;
+                    GUI.backgroundColor = Color.green;
                     if (GUILayout.Button("Refresh Data", TableStyles.ToolbarButton, GUILayout.MaxWidth(120)) || keyCode == KeyCode.F5)
                     {
                         rebuild = true;
                         RefreshData(forceRefresh: true);
                     }
+                    GUI.backgroundColor = origColor;
+
+                    // drop down
+                    //GUILayout.FlexibleSpace();
+                    EditorGUILayout.PrefixLabel("Threshod Selector", EditorStyles.miniButton);
+                    var modeContent = new GUIContent("Selector \u007C \u25BE");
+                    var modeRect = GUILayoutUtility.GetRect(modeContent, EditorStyles.miniButton, GUILayout.ExpandWidth(false));
+                    var modeDropRect = new Rect(modeRect.xMax - 16, modeRect.y, 16, modeRect.height);
+
+                    if (EditorGUI.DropdownButton(modeDropRect, GUIContent.none, FocusType.Passive, GUIStyle.none) || GUI.Button(modeRect, modeContent, EditorStyles.miniButton))
+                    {
+                        PopupWindow.Show(modeRect, new HealthConfigPopup());
+                    }
+
                 }
                 GUILayout.EndHorizontal();
 
@@ -226,6 +242,7 @@ namespace ResourceFormat
                         {
                             healthHeight = 17;
                         }
+
                         EditorGUILayout.HelpBox(sb.ToString(), (MessageType)Enum.ToObject(typeof(MessageType), (int)_modeHealth[_mode].State));
                     }
                     else
@@ -236,10 +253,13 @@ namespace ResourceFormat
 
                 // 4. select area
                 {
-                    float startY = TableConst.RootPathHeight + TableConst.ModeHeight + TableConst.TableBorder + healthHeight;
-                    float height = rect.height - startY - 5;
-                    _dataTable.Draw(new Rect(TableConst.TableBorder, startY, rect.width * TableConst.SplitterRatio - 1.5f * TableConst.TableBorder, height), rebuild);
-                    _showTable.Draw(new Rect(rect.width * TableConst.SplitterRatio + 0.5f * TableConst.TableBorder, startY, rect.width * (1.0f - TableConst.SplitterRatio) - 1.5f * TableConst.TableBorder, height));
+                    if (_modeInit[_mode])
+                    {
+                        float startY = TableConst.RootPathHeight + TableConst.ModeHeight + TableConst.TableBorder + healthHeight;
+                        float height = rect.height - startY - 5;
+                        _dataTable.Draw(new Rect(TableConst.TableBorder, startY, rect.width * TableConst.SplitterRatio - 1.5f * TableConst.TableBorder, height), rebuild);
+                        _showTable.Draw(new Rect(rect.width * TableConst.SplitterRatio + 0.5f * TableConst.TableBorder, startY, rect.width * (1.0f - TableConst.SplitterRatio) - 1.5f * TableConst.TableBorder, height));
+                    }
                 }
             }
             GUILayout.EndVertical();
