@@ -28,7 +28,7 @@ namespace ResourceFormat
         {
             ResourceOverviewWin resourceInfoWin = GetWindow<ResourceOverviewWin>();
             resourceInfoWin.minSize = new Vector2(800, 450);
-            resourceInfoWin.titleContent = new GUIContent("ResViewer", (Texture)Resources.Load("icon1"));    /// TODO: ljm >>> refractor load meathod
+            resourceInfoWin.titleContent = new GUIContent("AssetViewer");    /// TODO: ljm >>> refractor load meathod
         }
 
         void OnEnable()
@@ -56,22 +56,47 @@ namespace ResourceFormat
 
             // Texture
             OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().Clear();
-            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.ReadWrite.ToString(), true, OverviewTableString.Texture_ReadWrite, configJson.Texture.ReadWrite, new List<object> { true });
-            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.MipMap.ToString(), true, OverviewTableString.Texture_MipMap, configJson.Texture.MipMap, new List<object> { true });
-            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.Type.ToString(), false, OverviewTableString.Texture_Type, 0, null);
-            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.Resolution.ToString(), true, OverviewTableString.Texture_Resolution, configJson.Texture.ResolutionCount, new List<object> { configJson.Texture.Resolution });
-            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.StandaloneFormat.ToString(), false, OverviewTableString.Texture_Standalone, 0, null);
-            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.AndroidFormat.ToString(), false, OverviewTableString.Texture_Android, 0, null);
-            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.iOSFormat.ToString(), false, OverviewTableString.Texture_iOS, 0, null);
-            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(TextureOverviewMode.FilterMode.ToString(), true, OverviewTableString.Texture_FilterMode, configJson.Texture.Trilinear, new List<object> { FilterMode.Trilinear });
+            foreach (string mode in OverviewTableConst.GetSingletonInstance<TextureOverviewModeManager>().GetMode())
+            {
+                HealthConfig.ModeConfig modeConfig = configJson.GetModeConfig("Texture", mode);
+                if (modeConfig != null)
+                {
+                    OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
+                }
+            }
+
+            // Model
+            OverviewTableConst.GetSingletonInstance<ModelHealthInfoManager>().Clear();
+            foreach (string mode in OverviewTableConst.GetSingletonInstance<ModelOverviewModeManager>().GetMode())
+            {
+                HealthConfig.ModeConfig modeConfig = configJson.GetModeConfig("Model", mode);
+                if (modeConfig != null)
+                {
+                    OverviewTableConst.GetSingletonInstance<ModelHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
+                }
+            }
 
             // Particle
             OverviewTableConst.GetSingletonInstance<ParticleHealthInfoManager>().Clear();
-            OverviewTableConst.GetSingletonInstance<ParticleHealthInfoManager>().AddHealthInfo(ParticleOverviewMode.MaxParticle.ToString(), true, string.Format(OverviewTableString.Particle_Max, configJson.Particle.MaxParticle), configJson.Particle.MaxParticleCount, new List<object> { configJson.Particle.MaxParticle });
-            OverviewTableConst.GetSingletonInstance<ParticleHealthInfoManager>().AddHealthInfo(ParticleOverviewMode.Duration.ToString(), false, OverviewTableString.Particle_Duration, 0, null);
-            OverviewTableConst.GetSingletonInstance<ParticleHealthInfoManager>().AddHealthInfo(ParticleOverviewMode.PlayOnAwake.ToString(), false, OverviewTableString.Texture_FilterMode, configJson.Texture.Trilinear, new List<object> { FilterMode.Trilinear });
-            OverviewTableConst.GetSingletonInstance<ParticleHealthInfoManager>().AddHealthInfo(ParticleOverviewMode.Looping.ToString(), false, string.Format(OverviewTableString.Texture_FilterMode, configJson.Texture.Trilinear), configJson.Texture.Trilinear, new List<object> { FilterMode.Trilinear });
+            foreach (string mode in OverviewTableConst.GetSingletonInstance<ParticleOverviewModeManager>().GetMode())
+            {
+                HealthConfig.ModeConfig modeConfig = configJson.GetModeConfig("Particle", mode);
+                if (modeConfig != null)
+                {
+                    OverviewTableConst.GetSingletonInstance<ParticleHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
+                }
+            }
 
+            // Shader
+            OverviewTableConst.GetSingletonInstance<ShaderHealthInfoManager>().Clear();
+            foreach (string mode in OverviewTableConst.GetSingletonInstance<ShaderOverviewModeManager>().GetMode())
+            {
+                HealthConfig.ModeConfig modeConfig = configJson.GetModeConfig("Shader", mode);
+                if (modeConfig != null)
+                {
+                    OverviewTableConst.GetSingletonInstance<ShaderHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
+                }
+            }
         }
 
 
@@ -109,6 +134,12 @@ namespace ResourceFormat
                 _shaderViewer.Draw(viewRect, _pressedKey);
             }
             _pressedKey = KeyCode.None;
+        }
+
+        void OnDestroy()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 }

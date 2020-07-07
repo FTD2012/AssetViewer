@@ -88,7 +88,7 @@ namespace ResourceFormat
         {
             if (!healthInfoMetaDic.ContainsKey(modeEnum))
             {
-                return "Empty describle";
+                return "";
             }
             return healthInfoMetaDic[modeEnum].Tip;
         }

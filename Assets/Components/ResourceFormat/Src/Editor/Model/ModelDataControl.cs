@@ -40,10 +40,10 @@ namespace ResourceFormat
                 EditorUtility.DisplayProgressBar("获取模型数据", name, (i * 1.0f) / list.Count);
                 if (!EditorPath.IsModel(path))
                     continue;
-                ModelInfo modelInfo = ModelInfo.CreateModelInfo(path);
+                List<ModelInfo> modelInfo = ModelInfo.CreateModelInfo(path);
                 if (modelInfo != null)
                 {
-                    m_modelInfo.Add(modelInfo);
+                    m_modelInfo.AddRange(modelInfo);
                 }
             }
             EditorUtility.ClearProgressBar();

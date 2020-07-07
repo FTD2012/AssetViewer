@@ -7,15 +7,15 @@ namespace ResourceFormat
 {
     public enum ShaderOverviewMode
     {
-        MaxLOD = 0,
-        RenderQueue,
+        Sample = 0,
         Pass,
         Instruction,
+        RenderType,
         Variant,
+        RenderQueue,
+        MaxLOD,
         Property,
-        SubShader,
-        Sample,
-        RenderType
+        SubShader
     }
 
     public class ShaderOverviewViewer : OverviewViewer<ShaderOverviewData, ShaderInfo, ShaderOverviewModeManager, ShaderHealthInfoManager>

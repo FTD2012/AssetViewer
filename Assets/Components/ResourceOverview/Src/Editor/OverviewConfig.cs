@@ -26,19 +26,8 @@ namespace ResourceFormat
         public static string Warning = "警告";
         public static string Error = "未通过";
         public static string Recommand = "推荐值 < {0}，当前值{1}。";
+        public static string RecommandCurrent = "当前值{0}。";
         public static string NotInitTip = "请点击上方按钮刷新以获得数据。";
-        public static string Texture_ReadWrite = "开启Read/Write选项的纹理。Read/Write 选项启用后，将会允许从脚本来访问纹理数据，所以在系统内存中会保留纹理数据的副本，占用额外内存，等同于一个纹理数据会有双倍的内存消耗。";
-        public static string Texture_MipMap = "开启Mipmap选项的Sprite纹理。Mipmap开启后，内存会是未开启 Mipmap 的 1.33 倍，因为 Mipmap 会生成一组长宽依次减少一倍的纹理序列，一直生成到 1*1。 Mipmap 提升 GPU 效率，一般用于 3D 场景或角色，UI 不建议开启。";
-        public static string Texture_Type = "Unity 支持使用的图片类型包括，Default、Image、NormalMap、Bump、GUI、Cubemap、Reflection、Cookie、Advanced、Lightmap、Cursor、Sprite、HDRI、SingleChannel，详情参考TextureImporterType。";
-        public static string Texture_Resolution = "尺寸过大的纹理。一般来说，纹理尺寸越大，占用的内存也就越大，一般情况我们推荐纹理尺寸为 512*512，如果 512*512 显示效果已经够用，那么就不要用 1024*1024 的纹理，因为后者的内存占用是前者的 4 倍。";
-        public static string Texture_Standalone = "纹理在standalone模式下的内存占用。占用的内存过大可能会导致程序崩溃，请根据平台选择适当的压缩格式，Standalone模式下pot不透明纹理推荐使用DXT1，透明纹理推荐使用DXT5，nopt可以考虑将图片打包再使用对应压缩方式。";
-        public static string Texture_Android = "纹理在Android模式下的内存占用。占用的内存过大可能会导致程序崩溃，请根据平台选择适当的压缩格式，Android模式下pot不透明纹理推荐使用ETC1，透明纹理推荐使用ETC2，nopt可以考虑将图片打包再使用对应压缩方式。";
-        public static string Texture_iOS = "纹理在iOS模式下的内存占用。占用的内存过大可能会导致程序崩溃，请根据平台选择适当的压缩格式，iOS模式下推荐使用ASTC格式。";
-        public static string Texture_FilterMode = "过滤模式为Trilinear的纹理。Trilinear 三线性过滤（三线性插值），纹理会在不同的 mip水平之间进行模糊，从而增加 GPU 开销。";
-
-        public static string Particle_Max = "粒子数上限超过{0}的粒子系统。";
-        public static string Particle_Duration = "粒子的生存周期。";
-
     }
 
     public static class OverviewTableConst
@@ -146,7 +135,7 @@ namespace ResourceFormat
 
         public static Health.HealthEnum GetHealthState(float threshold, float conditionCount)
         {
-            Assert.IsTrue(threshold > 0 && conditionCount > 0, "threshold and conditionCount must greater than zero.");
+            Assert.IsTrue(threshold >= 0 && conditionCount >= 0, "threshold and conditionCount must greater than zero.");
             if (conditionCount <= 0.8 * threshold)
             {
                 return Health.HealthEnum.INFO;

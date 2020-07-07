@@ -236,14 +236,28 @@ namespace ResourceFormat
                         sb.Append(_modeHealth[_mode].Desc);
                         if (_modeHealth[_mode].State != Health.HealthEnum.NONE)
                         {
-                            sb.Append(string.Format(OverviewTableString.Recommand, _modeHealth[_mode].Threshold, _modeHealth[_mode].Value));
+                            if (_modeHealth[_mode].Threshold > 0)
+                            {
+                                sb.Append(string.Format(OverviewTableString.Recommand, _modeHealth[_mode].Threshold, _modeHealth[_mode].Value));
+                            }
+                            else
+                            {
+                                sb.Append(string.Format(OverviewTableString.RecommandCurrent, _modeHealth[_mode].Value));
+                            }
                         }
                         else
                         {
                             healthHeight = 17;
                         }
 
-                        EditorGUILayout.HelpBox(sb.ToString(), (MessageType)Enum.ToObject(typeof(MessageType), (int)_modeHealth[_mode].State));
+                        if (sb.Length != 0)
+                        {
+                            EditorGUILayout.HelpBox(sb.ToString(), (MessageType)Enum.ToObject(typeof(MessageType), (int)_modeHealth[_mode].State));
+                        }
+                        else
+                        {
+                            healthHeight = 0;
+                        }
                     }
                     else
                     {

@@ -8,12 +8,12 @@ namespace ResourceFormat
     public enum ModelOverviewModer
     {
         ReadWrite = 0,
-        ImportMaterial,
-        OptimizeMesh,
-        MeshData,
-        MeshCompress,
+        TriangleCount,
         VertexCount,
-        TriangleCount
+        MeshData,
+        OptimizeMesh,
+        ImportMaterial,
+        MeshCompress
     }
 
     public class ModelOverviewViewer : OverviewViewer<ModelOverviewData, ModelInfo, ModelOverviewModeManager, ModelHealthInfoManager>
@@ -90,18 +90,15 @@ namespace ResourceFormat
                 case ModelOverviewModer.VertexCount:
                 case ModelOverviewModer.TriangleCount:
                     return new ColumnType[] {
-                        new ColumnType("Path", "Path", 0.7f, TextAnchor.MiddleLeft, ""),
+                        new ColumnType("RealPath", "Path", 0.6f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("MemSize", "Memory", 0.1f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
+                        new ColumnType("TotalMem", "TotalMemory", 0.1f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
                         new ColumnType("vertexCount", "VertexCount", 0.1f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("triangleCount", "TriangleCount", 0.1f, TextAnchor.MiddleCenter, "")};
                 default:
                     throw new NotImplementedException();
             }
-
-
         }
-
-
     }
 
     public class ModelHealthInfoManager : HealthInfoManager

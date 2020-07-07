@@ -69,6 +69,31 @@ namespace ResourceFormat
             return false;
         }
 
+        public override int GetMatchHealthCount(object obj)
+        {
+            int count = 0;
+
+            foreach (ModelInfo modelInfo in _object)
+            {
+                switch (_mode)
+                {
+                    case ModelOverviewMode.ReadWrite:
+                        count += modelInfo.ReadWriteEnable == (bool)obj ? 1 : 0;
+                        break;
+                    case ModelOverviewMode.TriangleCount:
+                        count += modelInfo.triangleCount >= (int)obj ? 1 : 0;
+                        break;
+                    case ModelOverviewMode.VertexCount:
+                        count += modelInfo.vertexCount >= (int)obj ? 1 : 0;
+                        break;
+                    case ModelOverviewMode.OptimizeMesh:
+                        count += modelInfo.OptimizeMesh == (bool)obj ? 1 : 0;
+                        break;
+                }
+            }
+            return count;
+        }
+
         public override void AddObject(BaseInfo modelInfo)
         {
             addObject((ModelInfo)modelInfo);

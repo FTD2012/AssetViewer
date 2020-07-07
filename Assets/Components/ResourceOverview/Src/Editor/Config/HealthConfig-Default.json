@@ -1,14 +1,179 @@
 {
     "Name" : "Default",
-    "Texture": {
-        "ReadWrite" : 10,
-        "MipMap": 5,
-        "Resolution" : 26244,
-        "ResolutionCount" : 5,
-        "Trilinear": 10
-    },
-    "Particle": {
-        "MaxParticle" : 30,
-        "MaxParticleCount" : 5
-    }
+    "WinTypeConfig" : [
+        {
+            "WinTypeName": "Texture",
+            "ModeConfig" : [
+                {
+                    "ModeName" : "ReadWrite",
+                    "Enable" : true,
+                    "Tip" : "开启Read/Write选项的纹理。Read/Write 选项启用后，将会允许从脚本来访问纹理数据，所以在系统内存中会保留纹理数据的副本，占用额外内存，等同于一个纹理数据会有双倍的内存消耗。",
+                    "ConfigValue" : 10,
+                    "Condition" : [true]
+                },
+                {
+                    "ModeName" : "MipMap",
+                    "Enable" : true,
+                    "Tip" : "开启Mipmap选项的Sprite纹理。Mipmap开启后，内存会是未开启 Mipmap 的 1.33 倍，因为 Mipmap 会生成一组长宽依次减少一倍的纹理序列，一直生成到 1*1。 Mipmap 提升 GPU 效率，一般用于 3D 场景或角色，UI 不建议开启。",
+                    "ConfigValue" : 5,
+                    "Condition" : [true]
+                },
+                {
+                    "ModeName" : "FilterMode",
+                    "Enable" : true,
+                    "Tip" : "过滤模式为Trilinear的纹理。Trilinear 三线性过滤（三线性插值），纹理会在不同的 mip水平之间进行模糊，从而增加 GPU 开销。",
+                    "ConfigValue" : 10,
+                    "Condition" : [2]
+                },
+                {
+                    "ModeName" : "Type",
+                    "Enable" : false,
+                    "Tip" : "Unity 支持使用的图片类型包括，Default、Image、NormalMap、Bump、GUI、Cubemap、Reflection、Cookie、Advanced、Lightmap、Cursor、Sprite、HDRI、SingleChannel，详情参考TextureImporterType。",
+                    "ConfigValue" : 0,
+                    "Condition" : []
+                },
+                {
+                    "ModeName" : "Resolution",
+                    "Enable" : true,
+                    "Tip" : "尺寸过大的纹理。一般来说，纹理尺寸越大，占用的内存也就越大，一般情况我们推荐纹理尺寸为 512*512，如果 512*512 显示效果已经够用，那么就不要用 1024*1024 的纹理，因为后者的内存占用是前者的 4 倍。",
+                    "ConfigValue" : 0,
+                    "Condition" : [26244]
+                },
+                {
+                    "ModeName" : "StandaloneFormat",
+                    "Enable" : false,
+                    "Tip" : "纹理在standalone模式下的内存占用。占用的内存过大可能会导致程序崩溃，请根据平台选择适当的压缩格式，Standalone模式下pot不透明纹理推荐使用DXT1，透明纹理推荐使用DXT5，nopt可以考虑将图片打包再使用对应压缩方式。",
+                    "ConfigValue" : 0,
+                    "Condition" : []
+                },
+                {
+                    "ModeName" : "AndroidFormat",
+                    "Enable" : false,
+                    "Tip" : "纹理在Android模式下的内存占用。占用的内存过大可能会导致程序崩溃，请根据平台选择适当的压缩格式，Android模式下pot不透明纹理推荐使用ETC1，透明纹理推荐使用ETC2，nopt可以考虑将图片打包再使用对应压缩方式。",
+                    "ConfigValue" : 0,
+                    "Condition" : []
+                },
+                {
+                    "ModeName" : "iOSFormat",
+                    "Enable" : false,
+                    "Tip" : "纹理在iOS模式下的内存占用。占用的内存过大可能会导致程序崩溃，请根据平台选择适当的压缩格式，iOS模式下推荐使用ASTC格式。",
+                    "ConfigValue" : 0,
+                    "Condition" : []
+                }
+            ]
+        },
+        {
+            "WinTypeName": "Model",
+            "ModeConfig" : [
+                {
+                    "ModeName" : "ReadWrite",
+                    "Enable" : true,
+                    "Tip" : "开启Read/Write选项的网格。Read/Write 选项启用后，将会允许从脚本来访问网格数据，同时会产生网格数据的副本，占用额外内存，等同于一个网格数据会有接近2倍的内存消耗。对于需要使用StaticBatchingUtility.Combine进行合批的Mesh，仍需要开启Mesh的Read/Write选项。",
+                    "ConfigValue" : 10,
+                    "Condition" : [true]
+                },
+                {
+                    "ModeName" : "TriangleCount",
+                    "Enable" : true,
+                    "Tip" : "面片数过大的网格。检测到面片数大于500的网格，建议检测其必要性。",
+                    "ConfigValue" : 0,
+                    "Condition" : [500]
+                },
+                {
+                    "ModeName" : "VertexCount",
+                    "Enable" : true,
+                    "Tip" : "顶点数的网格。检测到顶点数大于1000的网格，建议检测其必要性。",
+                    "ConfigValue" : 0,
+                    "Condition" : [1000]
+                },
+                {
+                    "ModeName" : "OptimizeMesh",
+                    "Enable" : true,
+                    "Tip" : "未开启OptimizeMesh选项的网格。与模型相关，开启后，Unity 会对其进行网格优化，提高 GPU 效率。",
+                    "ConfigValue" : 0,
+                    "Condition" : [false]
+                },
+                {
+                    "ModeName" : "MeshData",
+                    "Enable" : false,
+                    "Tip" : "检测到Mesh的UV、UV2、UV3、UV4、COLOR、NORMAL、TANGENT属性，如无必要建议不进行导入。",
+                    "ConfigValue" : 0,
+                    "Condition" : []
+                }
+            ]
+        },
+        {
+            "WinTypeName": "Particle",
+            "ModeConfig" : [
+                {
+                    "ModeName" : "MaxParticle",
+                    "Enable" : true,
+                    "Tip" : "粒子数上限超过30的粒子系统。",
+                    "ConfigValue" : 0,
+                    "Condition" : [30]
+                },
+                {
+                    "ModeName" : "Duration",
+                    "Enable" : false,
+                    "Tip" : "粒子的生存周期。",
+                    "ConfigValue" : 0,
+                    "Condition" : []
+                },
+                {
+                    "ModeName" : "PlayOnAwake",
+                    "Enable" : false,
+                    "Tip" : "",
+                    "ConfigValue" : 0,
+                    "Condition" : []
+                },
+                {
+                    "ModeName" : "Looping",
+                    "Enable" : false,
+                    "Tip" : "",
+                    "ConfigValue" : 0,
+                    "Condition" : []
+                }
+            ]
+        },
+        {
+            "WinTypeName": "Shader",
+            "ModeConfig" : [
+                {
+                    "ModeName" : "Sample",
+                    "Enable" : true,
+                    "Tip" : "纹理采样数过多的Shader。纹理数量大于3，可能导致 GPU 不必要的开销。",
+                    "ConfigValue" : 0,
+                    "Condition" : [3]
+                },
+                {
+                    "ModeName" : "Instruction",
+                    "Enable" : true,
+                    "Tip" : "HLSL下汇编的指令数。指令数大于20的Shader，会消耗GPU的计算能力。",
+                    "ConfigValue" : 5,
+                    "Condition" : [20]
+                },
+                {
+                    "ModeName" : "RenderType",
+                    "Enable" : true,
+                    "Tip" : "Shader的渲染类型。Opaque可能会增加overdraw。",
+                    "ConfigValue" : 5,
+                    "Condition" : ["Opaque"]
+                },
+                {
+                    "ModeName" : "Variant",
+                    "Enable" : true,
+                    "Tip" : "Shader的变体数量。变体数量大于5的Shader，变体会占用大量内存。",
+                    "ConfigValue" : 0,
+                    "Condition" : [5]
+                },
+                {
+                    "ModeName" : "Pass",
+                    "Enable" : true,
+                    "Tip" : "Shader的Pass数量。频繁调用setpasscall会切换上下文信息，影响Unity的动态和批。",
+                    "ConfigValue" : 0,
+                    "Condition" : [2]
+                }
+            ]
+        }
+    ]
 }

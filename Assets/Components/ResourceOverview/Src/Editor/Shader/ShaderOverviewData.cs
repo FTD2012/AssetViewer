@@ -6,7 +6,6 @@ namespace ResourceFormat
     public class ShaderOverviewData : OverviewData
     {
         /// Don't modify variable name
-        public int Count;
         public int MaxLOD;
         public string MaxLODStr;
         public int RenderQueue;
@@ -69,6 +68,28 @@ namespace ResourceFormat
                     return RenderType == shaderInfo.RenderType;
             }
             return false;
+        }
+
+        public override int GetMatchHealthCount(object obj)
+        {
+            int count = 0;
+
+            foreach (ShaderInfo shaderInfo in _object)
+            {
+                switch (_mode)
+                {
+                    case ShaderOverviewMode.Sample:
+                        count += shaderInfo.Sample > (int)obj ? 1 : 0;
+                        break;
+                    case ShaderOverviewMode.RenderType:
+                        count += shaderInfo.RenderType == (string)obj ? 1 : 0;
+                        break;
+                    case ShaderOverviewMode.Pass:
+                        count += shaderInfo.Pass > (int)obj ? 1 : 0;
+                        break;
+                }
+            }
+            return count;
         }
 
         public override void AddObject(BaseInfo shaderInfo)

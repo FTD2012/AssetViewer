@@ -6,7 +6,6 @@ namespace ResourceFormat
     public class ParticleOverviewData : OverviewData
     {
         /// Don't modify variable name
-        public int Count;
         public int MaxParticle;
         public int SizeIndex;
         public string SizeStr;

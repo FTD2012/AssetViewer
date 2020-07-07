@@ -22,11 +22,15 @@ namespace ResourceFormat
         public bool bHasTangent;
         public int vertexCount;
         public int triangleCount;
+        public string RealPath;
+        public int TotalMem;
+
+        private static int _loadCount = 0;
 
         public int GetMeshDataID()
         {
             int meshDataIndex = _WorkData(0, bHasUV);
-            meshDataIndex = _WorkData(0, bHasUV2);
+            meshDataIndex = _WorkData(meshDataIndex, bHasUV2);
             meshDataIndex = _WorkData(meshDataIndex, bHasUV3);
             meshDataIndex = _WorkData(meshDataIndex, bHasUV4);
             meshDataIndex = _WorkData(meshDataIndex, bHasColor);
@@ -91,50 +95,67 @@ namespace ResourceFormat
                 return data << 1;
         }
 
-        public static ModelInfo CreateModelInfo(string assetPath)
+        public static List<ModelInfo> CreateModelInfo(string assetPath)
         {
             if (!EditorPath.IsModel(assetPath))
             {
                 return null;
             }
 
-            ModelInfo tInfo = null;
-            if (!m_dictModelInfo.TryGetValue(assetPath, out tInfo))
-            {
-                tInfo = new ModelInfo();
-                m_dictModelInfo.Add(assetPath, tInfo);
-            }
-            ModelImporter tImport = AssetImporter.GetAtPath(assetPath) as ModelImporter;
-            Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(assetPath);
+            ModelImporter modelImport = AssetImporter.GetAtPath(assetPath) as ModelImporter;
+            Object[] meshArray = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+            List<ModelInfo> modelInfoList = new List<ModelInfo>();
+            int TotalModelMem = EditorTool.CalculateModelSizeBytes(assetPath);
 
-            if (tImport == null || mesh == null)
+            if (modelImport == null || meshArray.Length <= 0)
+            {
                 return null;
-
-            tInfo.Path = assetPath;
-            tInfo.ReadWriteEnable = tImport.isReadable;
-            tInfo.OptimizeMesh = tImport.optimizeMesh;
-            tInfo.ImportMaterials = tImport.importMaterials;
-            tInfo.ImportAnimation = tImport.importAnimation;
-            tInfo.MeshCompression = tImport.meshCompression;
-
-            tInfo.bHasUV = mesh.uv != null && mesh.uv.Length != 0;
-            tInfo.bHasUV2 = mesh.uv2 != null && mesh.uv2.Length != 0;
-            tInfo.bHasUV3 = mesh.uv3 != null && mesh.uv3.Length != 0;
-            tInfo.bHasUV4 = mesh.uv4 != null && mesh.uv4.Length != 0;
-            tInfo.bHasColor = mesh.colors != null && mesh.colors.Length != 0;
-            tInfo.bHasNormal = mesh.normals != null && mesh.normals.Length != 0;
-            tInfo.bHasTangent = mesh.tangents != null && mesh.tangents.Length != 0;
-            tInfo.vertexCount = mesh.vertexCount;
-            tInfo.triangleCount = mesh.triangles.Length / 3;
-
-            tInfo.MemSize = EditorTool.CalculateModelSizeBytes(assetPath);
-
-            if (m_loadCount % 256 == 0)
-            {
-                Resources.UnloadUnusedAssets();
             }
 
-            return tInfo;
+            foreach (Object meshObject in meshArray)
+            {
+                Mesh mesh = meshObject as Mesh;
+                if (mesh != null)
+                {
+                    ModelInfo modelInfo = new ModelInfo();
+                    modelInfo.Path = assetPath;
+                    modelInfo.RealPath = assetPath + "/" + mesh.name;
+                    modelInfo.ReadWriteEnable = modelImport.isReadable;
+                    modelInfo.OptimizeMesh = modelImport.optimizeMesh;
+                    modelInfo.ImportMaterials = modelImport.importMaterials;
+                    modelInfo.ImportAnimation = modelImport.importAnimation;
+                    modelInfo.MeshCompression = modelImport.meshCompression;
+                    
+                    modelInfo.bHasUV = mesh.uv != null && mesh.uv.Length != 0;
+                    modelInfo.bHasUV2 = mesh.uv2 != null && mesh.uv2.Length != 0;
+                    modelInfo.bHasUV3 = mesh.uv3 != null && mesh.uv3.Length != 0;
+                    modelInfo.bHasUV4 = mesh.uv4 != null && mesh.uv4.Length != 0;
+                    modelInfo.bHasColor = mesh.colors != null && mesh.colors.Length != 0;
+                    modelInfo.bHasNormal = mesh.normals != null && mesh.normals.Length != 0;
+                    modelInfo.bHasTangent = mesh.tangents != null && mesh.tangents.Length != 0;
+                    modelInfo.vertexCount = mesh.vertexCount;
+                    modelInfo.triangleCount = mesh.triangles.Length / 3;
+
+                    modelInfo.MemSize = EditorTool.GetRuntimeMemorySize(mesh);
+                    modelInfo.TotalMem = TotalModelMem;
+
+                    modelInfoList.Add(modelInfo);
+
+                    if (++_loadCount % 256 == 0)
+                    {
+                        Resources.UnloadUnusedAssets();
+                    }
+                }
+                else
+                {
+                    if ((!(meshObject is GameObject)) && (!(meshObject is Component)))
+                    {
+                        Resources.UnloadAsset(meshObject);
+                    }
+                }
+            }
+
+            return modelInfoList;
         }
 
         public static List<ModelInfo> GetInfoByDirectory(string dir)
@@ -145,17 +166,15 @@ namespace ResourceFormat
             for (int i = 0; i < list.Count; ++i)
             {
                 string assetPath = EditorPath.FormatAssetPath(list[i]);
-                ModelInfo modelInfo = CreateModelInfo(assetPath);
-                if (modelInfo != null)
+                List<ModelInfo> dummyModelInfoList = CreateModelInfo(assetPath);
+                if (dummyModelInfoList != null)
                 {
-                    modelInfoList.Add(modelInfo);
+                    modelInfoList.AddRange(dummyModelInfoList);
                 }
             }
 
             return modelInfoList;
         }
 
-        private static int m_loadCount = 0;
-        private static Dictionary<string, ModelInfo> m_dictModelInfo = new Dictionary<string, ModelInfo>();
     }
 }

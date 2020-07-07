@@ -85,24 +85,9 @@ namespace ResourceFormat
                     case TextureOverviewMode.MipMap:
                         count += texInfo.MipmapEnable == (bool)obj ? 1 : 0;
                         break;
-                        //case TextureOverviewMode.Type:
-                        //return ImportType == texInfo.ImportType;
-                        //break;
                     case TextureOverviewMode.Resolution:
                         count += texInfo.Width * texInfo.Height >= (int)obj ? 1 : 0;
                         break;
-                    //case TextureOverviewMode.WidthVSHeight:
-                    //    return WidthAndHeight == (texInfo.Width == texInfo.Height);
-                    //break;
-                    //case TextureOverviewMode.StandaloneFormat:
-                    //    return StandaloneFormat == texInfo.StandaloneFormat;
-                    //break;
-                    //case TextureOverviewMode.AndroidFormat:
-                    //    return AndroidFormat == texInfo.AndroidFormat;
-                    //break;
-                    //case TextureOverviewMode.iOSFormat:
-                    //    return IosFormat == texInfo.IosFormat;
-                    //break;
                     case TextureOverviewMode.FilterMode:
                         count += texInfo.FilterMode == (FilterMode)obj ? 1 : 0;
                         break;

@@ -29,11 +29,37 @@ namespace ResourceFormat
             public int MaxParticleCount;
         }
 
+        public class ModeConfig
+        {
+            public string ModeName;
+            public bool Enable;
+            public string Tip;
+            public int ConfigValue;
+            public List<object> Condition;
+        }
+
+        public class WinTypeConfig
+        {
+            public string WinTypeName;
+            public List<ModeConfig> ModeConfig;
+        }
+
         public class ConfigJson
         {
             public string Name;
-            public TextureJson Texture;
-            public ParticleJson Particle;
+            public List<WinTypeConfig> WinTypeConfig;
+            //public TextureJson Texture;
+            //public ParticleJson Particle;
+
+            public ModeConfig GetModeConfig(string winTypeConfigName, string modeConfigName)
+            {
+                WinTypeConfig winTypeConfig = WinTypeConfig.Find(config => config.WinTypeName == winTypeConfigName);
+                if (winTypeConfig != null)
+                {
+                    return winTypeConfig.ModeConfig.Find(config => config.ModeName == modeConfigName);
+                }
+                return null;
+            }
         }
 
         public Dictionary<string, ConfigJson> HealthConfigDic;
@@ -89,7 +115,6 @@ namespace ResourceFormat
                 HealthConfigDic[name] = configJson;
             }
         }
-
 
         public ConfigJson ParseFromString(string jsonString)
         {
