@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace ResourceFormat
+namespace AssetViewer
 {
 #pragma warning disable CS0436 // Type conflicts with imported type
 

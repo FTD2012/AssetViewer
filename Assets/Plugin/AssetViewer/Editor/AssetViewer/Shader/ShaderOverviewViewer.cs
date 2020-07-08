@@ -3,7 +3,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace ResourceFormat
+namespace AssetViewer
 {
     public enum ShaderOverviewMode
     {

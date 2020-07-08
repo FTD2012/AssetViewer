@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using EditorCommon;
 
-namespace ResourceFormat
+namespace AssetViewer
 {
     public class AnimationInfo : BaseInfo
     {

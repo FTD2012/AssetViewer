@@ -8,7 +8,7 @@ using CommonComponent;
 using System.Reflection;
 using System.Text;
 
-namespace ResourceFormat
+namespace AssetViewer
 {
     public class OverviewViewer<T, U, V, H> where T : OverviewData where U : BaseInfo where V : OverviewModeManager where H : HealthInfoManager
     {

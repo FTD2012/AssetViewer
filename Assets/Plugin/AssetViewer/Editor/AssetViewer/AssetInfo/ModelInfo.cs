@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Text;
 
-namespace ResourceFormat
+namespace AssetViewer
 {
     public class ModelInfo : BaseInfo
     {

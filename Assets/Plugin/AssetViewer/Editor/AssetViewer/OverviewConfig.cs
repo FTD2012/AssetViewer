@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 
-namespace ResourceFormat
+namespace AssetViewer
 {
     public class TableConst
     {

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using System;
 
-namespace ResourceFormat
+namespace AssetViewer
 {    
     public class ParticleOverviewData : OverviewData
     {

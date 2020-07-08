@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using UnityEditor;
 
-namespace ResourceFormat
+namespace AssetViewer
 {
     public class ModelOverviewReport
     {

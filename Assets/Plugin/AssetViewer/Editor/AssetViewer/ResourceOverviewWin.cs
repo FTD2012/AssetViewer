@@ -4,7 +4,7 @@ using EditorCommon;
 using System;
 using System.Collections.Generic;
 
-namespace ResourceFormat
+namespace AssetViewer
 {
     enum OverviewWinType
     {
@@ -14,7 +14,7 @@ namespace ResourceFormat
         Shader
     }
 
-    public class ResourceOverviewWin : EditorWindow
+    public class AssetViewerWin : EditorWindow
     {
         private TextureOverviewViewer _textureViewerr;
         private ModelOverviewViewer _modelViewer;
@@ -26,7 +26,7 @@ namespace ResourceFormat
         [MenuItem("Window/AssetViewer " + EditorHotkeys.Ctrl_ + "X")]
         static void Create()
         {
-            ResourceOverviewWin resourceInfoWin = GetWindow<ResourceOverviewWin>();
+            AssetViewerWin resourceInfoWin = GetWindow<AssetViewerWin>();
             resourceInfoWin.minSize = new Vector2(800, 450);
             resourceInfoWin.titleContent = new GUIContent("AssetViewer");    /// TODO: ljm >>> refractor load meathod
         }

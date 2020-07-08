@@ -2,7 +2,7 @@ using UnityEditor;
 using System;
 using UnityEngine;
 
-namespace ResourceFormat
+namespace AssetViewer
 {
     public class TextureOverviewData : OverviewData
     {

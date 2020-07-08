@@ -1,5 +1,5 @@
 ﻿
-namespace ResourceFormat
+namespace AssetViewer
 {
     public class BaseInfo
     {

@@ -5,9 +5,9 @@ using UnityEngine;
 using LitJson;
 using System.IO;
 using System.Linq;
-using ResourceFormat;
+using AssetViewer;
 
-namespace ResourceFormat
+namespace AssetViewer
 {
     public class HealthConfig : Singleton<HealthConfig>
     {

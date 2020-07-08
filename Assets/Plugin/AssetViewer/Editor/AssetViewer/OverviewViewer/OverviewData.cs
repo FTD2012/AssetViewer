@@ -4,7 +4,7 @@ using CommonComponent;
 using System;
 using UnityEngine;
 
-namespace ResourceFormat
+namespace AssetViewer
 {
     public struct Health
     {
