@@ -44,11 +44,15 @@ namespace UnityEditor {
 		};
 		*/
 		private static string GetPropertyType( Shader s, int index ) {
-			ShaderUtil.ShaderPropertyType propertyType = ShaderUtil.GetPropertyType( s, index );
+#pragma warning disable CS0436 // Type conflicts with imported type
+
+            ShaderUtil.ShaderPropertyType propertyType = ShaderUtil.GetPropertyType( s, index );
 			if( propertyType == ShaderUtil.ShaderPropertyType.TexEnv ) {
 				return ShaderForgeInspector.kTextureTypes[(int)ShaderUtil.GetTexDim( s, index )];
 			}
-			return ShaderForgeInspector.kPropertyTypes[(int)propertyType];
+#pragma warning restore CS0436 // Type conflicts with imported type
+
+            return ShaderForgeInspector.kPropertyTypes[(int)propertyType];
 		}
 
 
