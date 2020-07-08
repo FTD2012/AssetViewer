@@ -37,6 +37,7 @@ namespace AssetViewer
             public List<object> ConditionList;
             public string Tip;
             public int Threshold;
+
             public HealthInfoMeta(bool enableCondition,string tip, int threshold, List<object> conditionList)
             {
                 EnableCondition = enableCondition;
@@ -111,8 +112,7 @@ namespace AssetViewer
         }
     }
 
-
-    public class OverviewData
+    public class ViewerData
     {
         public int Count;
 
@@ -128,7 +128,6 @@ namespace AssetViewer
             throw new NotImplementedException();
         }
 
-
         public virtual void AddObject(BaseInfo texInfo)
         {
             throw new NotImplementedException();
@@ -139,23 +138,21 @@ namespace AssetViewer
         }
     }
 
-    public class OverviewModeManager : Singleton<OverviewModeManager>
+    public class ViewerModeManager : Singleton<ViewerModeManager>
     {
         public virtual string[] GetMode()
         {
             throw new NotImplementedException();
         }
 
-        public virtual ColumnType[] GetDataTable(string overviewMode)
+        public virtual ColumnType[] GetDataTable(string viewerMode)
         {
             throw new NotImplementedException();
         }
 
-        public virtual ColumnType[] GetShowTable(string overviewMode)
+        public virtual ColumnType[] GetShowTable(string viewerMode)
         {
             throw new NotImplementedException();
         }
     }
-
-
 }

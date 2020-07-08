@@ -10,8 +10,8 @@ namespace AssetViewer
         //[MenuItem(OverviewConfig.ModelReportMenu)]
         public static void GenerateRportByConfig()
         {
-            List<ModelInfo> modelInfoList = ModelInfo.GetInfoByDirectory(OverviewConfig.RootPath);
-            GenerateReport(OverviewConfig.ModelReportPath, modelInfoList);
+            List<ModelInfo> modelInfoList = ModelInfo.GetInfoByDirectory(ViewerConfig.RootPath);
+            GenerateReport(ViewerConfig.ModelReportPath, modelInfoList);
         }
 
         public static void GenerateReport(string filePath, List<ModelInfo> modelInfoList)
@@ -236,7 +236,7 @@ namespace AssetViewer
 
         private static string GenerateMeshVertexCountData(List<ModelInfo> modelInfoList)
         {
-            int verTexMod = OverviewTableConst.VertexCountMod;
+            int verTexMod = ViewerConst.VertexCountMod;
             Dictionary<int, KeyValuePair<int, long>> dict
                 = new Dictionary<int, KeyValuePair<int, long>>();
 
@@ -278,7 +278,7 @@ namespace AssetViewer
 
         private static string GenerateMeshTriangleCountData(List<ModelInfo> modelInfoList)
         {
-            int triTexMod = OverviewTableConst.TriangleCountMod;
+            int triTexMod = ViewerConst.TriangleCountMod;
             Dictionary<int, KeyValuePair<int, long>> dict
                 = new Dictionary<int, KeyValuePair<int, long>>();
 

@@ -3,7 +3,7 @@ using System;
 
 namespace AssetViewer
 {
-    public enum ModelOverviewMode
+    public enum ModelViewerMode
     {
         ReadWrite = 0,
         ImportMaterial,
@@ -14,7 +14,7 @@ namespace AssetViewer
         TriangleCount
     }
 
-    public class ModelOverviewData : OverviewData
+    public class ModelViewerData : ViewerData
     {
         /// Don't modify variable name
         public int Memory;
@@ -27,11 +27,11 @@ namespace AssetViewer
         public string VertexRangeStr;
         public string TriangleRangeStr;
 
-        private ModelOverviewMode _mode;
+        private ModelViewerMode _mode;
 
-        public ModelOverviewData(string mode, ModelInfo modelInfo)
+        public ModelViewerData(string mode, ModelInfo modelInfo)
         {
-            _mode = (ModelOverviewMode)Enum.Parse(typeof(ModelOverviewMode), mode);
+            _mode = (ModelViewerMode)Enum.Parse(typeof(ModelViewerMode), mode);
             ReadWriteEnable = modelInfo.ReadWriteEnable;
             ImportMaterials = modelInfo.ImportMaterials;
             OptimizeMesh = modelInfo.OptimizeMesh;
@@ -51,19 +51,19 @@ namespace AssetViewer
         {
             switch (_mode)
             {
-                case ModelOverviewMode.ReadWrite:
+                case ModelViewerMode.ReadWrite:
                     return ReadWriteEnable == modelInfo.ReadWriteEnable;
-                case ModelOverviewMode.ImportMaterial:
+                case ModelViewerMode.ImportMaterial:
                     return ImportMaterials == modelInfo.ImportMaterials;
-                case ModelOverviewMode.OptimizeMesh:
+                case ModelViewerMode.OptimizeMesh:
                     return OptimizeMesh == modelInfo.OptimizeMesh;
-                case ModelOverviewMode.MeshData:
+                case ModelViewerMode.MeshData:
                     return MeshDataID == modelInfo.GetMeshDataID();
-                case ModelOverviewMode.MeshCompress:
+                case ModelViewerMode.MeshCompress:
                     return MeshCompression == modelInfo.MeshCompression;
-                case ModelOverviewMode.VertexCount:
+                case ModelViewerMode.VertexCount:
                     return VertexRangeStr == modelInfo.GetVertexRangeStr();
-                case ModelOverviewMode.TriangleCount:
+                case ModelViewerMode.TriangleCount:
                     return TriangleRangeStr == modelInfo.GetTriangleRangeStr();
             }
             return false;
@@ -77,25 +77,25 @@ namespace AssetViewer
             {
                 switch (_mode)
                 {
-                    case ModelOverviewMode.ReadWrite:
+                    case ModelViewerMode.ReadWrite:
                         count += modelInfo.ReadWriteEnable == (bool)obj ? 1 : 0;
                         break;
-                    case ModelOverviewMode.TriangleCount:
+                    case ModelViewerMode.TriangleCount:
                         count += modelInfo.triangleCount >= (int)obj ? 1 : 0;
                         break;
-                    case ModelOverviewMode.VertexCount:
+                    case ModelViewerMode.VertexCount:
                         count += modelInfo.vertexCount >= (int)obj ? 1 : 0;
                         break;
-                    case ModelOverviewMode.OptimizeMesh:
+                    case ModelViewerMode.OptimizeMesh:
                         count += modelInfo.OptimizeMesh == (bool)obj ? 1 : 0;
                         break;
-                    case ModelOverviewMode.MeshData:
+                    case ModelViewerMode.MeshData:
                         count += modelInfo.GetMeshDataID() == (int)obj ? 1 : 0;
                         break;
-                    case ModelOverviewMode.ImportMaterial:
+                    case ModelViewerMode.ImportMaterial:
                         count += modelInfo.ImportMaterials == (bool)obj ? 1 : 0;
                         break;
-                    case ModelOverviewMode.MeshCompress:
+                    case ModelViewerMode.MeshCompress:
                         count += modelInfo.MeshCompression == (ModelImporterMeshCompression)obj ? 1 : 0;
                         break;
                 }

@@ -40,7 +40,6 @@ namespace AssetViewer
         public static string[] AnimationCompression = { "Off", "KeyframeReduction", "KeyframeReductionAndCompression", "Optimal" };
         public static string[] MeshCompression = { "Off", "Low", "Medium", "High" };
 
-
         public static TextureImporterFormat[] AndroidImporterFormat = { TextureImporterFormat.RGB24, TextureImporterFormat.ETC_RGB4, TextureImporterFormat.ETC2_RGB4 };
         public static TextureImporterFormat[] IosImporterFormat = { TextureImporterFormat.RGB24, TextureImporterFormat.PVRTC_RGB4 };
     }
@@ -55,7 +54,8 @@ namespace AssetViewer
         public static GUIStyle BoldLabel = "BoldLabel";
         public static GUIStyle HeaderLabel = "HeaderLabel";
     }
-    public static class OverviewConfig
+
+    public static class ViewerConfig
     {
         public const string RootPath = "Assets";
         public const string TextureReportPath = "TextureOverviewReport.md";
@@ -64,10 +64,10 @@ namespace AssetViewer
         public const string TextureReportMenu = "UComponents/ResourcesOverview/TextureOverviewReport";
         public const string ModelReportMenu = "UComponents/ResourcesOverview/ModelOverviewReport";
 
-        public const string HealthConfigPath = "Assets/Editor/AssetViewer/Core/Config";
+        public const string HealthConfigPath = "Assets/Editor/AssetViewer/Config";
     }
 
-    public static class OverviewTableString
+    public static class ViewerTableString
     {
         public static string Comma = "，";
         public static string Pass = "通过";
@@ -78,7 +78,7 @@ namespace AssetViewer
         public static string NotInitTip = "请点击上方按钮刷新以获得数据。";
     }
 
-    public static class OverviewTableConst
+    public static class ViewerConst
     {
         public const int VertexCountMod = 1000;
         public const int TriangleCountMod = 1000;
@@ -162,6 +162,7 @@ namespace AssetViewer
                 ++index;
             return index;
         }
+
         public static int GetVariantIndex(float size)
         {
             int index = 0;
@@ -205,11 +206,11 @@ namespace AssetViewer
                 case Health.HealthEnum.NONE:
                     return string.Empty;
                 case Health.HealthEnum.INFO:
-                    return OverviewTableString.Pass + OverviewTableString.Comma;
+                    return ViewerTableString.Pass + ViewerTableString.Comma;
                 case Health.HealthEnum.WARNING:
-                    return OverviewTableString.Warning + OverviewTableString.Comma;
+                    return ViewerTableString.Warning + ViewerTableString.Comma;
                 case Health.HealthEnum.ERROR:
-                    return OverviewTableString.Error + OverviewTableString.Comma;
+                    return ViewerTableString.Error + ViewerTableString.Comma;
                 default:
                     throw new InvalidOperationException();
             }
@@ -218,6 +219,5 @@ namespace AssetViewer
         {
             return (T)typeof(Singleton<>).MakeGenericType(typeof(T)).GetMethod("Instance", BindingFlags.Static | BindingFlags.Public).Invoke(null, null);
         }
-
     }
 }

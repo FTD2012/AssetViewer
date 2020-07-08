@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AssetViewer
 {
-    public class AudioOverviewData : OverviewData
+    public class AudioViewerData : ViewerData
     {
         /// Don't modify variable name
         public int Memory;
@@ -17,10 +17,11 @@ namespace AssetViewer
         public AudioCompressionFormat AndroidAudioCompressionFormat;
         public AudioCompressionFormat iOSAudioCompressionFormat;
 
-        private AudioOverviewMode _mode;
-        public AudioOverviewData(string mode, AudioInfo audioInfo)
+        private AudioViewerMode _mode;
+
+        public AudioViewerData(string mode, AudioInfo audioInfo)
         {
-            _mode = (AudioOverviewMode)Enum.Parse(typeof(AudioOverviewMode), mode);
+            _mode = (AudioViewerMode)Enum.Parse(typeof(AudioViewerMode), mode);
             ForceToMono = audioInfo.ForceToMono;
             LoadInBackground = audioInfo.LoadInBackground;
             Ambisonic = audioInfo.Ambisonic;
@@ -41,19 +42,19 @@ namespace AssetViewer
         {
             switch (_mode)
             {
-                case AudioOverviewMode.MONO:
+                case AudioViewerMode.MONO:
                     return ForceToMono == audioInfo.ForceToMono;
-                case AudioOverviewMode.LoadInBackground:
+                case AudioViewerMode.LoadInBackground:
                     return LoadInBackground == audioInfo.LoadInBackground;
-                case AudioOverviewMode.Ambisonic:
+                case AudioViewerMode.Ambisonic:
                     return Ambisonic == audioInfo.Ambisonic;
-                case AudioOverviewMode.AndroidLoadType:
+                case AudioViewerMode.AndroidLoadType:
                     return AndroidAudioClipLoadType == audioInfo.AndroidAudioClipLoadType;
-                case AudioOverviewMode.iOSLoadType:
+                case AudioViewerMode.iOSLoadType:
                     return iOSAudioClipLoadType == audioInfo.iOSAudioClipLoadType;
-                case AudioOverviewMode.AndroidCompressionFormat:
+                case AudioViewerMode.AndroidCompressionFormat:
                     return AndroidAudioCompressionFormat == audioInfo.AndroidAudioCompressionFormat;
-                case AudioOverviewMode.iOSCompressionFormat:
+                case AudioViewerMode.iOSCompressionFormat:
                     return iOSAudioCompressionFormat == audioInfo.iOSAudioCompressionFormat;
             }
             return false;
@@ -62,30 +63,29 @@ namespace AssetViewer
         public override int GetMatchHealthCount(object obj)
         {
             int count = 0;
-
             foreach (AudioInfo audioInfo in _object)
             {
                 switch (_mode)
                 {
-                    case AudioOverviewMode.MONO:
+                    case AudioViewerMode.MONO:
                         count += audioInfo.ForceToMono == (bool)obj ? 1 : 0;
                         break;
-                    case AudioOverviewMode.LoadInBackground:
+                    case AudioViewerMode.LoadInBackground:
                         count += audioInfo.LoadInBackground == (bool)obj ? 1 : 0;
                         break;
-                    case AudioOverviewMode.Ambisonic:
+                    case AudioViewerMode.Ambisonic:
                         count += audioInfo.Ambisonic == (bool)obj ? 1 : 0;
                         break;
-                    case AudioOverviewMode.AndroidLoadType:
+                    case AudioViewerMode.AndroidLoadType:
                         count += audioInfo.AndroidAudioClipLoadType == (AudioClipLoadType)obj ? 1 : 0;
                         break;
-                    case AudioOverviewMode.iOSLoadType:
+                    case AudioViewerMode.iOSLoadType:
                         count += audioInfo.iOSAudioClipLoadType == (AudioClipLoadType)obj ? 1 : 0;
                         break;
-                    case AudioOverviewMode.AndroidCompressionFormat:
+                    case AudioViewerMode.AndroidCompressionFormat:
                         count += audioInfo.AndroidAudioCompressionFormat == (AudioCompressionFormat)obj ? 1 : 0;
                         break;
-                    case AudioOverviewMode.iOSCompressionFormat:
+                    case AudioViewerMode.iOSCompressionFormat:
                         count += audioInfo.iOSAudioCompressionFormat == (AudioCompressionFormat)obj ? 1 : 0;
                         break;
                 }

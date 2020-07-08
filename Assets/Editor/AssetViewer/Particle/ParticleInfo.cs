@@ -28,13 +28,12 @@ namespace AssetViewer
             {
                 particleInfo[i] = new ParticleInfo();
                 particleInfo[i].Path = assetPath;
-                particleInfo[i].RealPath = assetPath + "/" + OverviewTableConst.GetPath(particleSystem[i].transform);
+                particleInfo[i].RealPath = assetPath + "/" + ViewerConst.GetPath(particleSystem[i].transform);
                 particleInfo[i].MaxParticles = particleSystem[i].main.maxParticles;
                 particleInfo[i].Duration = particleSystem[i].main.duration;
                 particleInfo[i].PlayOnAwake = particleSystem[i].main.playOnAwake;
                 particleInfo[i].Looping = particleSystem[i].main.loop;
             }
-
 
             return particleInfo;
         }
@@ -58,9 +57,5 @@ namespace AssetViewer
             EditorUtility.ClearProgressBar();
             return particleInfoList;
         }
-
-
-
     }
-
 }

@@ -3,7 +3,7 @@ using System;
 
 namespace AssetViewer
 {
-    public class ShaderOverviewData : OverviewData
+    public class ShaderViewerData : ViewerData
     {
         /// Don't modify variable name
         public int MaxLOD;
@@ -19,18 +19,18 @@ namespace AssetViewer
         public int Sample;
         public string RenderType;
 
-        private ShaderOverviewMode _mode;
+        private ShaderViewerMode _mode;
 
-        public ShaderOverviewData(string mode, ShaderInfo shaderInfo)
+        public ShaderViewerData(string mode, ShaderInfo shaderInfo)
         {
-            _mode = (ShaderOverviewMode)Enum.Parse(typeof(ShaderOverviewMode), mode);
-            MaxLOD = OverviewTableConst.GetLodIndex(shaderInfo.MaxLOD);
-            MaxLODStr = OverviewTableConst.LoadSizeStr[MaxLOD];
-            RenderQueue = OverviewTableConst.GetRenderQueueIndex(shaderInfo.RenderQueue);
-            RenderQueueStr = OverviewTableConst.RenderQueueStr[RenderQueue];
+            _mode = (ShaderViewerMode)Enum.Parse(typeof(ShaderViewerMode), mode);
+            MaxLOD = ViewerConst.GetLodIndex(shaderInfo.MaxLOD);
+            MaxLODStr = ViewerConst.LoadSizeStr[MaxLOD];
+            RenderQueue = ViewerConst.GetRenderQueueIndex(shaderInfo.RenderQueue);
+            RenderQueueStr = ViewerConst.RenderQueueStr[RenderQueue];
             Pass = shaderInfo.Pass;
-            Instruction = OverviewTableConst.GetInstructionIndex(shaderInfo.Instruction);
-            InstructionStr = OverviewTableConst.InstructionSizeStr[Instruction];
+            Instruction = ViewerConst.GetInstructionIndex(shaderInfo.Instruction);
+            InstructionStr = ViewerConst.InstructionSizeStr[Instruction];
             Variant = shaderInfo.Variant;
             Property = shaderInfo.Property;
             SubShader = shaderInfo.SubShader;
@@ -48,23 +48,23 @@ namespace AssetViewer
         {
             switch (_mode)
             {
-                case ShaderOverviewMode.MaxLOD:
-                    return MaxLOD == OverviewTableConst.GetLodIndex(shaderInfo.MaxLOD);
-                case ShaderOverviewMode.RenderQueue:
-                    return RenderQueue == OverviewTableConst.GetRenderQueueIndex(shaderInfo.RenderQueue);
-                case ShaderOverviewMode.Pass:
+                case ShaderViewerMode.MaxLOD:
+                    return MaxLOD == ViewerConst.GetLodIndex(shaderInfo.MaxLOD);
+                case ShaderViewerMode.RenderQueue:
+                    return RenderQueue == ViewerConst.GetRenderQueueIndex(shaderInfo.RenderQueue);
+                case ShaderViewerMode.Pass:
                     return Pass == shaderInfo.Pass;
-                case ShaderOverviewMode.Instruction:
-                    return Instruction == OverviewTableConst.GetInstructionIndex(shaderInfo.Instruction);
-                case ShaderOverviewMode.Variant:
+                case ShaderViewerMode.Instruction:
+                    return Instruction == ViewerConst.GetInstructionIndex(shaderInfo.Instruction);
+                case ShaderViewerMode.Variant:
                     return Variant == shaderInfo.Variant;
-                case ShaderOverviewMode.Property:
+                case ShaderViewerMode.Property:
                     return Property == shaderInfo.Property;
-                case ShaderOverviewMode.SubShader:
+                case ShaderViewerMode.SubShader:
                     return SubShader == shaderInfo.SubShader;
-                case ShaderOverviewMode.Sample:
+                case ShaderViewerMode.Sample:
                     return Sample == shaderInfo.Sample;
-                case ShaderOverviewMode.RenderType:
+                case ShaderViewerMode.RenderType:
                     return RenderType == shaderInfo.RenderType;
             }
             return false;
@@ -78,28 +78,28 @@ namespace AssetViewer
             {
                 switch (_mode)
                 {
-                    case ShaderOverviewMode.Sample:
+                    case ShaderViewerMode.Sample:
                         count += shaderInfo.Sample > (int)obj ? 1 : 0;
                         break;
-                    case ShaderOverviewMode.RenderType:
+                    case ShaderViewerMode.RenderType:
                         count += shaderInfo.RenderType == (string)obj ? 1 : 0;
                         break;
-                    case ShaderOverviewMode.Pass:
+                    case ShaderViewerMode.Pass:
                         count += shaderInfo.Pass > (int)obj ? 1 : 0;
                         break;
-                    case ShaderOverviewMode.Instruction:
+                    case ShaderViewerMode.Instruction:
                         count += shaderInfo.Instruction > (int)obj ? 1 : 0;
                         break;
-                    case ShaderOverviewMode.Variant:
+                    case ShaderViewerMode.Variant:
                         count += (int)shaderInfo.Variant > (int)obj ? 1 : 0;
                         break;
-                    case ShaderOverviewMode.MaxLOD:
+                    case ShaderViewerMode.MaxLOD:
                         count += shaderInfo.MaxLOD > (int)obj ? 1 : 0;
                         break;
-                    case ShaderOverviewMode.Property:
+                    case ShaderViewerMode.Property:
                         count += shaderInfo.Property > (int)obj ? 1 : 0;
                         break;
-                    case ShaderOverviewMode.SubShader:
+                    case ShaderViewerMode.SubShader:
                         count += shaderInfo.SubShader > (int)obj ? 1 : 0;
                         break;
                 }

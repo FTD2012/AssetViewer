@@ -10,8 +10,8 @@ namespace AssetViewer
         //[MenuItem(OverviewConfig.TextureReportMenu)]
         public static void GenerateRportByConfig()
         {
-            List<TextureInfo> texInfoList = TextureInfo.GetInfoByDirectory(OverviewConfig.RootPath);
-            GenerateReport(OverviewConfig.TextureReportPath, texInfoList);
+            List<TextureInfo> texInfoList = TextureInfo.GetInfoByDirectory(ViewerConfig.RootPath);
+            GenerateReport(ViewerConfig.TextureReportPath, texInfoList);
         }
 
         public static void GenerateReport(string filePath, List<TextureInfo> texInfoList)
@@ -145,7 +145,7 @@ namespace AssetViewer
             sb.AppendLine("|-|-|-|");
             foreach (var itor in list)
             {
-                sb.AppendFormat("|{0}|", OverviewTableConst.TextureTypeStr[(int)itor.Key]);
+                sb.AppendFormat("|{0}|", ViewerConst.TextureTypeStr[(int)itor.Key]);
                 sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }
@@ -161,7 +161,7 @@ namespace AssetViewer
             for (int i = 0; i < texInfoList.Count; ++i)
             {
                 TextureInfo texInfo = texInfoList[i];
-                var key = OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
+                var key = ViewerConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
                 var value = texInfoList[i].MemSize;
 
                 if (!dict.ContainsKey(key))
@@ -187,7 +187,7 @@ namespace AssetViewer
             sb.AppendLine("|-|-|-|");
             foreach (var itor in list)
             {
-                sb.AppendFormat("|{0}|", OverviewTableConst.TextureSizeStr[(int)itor.Key]);
+                sb.AppendFormat("|{0}|", ViewerConst.TextureSizeStr[(int)itor.Key]);
                 sb.AppendFormat("{0}|{1}|", itor.Value.Key, EditorUtility.FormatBytes(itor.Value.Value));
                 sb.AppendLine();
             }

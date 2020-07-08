@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AssetViewer
 {
-    public enum TextureOverviewMode
+    public enum TextureViewerMode
     {
         ReadWrite = 0,
         MipMap,
@@ -18,108 +18,108 @@ namespace AssetViewer
         iOSFormat
     }
 
-    public class TextureOverviewViewer : OverviewViewer<TextureOverviewData, TextureInfo, TextureOverviewModeManager, TextureHealthInfoManager>
+    public class TextureViewer : Viewer<TextureViewerData, TextureInfo, TextureViewerModeManager, TextureHealthInfoManager>
     {
-        public TextureOverviewViewer(EditorWindow hostWindow) : base(hostWindow)
+        public TextureViewer(EditorWindow hostWindow) : base(hostWindow)
         {
 
         }
     }
 
-    public class TextureOverviewModeManager : OverviewModeManager
+    public class TextureViewerModeManager : ViewerModeManager
     {
         public override string[] GetMode()
         {
-            return EditorTool.RemoveAt(Enum.GetNames(typeof(TextureOverviewMode)), 5);
+            return EditorTool.RemoveAt(Enum.GetNames(typeof(TextureViewerMode)), 5);
         }
 
-        public override ColumnType[] GetDataTable(string textureOverviewMode)
+        public override ColumnType[] GetDataTable(string textureViewerMode)
         {
-            TextureOverviewMode textureOverviewModeEnum =  (TextureOverviewMode)Enum.Parse(typeof(TextureOverviewMode), textureOverviewMode);
-            switch (textureOverviewModeEnum)
+            TextureViewerMode textureViewerModeEnum =  (TextureViewerMode)Enum.Parse(typeof(TextureViewerMode), textureViewerMode);
+            switch (textureViewerModeEnum)
             {
-                case TextureOverviewMode.ReadWrite:
+                case TextureViewerMode.ReadWrite:
                     return new ColumnType[] {
-                        new ColumnType("ReadWriteEnable", "R/W Enable", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.MipMap:
+                        new ColumnType("ReadWriteEnable", "R/W Enable", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case TextureViewerMode.MipMap:
                     return new ColumnType[] {
-                        new ColumnType("MipmapEnable", "MipmapEnable", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.Type:
+                        new ColumnType("MipmapEnable", "MipmapEnable", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case TextureViewerMode.Type:
                     return new ColumnType[] {
-                        new ColumnType("ImportType", "TextureType", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.Resolution:
+                        new ColumnType("ImportType", "TextureType", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case TextureViewerMode.Resolution:
                     return new ColumnType[] {
-                        new ColumnType("SizeStr", "Resolution Range", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.WidthVSHeight:
+                        new ColumnType("SizeStr", "Resolution Range", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case TextureViewerMode.WidthVSHeight:
                     return new ColumnType[] {
-                        new ColumnType("WidthAndHeight", "Width VS Height", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.StandaloneFormat:
+                        new ColumnType("WidthAndHeight", "Width VS Height", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case TextureViewerMode.StandaloneFormat:
                     return new ColumnType[] {
-                        new ColumnType("StandaloneFormat", "StandaloneFormat", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.AndroidFormat:
+                        new ColumnType("StandaloneFormat", "StandaloneFormat", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case TextureViewerMode.AndroidFormat:
                     return new ColumnType[] {
-                        new ColumnType("AndroidFormat", "AndroidFormat", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.iOSFormat:
+                        new ColumnType("AndroidFormat", "AndroidFormat", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case TextureViewerMode.iOSFormat:
                     return new ColumnType[] {
-                        new ColumnType("IosFormat", "iOSFormat", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.FilterMode:
+                        new ColumnType("IosFormat", "iOSFormat", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case TextureViewerMode.FilterMode:
                     return new ColumnType[] {
-                        new ColumnType("FilterMode", "FilterMode", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                        new ColumnType("FilterMode", "FilterMode", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        public override ColumnType[] GetShowTable(string textureOverviewMode)
+        public override ColumnType[] GetShowTable(string textureViewerMode)
         {
-            TextureOverviewMode textureOverviewModeEnum = (TextureOverviewMode)Enum.Parse(typeof(TextureOverviewMode), textureOverviewMode);
-            switch (textureOverviewModeEnum)
+            TextureViewerMode textureViewerModeEnum = (TextureViewerMode)Enum.Parse(typeof(TextureViewerMode), textureViewerMode);
+            switch (textureViewerModeEnum)
             {
-                case TextureOverviewMode.ReadWrite:
-                case TextureOverviewMode.MipMap:
-                case TextureOverviewMode.Type:
-                case TextureOverviewMode.Resolution:
-                case TextureOverviewMode.WidthVSHeight:
+                case TextureViewerMode.ReadWrite:
+                case TextureViewerMode.MipMap:
+                case TextureViewerMode.Type:
+                case TextureViewerMode.Resolution:
+                case TextureViewerMode.WidthVSHeight:
                     return new ColumnType[] {
                         new ColumnType("Path", "Path", 0.8f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("MemSize", "Memory", 0.2f, TextAnchor.MiddleCenter, "<fmt_bytes>") };
-                case TextureOverviewMode.StandaloneFormat:
+                case TextureViewerMode.StandaloneFormat:
                     return new ColumnType[] {
                         new ColumnType("Path", "Path", 0.4f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("StandaloneFormat", "Format", 0.2f, TextAnchor.MiddleCenter, "="),
                         new ColumnType("StandaloneOverriden", "Overriden", 0.2f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("StandaloneSize", "Memory", 0.2f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.AndroidFormat:
+                case TextureViewerMode.AndroidFormat:
                     return new ColumnType[] {
                         new ColumnType("Path", "Path", 0.4f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("AndroidFormat", "Format", 0.2f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("AndroidOverriden", "Overriden", 0.2f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("AndroidSize", "Memory", 0.2f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.iOSFormat:
+                case TextureViewerMode.iOSFormat:
                     return new ColumnType[] {
                         new ColumnType("Path", "Path", 0.4f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("IosFormat", "Format", 0.2f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("IosOverriden", "Overriden", 0.2f, TextAnchor.MiddleCenter, ""),
                         new ColumnType("IosSize", "Memory", 0.2f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case TextureOverviewMode.FilterMode:
+                case TextureViewerMode.FilterMode:
                     return new ColumnType[] {
                         new ColumnType("Path", "Path", 0.6f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("FilterMode", "FilterMode", 0.2f, TextAnchor.MiddleCenter, ""),

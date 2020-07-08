@@ -42,28 +42,28 @@ namespace AssetViewer
 
         public int GetVertexRangeID()
         {
-            return vertexCount / OverviewTableConst.VertexCountMod;
+            return vertexCount / ViewerConst.VertexCountMod;
         }
 
         public string GetVertexRangeStr()
         {
             int index = GetVertexRangeID();
             return string.Format("{0}-{1}",
-                index * OverviewTableConst.VertexCountMod,
-                (index + 1) * OverviewTableConst.VertexCountMod - 1);
+                index * ViewerConst.VertexCountMod,
+                (index + 1) * ViewerConst.VertexCountMod - 1);
         }
 
         public int GetTriangleRangeID()
         {
-            return triangleCount / OverviewTableConst.TriangleCountMod;
+            return triangleCount / ViewerConst.TriangleCountMod;
         }
 
         public string GetTriangleRangeStr()
         {
             int index = GetTriangleRangeID();
             return string.Format("{0}-{1}",
-                index * OverviewTableConst.TriangleCountMod,
-                (index + 1) * OverviewTableConst.TriangleCountMod - 1);
+                index * ViewerConst.TriangleCountMod,
+                (index + 1) * ViewerConst.TriangleCountMod - 1);
         }
 
         public static string GetMeshDataStr(int key)
@@ -80,19 +80,22 @@ namespace AssetViewer
             {
                 if (bData[i])
                 {
-                    sb.Append("," + OverviewTableConst.MeshDataStr[i]);
+                    sb.Append("," + ViewerConst.MeshDataStr[i]);
                 }
             }
-
             return sb.ToString();
         }
 
         private static int _WorkData(int data, bool flag)
         {
             if (flag)
+            {
                 return (data << 1) | 1;
+            }
             else
+            {
                 return data << 1;
+            }
         }
 
         public static List<ModelInfo> CreateModelInfo(string assetPath)
@@ -125,7 +128,6 @@ namespace AssetViewer
                     modelInfo.ImportMaterials = modelImport.importMaterials;
                     modelInfo.ImportAnimation = modelImport.importAnimation;
                     modelInfo.MeshCompression = modelImport.meshCompression;
-                    
                     modelInfo.bHasUV = mesh.uv != null && mesh.uv.Length != 0;
                     modelInfo.bHasUV2 = mesh.uv2 != null && mesh.uv2.Length != 0;
                     modelInfo.bHasUV3 = mesh.uv3 != null && mesh.uv3.Length != 0;
@@ -135,10 +137,8 @@ namespace AssetViewer
                     modelInfo.bHasTangent = mesh.tangents != null && mesh.tangents.Length != 0;
                     modelInfo.vertexCount = mesh.vertexCount;
                     modelInfo.triangleCount = mesh.triangles.Length / 3;
-
                     modelInfo.MemSize = EditorTool.GetRuntimeMemorySize(mesh);
                     modelInfo.TotalMem = TotalModelMem;
-
                     modelInfoList.Add(modelInfo);
 
                     if (++_loadCount % 256 == 0)
@@ -172,9 +172,7 @@ namespace AssetViewer
                     modelInfoList.AddRange(dummyModelInfoList);
                 }
             }
-
             return modelInfoList;
         }
-
     }
 }

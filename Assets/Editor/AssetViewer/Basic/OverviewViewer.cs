@@ -9,11 +9,11 @@ using System.Text;
 
 namespace AssetViewer
 {
-    public class OverviewViewer<T, U, V, H> where T : OverviewData where U : BaseInfo where V : OverviewModeManager where H : HealthInfoManager
+    public class Viewer<T, U, V, H> where T : ViewerData where U : BaseInfo where V : ViewerModeManager where H : HealthInfoManager
     {
         // data
         protected Dictionary<string, bool> _modeInit;
-        protected Dictionary<string, List<object>> _modeData; // object is XXXOverviewData
+        protected Dictionary<string, List<object>> _modeData; // object is XXXViewerData
         protected Dictionary<string, Health> _modeHealth;
         protected List<U> _infoList;
         protected string _rootPath = string.Empty;
@@ -24,21 +24,21 @@ namespace AssetViewer
         protected TableView _showTable;
 
         // meta-data
-        protected V _overviewModeManager;
+        protected V _viewerModeManager;
         protected H _healthInfoManager;
 
-        public OverviewViewer(EditorWindow hostWindow)
+        public Viewer(EditorWindow hostWindow)
         {
             Assert.IsNotNull(hostWindow);
 
-            _overviewModeManager = OverviewTableConst.GetSingletonInstance<V>();
-            _healthInfoManager = OverviewTableConst.GetSingletonInstance<H>();
+            _viewerModeManager = ViewerConst.GetSingletonInstance<V>();
+            _healthInfoManager = ViewerConst.GetSingletonInstance<H>();
 
             _modeInit = new Dictionary<string, bool>();
             _modeData = new Dictionary<string, List<object>>();
             _modeHealth = new Dictionary<string, Health>();
-            _mode = _overviewModeManager.GetMode()[0];
-            foreach (var key in _overviewModeManager.GetMode())
+            _mode = _viewerModeManager.GetMode()[0];
+            foreach (var key in _viewerModeManager.GetMode())
             {
                 _modeInit[key] = false;
                 _modeData[key] = new List<object>();
@@ -75,34 +75,34 @@ namespace AssetViewer
                     bool find = false;
                     for (int j = 0; j < _modeData[mode].Count; j++)
                     {
-                        T overViewData = _modeData[mode][j] as T;
-                        if (overViewData.IsMatch(_infoList[i]))
+                        T viewerData = _modeData[mode][j] as T;
+                        if (viewerData.IsMatch(_infoList[i]))
                         {
                             find = true;
-                            overViewData.AddObject(_infoList[i]);
+                            viewerData.AddObject(_infoList[i]);
                             break;
                         }
                     }
 
                     if (!find)
                     {
-                        T overViewData = (T)Activator.CreateInstance(typeof(T), _mode, _infoList[i]);
-                        overViewData.AddObject(_infoList[i]);
-                        _modeData[mode].Add(overViewData);
+                        T viewerData = (T)Activator.CreateInstance(typeof(T), _mode, _infoList[i]);
+                        viewerData.AddObject(_infoList[i]);
+                        _modeData[mode].Add(viewerData);
                     }
                 }
 
                 if (_healthInfoManager.GetEnableCondition(mode))
                 {
                     int validCount = 0; // config
-                    foreach (T overViewData in _modeData[mode])
+                    foreach (T viewerData in _modeData[mode])
                     {
                         foreach (object condition in _healthInfoManager.GetConditionList(mode))
                         {
-                            validCount += overViewData.GetMatchHealthCount(condition);
+                            validCount += viewerData.GetMatchHealthCount(condition);
                         }
                     }
-                    _modeHealth[mode] = new Health(OverviewTableConst.GetHealthState(_healthInfoManager.GetThreshold(mode), validCount), _healthInfoManager.GetTip(mode), _healthInfoManager.GetThreshold(mode), validCount);
+                    _modeHealth[mode] = new Health(ViewerConst.GetHealthState(_healthInfoManager.GetThreshold(mode), validCount), _healthInfoManager.GetTip(mode), _healthInfoManager.GetThreshold(mode), validCount);
                 }
                 else
                 {
@@ -136,7 +136,7 @@ namespace AssetViewer
         {
             _dataTable.ClearColumns();
 
-            foreach (var columnType in _overviewModeManager.GetDataTable(_mode))
+            foreach (var columnType in _viewerModeManager.GetDataTable(_mode))
             {
                 _dataTable.AddColumn(columnType.colDataPropertyName, columnType.colTitleText, columnType.widthByPercent, columnType.alignment, columnType.fmt);
             }
@@ -146,7 +146,7 @@ namespace AssetViewer
         {
             _showTable.ClearColumns();
 
-            foreach (var columnType in _overviewModeManager.GetShowTable(_mode))
+            foreach (var columnType in _viewerModeManager.GetShowTable(_mode))
             {
                 _showTable.AddColumn(columnType.colDataPropertyName, columnType.colTitleText, columnType.widthByPercent, columnType.alignment, columnType.fmt);
             }
@@ -155,15 +155,15 @@ namespace AssetViewer
         #region event
         public void OnDataSelected(object selected, int col)
         {
-            T overViewData = selected as T;
-            if (overViewData == null)
+            T viewerData = selected as T;
+            if (viewerData == null)
             {
                 return;
             }
 
             if (_showTable != null)
             {
-                _showTable.RefreshData(overViewData.GetObject());
+                _showTable.RefreshData(viewerData.GetObject());
             }
         }
 
@@ -220,7 +220,7 @@ namespace AssetViewer
                 GUILayout.BeginHorizontal(TableStyles.Toolbar);
                 {
                     GUILayout.Label("Mode: ", GUILayout.Width(100));
-                    string[] mode = _overviewModeManager.GetMode();
+                    string[] mode = _viewerModeManager.GetMode();
                     rebuild = SwitchMode(mode[GUILayout.SelectionGrid(Array.IndexOf(mode, _mode), mode, mode.Length, TableStyles.ToolbarButton)]) || rebuild;
                 }
                 GUILayout.EndHorizontal();
@@ -231,17 +231,17 @@ namespace AssetViewer
                     if (_modeHealth.ContainsKey(_mode))
                     {
                         StringBuilder sb = new StringBuilder(100);
-                        sb.Append(OverviewTableConst.GetHealthStateDesc(_modeHealth[_mode].State));
+                        sb.Append(ViewerConst.GetHealthStateDesc(_modeHealth[_mode].State));
                         sb.Append(_modeHealth[_mode].Desc);
                         if (_modeHealth[_mode].State != Health.HealthEnum.NONE)
                         {
                             if (_modeHealth[_mode].Threshold > 0)
                             {
-                                sb.Append(string.Format(OverviewTableString.Recommand, _modeHealth[_mode].Threshold, _modeHealth[_mode].Value));
+                                sb.Append(string.Format(ViewerTableString.Recommand, _modeHealth[_mode].Threshold, _modeHealth[_mode].Value));
                             }
                             else
                             {
-                                sb.Append(string.Format(OverviewTableString.RecommandCurrent, _modeHealth[_mode].Value));
+                                sb.Append(string.Format(ViewerTableString.RecommandCurrent, _modeHealth[_mode].Value));
                             }
                         }
                         else
@@ -260,7 +260,7 @@ namespace AssetViewer
                     }
                     else
                     {
-                        EditorGUILayout.HelpBox(OverviewTableString.NotInitTip, MessageType.Warning);
+                        EditorGUILayout.HelpBox(ViewerTableString.NotInitTip, MessageType.Warning);
                     }
                 }
 
@@ -277,7 +277,5 @@ namespace AssetViewer
             }
             GUILayout.EndVertical();
         }
-
     }
-
 }

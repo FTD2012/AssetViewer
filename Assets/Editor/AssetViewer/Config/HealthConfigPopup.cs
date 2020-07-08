@@ -6,6 +6,7 @@ using UnityEditor;
 public class HealthConfigPopup : PopupWindowContent
 {
     public static string[] s_healthConfigs;
+
     private static int s_CurrentMode = -1;
 
     public static int s_currentMode
@@ -73,6 +74,4 @@ public class HealthConfigPopup : PopupWindowContent
         var windowSize = new Vector2(100, s_healthConfigs.Length * 16);
         return windowSize;
     }
-
-
 }

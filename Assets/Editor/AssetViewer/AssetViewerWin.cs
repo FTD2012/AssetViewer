@@ -5,7 +5,7 @@ using System;
 
 namespace AssetViewer
 {
-    enum OverviewWinType
+    public enum ViewerType
     {
         Texture,
         Model,
@@ -16,91 +16,102 @@ namespace AssetViewer
 
     public class AssetViewerWin : EditorWindow
     {
-        private TextureOverviewViewer _textureViewerr;
-        private ModelOverviewViewer _modelViewer;
-        private ParticleOverviewViewer _particleViewer;
-        private ShaderOverviewViewer _shaderViewer;
-        private AudioOverviewViewer _audioViewer;
-        private OverviewWinType _currentMode = OverviewWinType.Texture;
+        private TextureViewer _textureViewerr;
+        private ModelViewer _modelViewer;
+        private ParticleViewer _particleViewer;
+        private ShaderViewer _shaderViewer;
+        private AudioViewer _audioViewer;
+        private ViewerType _currentMode = ViewerType.Texture;
         private KeyCode _pressedKey;
 
         [MenuItem("Window/AssetViewer " + EditorHotkeys.Ctrl_ + "X")]
-        static void Create()
+        private static void Create()
         {
             AssetViewerWin resourceInfoWin = GetWindow<AssetViewerWin>();
             resourceInfoWin.minSize = new Vector2(800, 450);
             resourceInfoWin.titleContent = new GUIContent("AssetViewer");
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
-            _textureViewerr = new TextureOverviewViewer(this);
-            _modelViewer = new ModelOverviewViewer(this);
-            _particleViewer = new ParticleOverviewViewer(this);
-            _shaderViewer = new ShaderOverviewViewer(this);
-            _audioViewer = new AudioOverviewViewer(this);
+            _textureViewerr = new TextureViewer(this);
+            _modelViewer = new ModelViewer(this);
+            _particleViewer = new ParticleViewer(this);
+            _shaderViewer = new ShaderViewer(this);
+            _audioViewer = new AudioViewer(this);
 
             InitHealthData();
         }
 
-        void InitHealthData()
+        private void InitHealthData()
         {
             HealthConfig.Instance().Init();
             HealthConfigPopup.s_healthConfigs = HealthConfig.Instance().GetHealthConfigName();
             LoadHealthConfig();
         }
 
-        void LoadHealthConfig()
+        private void LoadHealthConfig()
         {
             string configName = HealthConfigPopup.s_healthConfigs[HealthConfigPopup.s_currentMode];
             HealthConfig.ConfigJson configJson = HealthConfig.Instance().GetConfig(configName);
 
-            // Texture
-            OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().Clear();
-            foreach (string mode in OverviewTableConst.GetSingletonInstance<TextureOverviewModeManager>().GetMode())
+            // ------------------------------------------------Texture------------------------------------------------
+            ViewerConst.GetSingletonInstance<TextureHealthInfoManager>().Clear();
+            foreach (string mode in ViewerConst.GetSingletonInstance<TextureViewerModeManager>().GetMode())
             {
                 HealthConfig.ModeConfig modeConfig = configJson.GetModeConfig("Texture", mode);
                 if (modeConfig != null)
                 {
-                    OverviewTableConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
+                    ViewerConst.GetSingletonInstance<TextureHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
                 }
             }
 
-            // Model
-            OverviewTableConst.GetSingletonInstance<ModelHealthInfoManager>().Clear();
-            foreach (string mode in OverviewTableConst.GetSingletonInstance<ModelOverviewModeManager>().GetMode())
+            // ------------------------------------------------Model------------------------------------------------
+            ViewerConst.GetSingletonInstance<ModelHealthInfoManager>().Clear();
+            foreach (string mode in ViewerConst.GetSingletonInstance<ModelViewerModeManager>().GetMode())
             {
                 HealthConfig.ModeConfig modeConfig = configJson.GetModeConfig("Model", mode);
                 if (modeConfig != null)
                 {
-                    OverviewTableConst.GetSingletonInstance<ModelHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
+                    ViewerConst.GetSingletonInstance<ModelHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
                 }
             }
 
-            // Particle
-            OverviewTableConst.GetSingletonInstance<ParticleHealthInfoManager>().Clear();
-            foreach (string mode in OverviewTableConst.GetSingletonInstance<ParticleOverviewModeManager>().GetMode())
+            // ------------------------------------------------Particle------------------------------------------------
+            ViewerConst.GetSingletonInstance<ParticleHealthInfoManager>().Clear();
+            foreach (string mode in ViewerConst.GetSingletonInstance<ParticleViewerModeManager>().GetMode())
             {
                 HealthConfig.ModeConfig modeConfig = configJson.GetModeConfig("Particle", mode);
                 if (modeConfig != null)
                 {
-                    OverviewTableConst.GetSingletonInstance<ParticleHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
+                    ViewerConst.GetSingletonInstance<ParticleHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
                 }
             }
 
-            // Shader
-            OverviewTableConst.GetSingletonInstance<ShaderHealthInfoManager>().Clear();
-            foreach (string mode in OverviewTableConst.GetSingletonInstance<ShaderOverviewModeManager>().GetMode())
+            // ------------------------------------------------Shader------------------------------------------------
+            ViewerConst.GetSingletonInstance<ShaderHealthInfoManager>().Clear();
+            foreach (string mode in ViewerConst.GetSingletonInstance<ShaderViewerModeManager>().GetMode())
             {
                 HealthConfig.ModeConfig modeConfig = configJson.GetModeConfig("Shader", mode);
                 if (modeConfig != null)
                 {
-                    OverviewTableConst.GetSingletonInstance<ShaderHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
+                    ViewerConst.GetSingletonInstance<ShaderHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
+                }
+            }
+
+            // ------------------------------------------------Audio------------------------------------------------
+            ViewerConst.GetSingletonInstance<AudioHealthInfoManager>().Clear();
+            foreach (string mode in ViewerConst.GetSingletonInstance<AudioViewerModeManager>().GetMode())
+            {
+                HealthConfig.ModeConfig modeConfig = configJson.GetModeConfig("Audio", mode);
+                if (modeConfig != null)
+                {
+                    ViewerConst.GetSingletonInstance<AudioHealthInfoManager>().AddHealthInfo(mode, modeConfig.Enable, modeConfig.Tip, modeConfig.ConfigValue, modeConfig.Condition);
                 }
             }
         }
 
-        void Update()
+        private void Update()
         {
             if (Input.GetKeyUp(KeyCode.F5) || Input.GetKeyDown(KeyCode.F5)) // I don't know why this not working.
             {
@@ -108,39 +119,39 @@ namespace AssetViewer
             }
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             GUILayout.BeginHorizontal(TableStyles.Toolbar);
             {
-                _currentMode = (OverviewWinType)GUILayout.SelectionGrid((int)_currentMode, Enum.GetNames(typeof(OverviewWinType)), Enum.GetNames(typeof(OverviewWinType)).Length, TableStyles.ToolbarButton);
+                _currentMode = (ViewerType)GUILayout.SelectionGrid((int)_currentMode, Enum.GetNames(typeof(ViewerType)), Enum.GetNames(typeof(ViewerType)).Length, TableStyles.ToolbarButton);
             }
             GUILayout.EndHorizontal();
 
             Rect viewRect = new Rect(0, TableConst.TopBarHeight, position.width, position.height - TableConst.TopBarHeight);
-            if (_currentMode == OverviewWinType.Texture)
+            if (_currentMode == ViewerType.Texture)
             {
                 _textureViewerr.Draw(viewRect, _pressedKey);
             }
-            else if (_currentMode == OverviewWinType.Model)
+            else if (_currentMode == ViewerType.Model)
             {
                 _modelViewer.Draw(viewRect, _pressedKey);
             }
-            else if (_currentMode == OverviewWinType.Particle)
+            else if (_currentMode == ViewerType.Particle)
             {
                 _particleViewer.Draw(viewRect, _pressedKey);
             }
-            else if (_currentMode == OverviewWinType.Shader)
+            else if (_currentMode == ViewerType.Shader)
             {
                 _shaderViewer.Draw(viewRect, _pressedKey);
             }
-            else if (_currentMode == OverviewWinType.Audio)
+            else if (_currentMode == ViewerType.Audio)
             {
                 _audioViewer.Draw(viewRect, _pressedKey);
             }
             _pressedKey = KeyCode.None;
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();

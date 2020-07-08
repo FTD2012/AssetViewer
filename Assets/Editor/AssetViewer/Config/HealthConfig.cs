@@ -10,21 +10,6 @@ namespace AssetViewer
         private readonly string Prefix = "HealthConfig-";
         private readonly string Extension = ".json";
 
-        public class TextureJson
-        {
-            public int ReadWrite;
-            public int MipMap;
-            public int Resolution;
-            public int ResolutionCount;
-            public int Trilinear;
-        }
-
-        public class ParticleJson
-        {
-            public int MaxParticle;
-            public int MaxParticleCount;
-        }
-
         public class ModeConfig
         {
             public string ModeName;
@@ -44,8 +29,6 @@ namespace AssetViewer
         {
             public string Name;
             public List<WinTypeConfig> WinTypeConfig;
-            //public TextureJson Texture;
-            //public ParticleJson Particle;
 
             public ModeConfig GetModeConfig(string winTypeConfigName, string modeConfigName)
             {
@@ -76,7 +59,7 @@ namespace AssetViewer
 
         public void InitFromFile()
         {
-            string[] directories = Directory.GetFiles(OverviewConfig.HealthConfigPath);
+            string[] directories = Directory.GetFiles(ViewerConfig.HealthConfigPath);
             foreach (string directory in directories)
             {
                 string fileName = Path.GetFileNameWithoutExtension(directory);

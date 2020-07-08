@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AssetViewer
 {
-    public class TextureOverviewData : OverviewData
+    public class TextureViewerData : ViewerData
     {
         /// Don't modify variable name
         public int Memory;
@@ -21,11 +21,11 @@ namespace AssetViewer
         public int Height;
         public FilterMode FilterMode;
 
-        private TextureOverviewMode _mode;
+        private TextureViewerMode _mode;
 
-        public TextureOverviewData(string mode, TextureInfo texInfo)
+        public TextureViewerData(string mode, TextureInfo texInfo)
         {
-            _mode = (TextureOverviewMode)Enum.Parse(typeof(TextureOverviewMode), mode);
+            _mode = (TextureViewerMode)Enum.Parse(typeof(TextureViewerMode), mode);
             ReadWriteEnable = texInfo.ReadWriteEnable;
             MipmapEnable = texInfo.MipmapEnable;
             ImportType = texInfo.ImportType;
@@ -33,8 +33,8 @@ namespace AssetViewer
             AndroidFormat = texInfo.AndroidFormat;
             IosFormat = texInfo.IosFormat;
             WidthAndHeight = texInfo.Width == texInfo.Height;
-            SizeIndex = OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
-            SizeStr = OverviewTableConst.TextureSizeStr[SizeIndex];
+            SizeIndex = ViewerConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
+            SizeStr = ViewerConst.TextureSizeStr[SizeIndex];
             Width = texInfo.Width;
             Height = texInfo.Height;
             FilterMode = texInfo.FilterMode;
@@ -49,23 +49,23 @@ namespace AssetViewer
         {
             switch (_mode)
             {
-                case TextureOverviewMode.ReadWrite:
+                case TextureViewerMode.ReadWrite:
                     return ReadWriteEnable == texInfo.ReadWriteEnable;
-                case TextureOverviewMode.MipMap:
+                case TextureViewerMode.MipMap:
                     return MipmapEnable == texInfo.MipmapEnable;
-                case TextureOverviewMode.Type:
+                case TextureViewerMode.Type:
                     return ImportType == texInfo.ImportType;
-                case TextureOverviewMode.Resolution:
-                    return SizeIndex == OverviewTableConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
-                case TextureOverviewMode.WidthVSHeight:
+                case TextureViewerMode.Resolution:
+                    return SizeIndex == ViewerConst.GetTextureSizeIndex(texInfo.Width, texInfo.Height);
+                case TextureViewerMode.WidthVSHeight:
                     return WidthAndHeight == (texInfo.Width == texInfo.Height);
-                case TextureOverviewMode.StandaloneFormat:
+                case TextureViewerMode.StandaloneFormat:
                     return StandaloneFormat == texInfo.StandaloneFormat;
-                case TextureOverviewMode.AndroidFormat:
+                case TextureViewerMode.AndroidFormat:
                     return AndroidFormat == texInfo.AndroidFormat;
-                case TextureOverviewMode.iOSFormat:
+                case TextureViewerMode.iOSFormat:
                     return IosFormat == texInfo.IosFormat;
-                case TextureOverviewMode.FilterMode:
+                case TextureViewerMode.FilterMode:
                     return FilterMode == texInfo.FilterMode;
             }
             return false;
@@ -74,36 +74,35 @@ namespace AssetViewer
         public override int GetMatchHealthCount(object obj)
         {
             int count = 0;
-
             foreach (TextureInfo texInfo in _object)
             {
                 switch (_mode)
                 {
-                    case TextureOverviewMode.ReadWrite:
+                    case TextureViewerMode.ReadWrite:
                         count += texInfo.ReadWriteEnable == (bool)obj ? 1 : 0;
                         break;
-                    case TextureOverviewMode.MipMap:
+                    case TextureViewerMode.MipMap:
                         count += texInfo.MipmapEnable == (bool)obj ? 1 : 0;
                         break;
-                    case TextureOverviewMode.Resolution:
+                    case TextureViewerMode.Resolution:
                         count += texInfo.Width * texInfo.Height >= (int)obj ? 1 : 0;
                         break;
-                    case TextureOverviewMode.FilterMode:
+                    case TextureViewerMode.FilterMode:
                         count += texInfo.FilterMode == (FilterMode)obj ? 1 : 0;
                         break;
-                    case TextureOverviewMode.Type:
+                    case TextureViewerMode.Type:
                         count += texInfo.ImportType == (TextureImporterType)obj ? 1 : 0;
                         break;
-                    case TextureOverviewMode.WidthVSHeight:
+                    case TextureViewerMode.WidthVSHeight:
                         count += (texInfo.Width == texInfo.Height) == (bool)obj ? 1 : 0;
                         break;
-                    case TextureOverviewMode.StandaloneFormat:
+                    case TextureViewerMode.StandaloneFormat:
                         count += texInfo.StandaloneFormat == (TextureImporterFormat)obj ? 1 : 0;
                         break;
-                    case TextureOverviewMode.AndroidFormat:
+                    case TextureViewerMode.AndroidFormat:
                         count += texInfo.AndroidFormat == (TextureImporterFormat)obj ? 1 : 0;
                         break;
-                    case TextureOverviewMode.iOSFormat:
+                    case TextureViewerMode.iOSFormat:
                         count += texInfo.IosFormat == (TextureImporterFormat)obj ? 1 : 0;
                         break;
                 }
@@ -118,15 +117,15 @@ namespace AssetViewer
 
         private void addObject(TextureInfo texInfo)
         {
-            if (_mode == TextureOverviewMode.AndroidFormat)
+            if (_mode == TextureViewerMode.AndroidFormat)
             {
                 Memory += texInfo.AndroidSize;
             }
-            else if (_mode == TextureOverviewMode.iOSFormat)
+            else if (_mode == TextureViewerMode.iOSFormat)
             {
                 Memory += texInfo.IosSize;
             }
-            else if (_mode == TextureOverviewMode.StandaloneFormat)
+            else if (_mode == TextureViewerMode.StandaloneFormat)
             {
                 Memory += texInfo.StandaloneSize;
             }

@@ -17,7 +17,6 @@ namespace EditorCommon
         public static string PlatformStandalone = "Standalone";
 
         public static string EDITOR_ANICLIP_NAME = "__preview__Take 001";
-        public static string[] EDITOR_CONTROL_NAMES = {"AnimatorStateMachine",
-            "AnimatorStateTransition", "AnimatorState", "AnimatorTransition", "BlendTree" };
+        public static string[] EDITOR_CONTROL_NAMES = {"AnimatorStateMachine", "AnimatorStateTransition", "AnimatorState", "AnimatorTransition", "BlendTree" };
     }
 }

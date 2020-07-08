@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AssetViewer
 {
-    public enum ModelOverviewModer
+    public enum ModelViewerModer
     {
         ReadWrite = 0,
         TriangleCount,
@@ -16,79 +16,79 @@ namespace AssetViewer
         MeshCompress
     }
 
-    public class ModelOverviewViewer : OverviewViewer<ModelOverviewData, ModelInfo, ModelOverviewModeManager, ModelHealthInfoManager>
+    public class ModelViewer : Viewer<ModelViewerData, ModelInfo, ModelViewerModeManager, ModelHealthInfoManager>
     {
-        public ModelOverviewViewer(EditorWindow hostWindow) : base(hostWindow)
+        public ModelViewer(EditorWindow hostWindow) : base(hostWindow)
         {
 
         }
     }
 
-    public class ModelOverviewModeManager : OverviewModeManager
+    public class ModelViewerModeManager : ViewerModeManager
     {
         public override string[] GetMode()
         {
-            return Enum.GetNames(typeof(ModelOverviewModer));
+            return Enum.GetNames(typeof(ModelViewerModer));
         }
 
-        public override ColumnType[] GetDataTable(string modelOverviewMode)
+        public override ColumnType[] GetDataTable(string modelViewerMode)
         {
-            ModelOverviewModer modelOverviewModeEnum = (ModelOverviewModer)Enum.Parse(typeof(ModelOverviewModer), modelOverviewMode);
-            switch (modelOverviewModeEnum)
+            ModelViewerModer modelViewerModeEnum = (ModelViewerModer)Enum.Parse(typeof(ModelViewerModer), modelViewerMode);
+            switch (modelViewerModeEnum)
             {
-                case ModelOverviewModer.ReadWrite:
+                case ModelViewerModer.ReadWrite:
                     return new ColumnType[] {
-                        new ColumnType("ReadWriteEnable", "R/W Enable", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case ModelOverviewModer.ImportMaterial:
+                        new ColumnType("ReadWriteEnable", "R/W Enable", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case ModelViewerModer.ImportMaterial:
                     return new ColumnType[] {
-                        new ColumnType("ImportMaterials", "ImportMaterials", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case ModelOverviewModer.OptimizeMesh:
+                        new ColumnType("ImportMaterials", "ImportMaterials", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case ModelViewerModer.OptimizeMesh:
                     return new ColumnType[] {
-                        new ColumnType("OptimizeMesh", "OptimizeMesh", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case ModelOverviewModer.MeshData:
+                        new ColumnType("OptimizeMesh", "OptimizeMesh", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case ModelViewerModer.MeshData:
                     return new ColumnType[] {
-                        new ColumnType("MeshDataStr", "MeshData", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case ModelOverviewModer.MeshCompress:
+                        new ColumnType("MeshDataStr", "MeshData", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case ModelViewerModer.MeshCompress:
                     return new ColumnType[] {
-                        new ColumnType("MeshCompression", "MeshCompression", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case ModelOverviewModer.VertexCount:
+                        new ColumnType("MeshCompression", "MeshCompression", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case ModelViewerModer.VertexCount:
                     return new ColumnType[] {
-                        new ColumnType("VertexRangeStr", "Vertex", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
-                case ModelOverviewModer.TriangleCount:
+                        new ColumnType("VertexRangeStr", "Vertex", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                case ModelViewerModer.TriangleCount:
                     return new ColumnType[] {
-                        new ColumnType("TriangleRangeStr", "Triangle", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Memory", "Memory", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
+                        new ColumnType("TriangleRangeStr", "Triangle", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Memory", "Memory", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 default:
                     throw new NotImplementedException();
             }
 
         }
 
-        public override ColumnType[] GetShowTable(string modelOverviewMode)
+        public override ColumnType[] GetShowTable(string modelViewerMode)
         {
-            ModelOverviewModer modelOverviewModeEnum = (ModelOverviewModer)Enum.Parse(typeof(ModelOverviewModer), modelOverviewMode);
-            switch (modelOverviewModeEnum)
+            ModelViewerModer modelViewerModeEnum = (ModelViewerModer)Enum.Parse(typeof(ModelViewerModer), modelViewerMode);
+            switch (modelViewerModeEnum)
             {
-                case ModelOverviewModer.ReadWrite:
-                case ModelOverviewModer.ImportMaterial:
-                case ModelOverviewModer.OptimizeMesh:
-                case ModelOverviewModer.MeshData:
-                case ModelOverviewModer.MeshCompress:
-                case ModelOverviewModer.VertexCount:
-                case ModelOverviewModer.TriangleCount:
+                case ModelViewerModer.ReadWrite:
+                case ModelViewerModer.ImportMaterial:
+                case ModelViewerModer.OptimizeMesh:
+                case ModelViewerModer.MeshData:
+                case ModelViewerModer.MeshCompress:
+                case ModelViewerModer.VertexCount:
+                case ModelViewerModer.TriangleCount:
                     return new ColumnType[] {
                         new ColumnType("RealPath", "Path", 0.6f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("MemSize", "Memory", 0.1f, TextAnchor.MiddleCenter, "<fmt_bytes>"),

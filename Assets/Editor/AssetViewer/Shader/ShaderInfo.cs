@@ -6,10 +6,9 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
+#pragma warning disable CS0436 // Type conflicts with imported type
 namespace AssetViewer
 {
-#pragma warning disable CS0436 // Type conflicts with imported type
-
     public class ShaderInfo : BaseInfo
     {
         public enum ShaderPlatformModes
@@ -158,7 +157,6 @@ namespace AssetViewer
                 MatchCollection matches = Regex.Matches(text, @"\b(sample|sample_b|sample_c|sample_c_lz|sample_d|sample_l|sampleinfo|samplepos)\b");
                 return matches.Count;
             }
-
         }
 
         public struct Pass
@@ -169,6 +167,7 @@ namespace AssetViewer
             // public string Blend;
             // public string ColorMask;
             public List<Variant> VariantList;
+
             public Pass(List<Variant> variantList)
             {
                 VariantList = variantList;
@@ -229,6 +228,7 @@ namespace AssetViewer
         {
             public Tags Tags;
             public List<Pass> PassList;
+
             public SubShader(List<Pass> passList, Tags tags)
             {
                 Tags = tags;
@@ -273,13 +273,12 @@ namespace AssetViewer
                 }
                 return count;
             }
-
         }
 
-        string shaderName;
-        // string Property;
-        List<SubShader> subShaderList;
-        UnityEditor.ShaderUtil.ShaderCompilerPlatformType shaderCompilerPlatformType;
+        private string shaderName;
+        // private string Property;
+        private List<SubShader> subShaderList;
+        private ShaderUtil.ShaderCompilerPlatformType shaderCompilerPlatformType;
 
         public static CompiledShaderInfo CreateCompiledShaderInfo(string shaderText)
         {
@@ -387,9 +386,6 @@ namespace AssetViewer
                 return "None";
             }
         }
-
     }
-
-#pragma warning restore CS0436 // Type conflicts with imported type
-
 }
+#pragma warning restore CS0436 // Type conflicts with imported type

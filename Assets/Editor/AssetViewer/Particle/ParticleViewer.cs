@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AssetViewer
 {
-    public enum ParticleOverviewMode
+    public enum ParticleViewerMode
     {
         MaxParticle = 0,
         Duration,
@@ -13,66 +13,66 @@ namespace AssetViewer
         Looping
     }
 
-    public class ParticleOverviewViewer : OverviewViewer<ParticleOverviewData, ParticleInfo, ParticleOverviewModeManager, ParticleHealthInfoManager>
+    public class ParticleViewer : Viewer<ParticleViewerData, ParticleInfo, ParticleViewerModeManager, ParticleHealthInfoManager>
     {
-        public ParticleOverviewViewer(EditorWindow hostWindow) : base(hostWindow)
+        public ParticleViewer(EditorWindow hostWindow) : base(hostWindow)
         {
 
         }
     }
 
-    public class ParticleOverviewModeManager : OverviewModeManager
+    public class ParticleViewerModeManager : ViewerModeManager
     {
         public override string[] GetMode()
         {
-            return Enum.GetNames(typeof(ParticleOverviewMode));
+            return Enum.GetNames(typeof(ParticleViewerMode));
         }
 
-        public override ColumnType[] GetDataTable(string particleOverviewMode)
+        public override ColumnType[] GetDataTable(string particleViewerMode)
         {
-            ParticleOverviewMode textureOverviewModeEnum = (ParticleOverviewMode)Enum.Parse(typeof(ParticleOverviewMode), particleOverviewMode);
-            switch (textureOverviewModeEnum)
+            ParticleViewerMode pariticleViewerModeEnum = (ParticleViewerMode)Enum.Parse(typeof(ParticleViewerMode), particleViewerMode);
+            switch (pariticleViewerModeEnum)
             {
-                case ParticleOverviewMode.MaxParticle:
+                case ParticleViewerMode.MaxParticle:
                     return new ColumnType[] {
-                        new ColumnType("SizeStr", "MaxParticle", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "")};
-                case ParticleOverviewMode.Duration:
+                        new ColumnType("SizeStr", "MaxParticle", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "")};
+                case ParticleViewerMode.Duration:
                     return new ColumnType[] {
-                        new ColumnType("DurtationStr", "Duration", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "")};
-                case ParticleOverviewMode.PlayOnAwake:
+                        new ColumnType("DurtationStr", "Duration", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "")};
+                case ParticleViewerMode.PlayOnAwake:
                     return new ColumnType[] {
-                        new ColumnType("PlayOnAwake", "PlayOnAwake", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "")};
-                case ParticleOverviewMode.Looping:
+                        new ColumnType("PlayOnAwake", "PlayOnAwake", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "")};
+                case ParticleViewerMode.Looping:
                     return new ColumnType[] {
-                        new ColumnType("Looping", "Looping", OverviewTableConst.LeftWidth, TextAnchor.MiddleCenter, ""),
-                        new ColumnType("Count", "Count", (1.0f - OverviewTableConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "")};
+                        new ColumnType("Looping", "Looping", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", (1.0f - ViewerConst.LeftWidth) / 2.0f, TextAnchor.MiddleCenter, "")};
 
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        public override ColumnType[] GetShowTable(string particleOverviewMode)
+        public override ColumnType[] GetShowTable(string particleViewerMode)
         {
-            ParticleOverviewMode textureOverviewModeEnum = (ParticleOverviewMode)Enum.Parse(typeof(ParticleOverviewMode), particleOverviewMode);
-            switch (textureOverviewModeEnum)
+            ParticleViewerMode particleViewerModeEnum = (ParticleViewerMode)Enum.Parse(typeof(ParticleViewerMode), particleViewerMode);
+            switch (particleViewerModeEnum)
             {
-                case ParticleOverviewMode.MaxParticle:
+                case ParticleViewerMode.MaxParticle:
                     return new ColumnType[] {
                         new ColumnType("RealPath", "Path", 0.8f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("MaxParticles", "MaxParticle", 0.2f, TextAnchor.MiddleCenter, "")};
-                case ParticleOverviewMode.Duration:
+                case ParticleViewerMode.Duration:
                     return new ColumnType[] {
                         new ColumnType("RealPath", "Path", 0.8f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("Duration", "Duration", 0.2f, TextAnchor.MiddleCenter, "")};
-                case ParticleOverviewMode.PlayOnAwake:
+                case ParticleViewerMode.PlayOnAwake:
                     return new ColumnType[] {
                         new ColumnType("RealPath", "Path", 0.8f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("PlayOnAwake", "PlayOnAwake", 0.2f, TextAnchor.MiddleCenter, "")};
-                case ParticleOverviewMode.Looping:
+                case ParticleViewerMode.Looping:
                     return new ColumnType[] {
                         new ColumnType("RealPath", "Path", 0.8f, TextAnchor.MiddleLeft, ""),
                         new ColumnType("Looping", "Looping", 0.2f, TextAnchor.MiddleCenter, "")};
@@ -86,5 +86,4 @@ namespace AssetViewer
     {
 
     }
-
 }

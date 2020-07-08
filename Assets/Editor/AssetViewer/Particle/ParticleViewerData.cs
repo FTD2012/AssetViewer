@@ -1,8 +1,8 @@
 ﻿using System;
 
 namespace AssetViewer
-{    
-    public class ParticleOverviewData : OverviewData
+{
+    public class ParticleViewerData : ViewerData
     {
         /// Don't modify variable name
         public int MaxParticle;
@@ -14,17 +14,17 @@ namespace AssetViewer
         public bool PlayOnAwake;
         public bool Looping;
 
-        private ParticleOverviewMode _mode;
+        private ParticleViewerMode _mode;
 
-        public ParticleOverviewData(string mode, ParticleInfo particleInfo)
+        public ParticleViewerData(string mode, ParticleInfo particleInfo)
         {
-            _mode = (ParticleOverviewMode)Enum.Parse(typeof(ParticleOverviewMode), mode);
+            _mode = (ParticleViewerMode)Enum.Parse(typeof(ParticleViewerMode), mode);
             MaxParticle = particleInfo.MaxParticles;
-            SizeIndex = OverviewTableConst.GetParticleSizeIndex(particleInfo.MaxParticles);
-            SizeStr = OverviewTableConst.ParticleSizeStr[SizeIndex];
+            SizeIndex = ViewerConst.GetParticleSizeIndex(particleInfo.MaxParticles);
+            SizeStr = ViewerConst.ParticleSizeStr[SizeIndex];
             Duration = particleInfo.Duration;
-            DurationIndex = OverviewTableConst.GetDurationIndex(particleInfo.Duration);
-            DurtationStr = OverviewTableConst.DurationSizeStr[DurationIndex];
+            DurationIndex = ViewerConst.GetDurationIndex(particleInfo.Duration);
+            DurtationStr = ViewerConst.DurationSizeStr[DurationIndex];
             PlayOnAwake = particleInfo.PlayOnAwake;
             Looping = particleInfo.Looping;
         }
@@ -34,18 +34,17 @@ namespace AssetViewer
             return isMatch((ParticleInfo)modelInfo);
         }
 
-
         private bool isMatch(ParticleInfo particleInfo)
         {
             switch (_mode)
             {
-                case ParticleOverviewMode.MaxParticle:
-                    return SizeIndex == OverviewTableConst.GetParticleSizeIndex(particleInfo.MaxParticles);
-                case ParticleOverviewMode.Duration:
-                    return DurationIndex == OverviewTableConst.GetDurationIndex(particleInfo.Duration);
-                case ParticleOverviewMode.PlayOnAwake:
+                case ParticleViewerMode.MaxParticle:
+                    return SizeIndex == ViewerConst.GetParticleSizeIndex(particleInfo.MaxParticles);
+                case ParticleViewerMode.Duration:
+                    return DurationIndex == ViewerConst.GetDurationIndex(particleInfo.Duration);
+                case ParticleViewerMode.PlayOnAwake:
                     return PlayOnAwake == particleInfo.PlayOnAwake;
-                case ParticleOverviewMode.Looping:
+                case ParticleViewerMode.Looping:
                     return Looping == particleInfo.Looping;
             }
             return false;
@@ -54,26 +53,24 @@ namespace AssetViewer
         public override int GetMatchHealthCount(object obj)
         {
             int count = 0;
-
             foreach (ParticleInfo particleInfo in _object)
             {
                 switch (_mode)
                 {
-                    case ParticleOverviewMode.MaxParticle:
+                    case ParticleViewerMode.MaxParticle:
                         count += particleInfo.MaxParticles > (int)obj ? 1 : 0;
                         break;
-                    case ParticleOverviewMode.Duration:
+                    case ParticleViewerMode.Duration:
                         count += particleInfo.Duration > (int)obj ? 1 : 0;
                         break;
-                    case ParticleOverviewMode.PlayOnAwake:
+                    case ParticleViewerMode.PlayOnAwake:
                         count += particleInfo.PlayOnAwake == (bool)obj ? 1 : 0;
                         break;
-                    case ParticleOverviewMode.Looping:
+                    case ParticleViewerMode.Looping:
                         count += particleInfo.Looping == (bool)obj ? 1 : 0;
                         break;
                 }
             }
-
             return count;
         }
 
