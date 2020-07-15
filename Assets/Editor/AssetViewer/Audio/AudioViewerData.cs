@@ -7,6 +7,8 @@ namespace AssetViewer
     {
         /// Don't modify variable name
         public int Memory;
+        public int TotalOriginSize;
+        public int TotalCompressedSize;
         public bool ForceToMono;
         public bool LoadInBackground;
         public bool Ambisonic;
@@ -16,6 +18,9 @@ namespace AssetViewer
         public AudioCompressionFormat StandAloneAudioCompressionFormat;
         public AudioCompressionFormat AndroidAudioCompressionFormat;
         public AudioCompressionFormat iOSAudioCompressionFormat;
+        public int OriginSize;
+        public int CompressedSize;
+        public string All;
 
         private AudioViewerMode _mode;
 
@@ -31,6 +36,9 @@ namespace AssetViewer
             StandAloneAudioCompressionFormat = audioInfo.StandAloneAudioCompressionFormat;
             AndroidAudioCompressionFormat = audioInfo.AndroidAudioCompressionFormat;
             iOSAudioCompressionFormat = audioInfo.iOSAudioCompressionFormat;
+            OriginSize = audioInfo.OriginSize;
+            CompressedSize = audioInfo.CompressedSize;
+            All = "All";
         }
 
         public override bool IsMatch(BaseInfo audioInfo)
@@ -42,6 +50,8 @@ namespace AssetViewer
         {
             switch (_mode)
             {
+                case AudioViewerMode.Size:
+                    return true;
                 case AudioViewerMode.MONO:
                     return ForceToMono == audioInfo.ForceToMono;
                 case AudioViewerMode.LoadInBackground:
@@ -67,6 +77,9 @@ namespace AssetViewer
             {
                 switch (_mode)
                 {
+                    case AudioViewerMode.Size:
+                        count += audioInfo.CompressedSize > (int)obj ? 1 : 0;
+                        break;
                     case AudioViewerMode.MONO:
                         count += audioInfo.ForceToMono == (bool)obj ? 1 : 0;
                         break;
@@ -100,6 +113,8 @@ namespace AssetViewer
 
         private void addObject(AudioInfo audioInfo)
         {
+            TotalOriginSize += audioInfo.OriginSize;
+            TotalCompressedSize += audioInfo.CompressedSize;
             Memory += audioInfo.MemSize;
             _object.Add(audioInfo);
             Count++;

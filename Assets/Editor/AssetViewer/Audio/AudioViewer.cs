@@ -7,7 +7,8 @@ namespace AssetViewer
 {
     public enum AudioViewerMode
     {
-        MONO = 0,
+        Size = 0,
+        MONO,
         LoadInBackground,
         Ambisonic,
         AndroidLoadType,
@@ -36,6 +37,12 @@ namespace AssetViewer
             AudioViewerMode audioViewerModeEnum = (AudioViewerMode)Enum.Parse(typeof(AudioViewerMode), audioViewerMode);
             switch (audioViewerModeEnum)
             {
+                case AudioViewerMode.Size:
+                    return new ColumnType[] {
+                        new ColumnType("All", "All", 0.2f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("Count", "Count", 0.2f, TextAnchor.MiddleCenter, ""),
+                        new ColumnType("TotalOriginSize", "OriginSize", 0.3f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
+                        new ColumnType("TotalCompressedSize", "CompressedSize", 0.3f, TextAnchor.MiddleCenter, "<fmt_bytes>")};
                 case AudioViewerMode.MONO:
                     return new ColumnType[] {
                         new ColumnType("ForceToMono", "Force to Mono", ViewerConst.LeftWidth, TextAnchor.MiddleCenter, ""),
@@ -81,6 +88,11 @@ namespace AssetViewer
             AudioViewerMode audioViewerModeEnum = (AudioViewerMode)Enum.Parse(typeof(AudioViewerMode), audioViewerMode);
             switch (audioViewerModeEnum)
             {
+                case AudioViewerMode.Size:
+                    return new ColumnType[] {
+                        new ColumnType("Path", "Path", 0.6f, TextAnchor.MiddleLeft, ""),
+                        new ColumnType("OriginSize", "OriginSize", 0.2f, TextAnchor.MiddleCenter, "<fmt_bytes>"),
+                        new ColumnType("CompressedSize", "CompressedSize", 0.2f, TextAnchor.MiddleCenter, "<fmt_bytes>") };
                 case AudioViewerMode.MONO:
                     return new ColumnType[] {
                         new ColumnType("Path", "Path", 0.6f, TextAnchor.MiddleLeft, ""),

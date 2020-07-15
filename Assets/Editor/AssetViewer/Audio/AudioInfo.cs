@@ -1,5 +1,6 @@
 ﻿using EditorCommon;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ namespace AssetViewer
         public AudioCompressionFormat StandAloneAudioCompressionFormat;
         public AudioCompressionFormat AndroidAudioCompressionFormat;
         public AudioCompressionFormat iOSAudioCompressionFormat;
+        public int OriginSize;
+        public int CompressedSize;
 
         private static int _loadCount = 0;
         private static Dictionary<string, AudioInfo> _dictAudioInfo = new Dictionary<string, AudioInfo>();
@@ -55,6 +58,8 @@ namespace AssetViewer
             audioInfo.StandAloneAudioCompressionFormat = audioImporter.GetOverrideSampleSettings("Standalone").compressionFormat;
             audioInfo.AndroidAudioCompressionFormat = audioImporter.GetOverrideSampleSettings("Android").compressionFormat;
             audioInfo.iOSAudioCompressionFormat = audioImporter.GetOverrideSampleSettings("iOS").compressionFormat;
+            audioInfo.OriginSize = ViewerConst.GetInternalValue<int>(audioImporter, "get_origSize", null);
+            audioInfo.CompressedSize = ViewerConst.GetInternalValue<int>(audioImporter, "get_compSize", null);
 
             if (++_loadCount % 256 == 0)
             {

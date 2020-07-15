@@ -219,5 +219,21 @@ namespace AssetViewer
         {
             return (T)typeof(Singleton<>).MakeGenericType(typeof(T)).GetMethod("Instance", BindingFlags.Static | BindingFlags.Public).Invoke(null, null);
         }
+
+        public static T GetInternalValue<T>(object target, string method, object[] parameters)
+        {
+            MethodInfo methodInfo = GetInternalMethod(target.GetType(), method);
+            if (methodInfo != null)
+            {
+                return (T)methodInfo.Invoke(target, parameters);
+            }
+            return default(T);
+        }
+
+        public static MethodInfo GetInternalMethod(Type type, string method)
+        {
+            MethodInfo methodInfo = type.GetMethod(method, BindingFlags.Instance | BindingFlags.NonPublic);
+            return methodInfo;
+        }
     }
 }

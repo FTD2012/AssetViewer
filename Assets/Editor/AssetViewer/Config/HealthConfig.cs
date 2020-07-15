@@ -8,7 +8,7 @@ namespace AssetViewer
     public class HealthConfig : Singleton<HealthConfig>
     {
         private readonly string Prefix = "HealthConfig-";
-        private readonly string Extension = ".json";
+        private readonly string Extension = "";
 
         public class ModeConfig
         {

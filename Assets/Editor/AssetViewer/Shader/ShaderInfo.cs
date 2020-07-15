@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
@@ -11,6 +12,30 @@ namespace AssetViewer
 {
     public class ShaderInfo : BaseInfo
     {
+        public enum ShaderCompilerPlatformType
+        {
+            OpenGL = 0,
+            D3D9,
+            Xbox360,
+            PS3,
+            D3D11,
+            OpenGLES20,
+            OpenGLES20Desktop,
+            Flash,
+            D3D11_9x,
+            OpenGLES30,
+            PSVita,
+            PS4,
+            XboxOne,
+            PSM,
+            Metal,
+            OpenGLCore,
+            N3DS,
+            WiiU,
+            Vulkan,
+            Switch,
+            Count
+        }
         public enum ShaderPlatformModes
         {
             Current_graphics_device = 0,
@@ -57,13 +82,15 @@ namespace AssetViewer
             Shader shader = AssetDatabase.LoadAssetAtPath<Shader>(assetPath);
             string shaderText = File.ReadAllText(assetPath);
 
-            ShaderUtil.OpenCompiledShader(shader, (int)ShaderPlatformModes.Custom, 1 << (int)ShaderUtil.ShaderCompilerPlatformType.D3D11, false);
+            //ShaderUtil.OpenCompiledShader(shader, (int)ShaderPlatformModes.Custom, 1 << (int)ShaderUtil.ShaderCompilerPlatformType.D3D11, false);
+
+            typeof(ShaderUtil).GetMethod("OpenCompiledShader", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { shader, (int)ShaderPlatformModes.Custom, 1 << (int)ShaderCompilerPlatformType.D3D11, false });
             try
             {
                 CompiledShaderInfo compiledShaderInfo = CompiledShaderInfo.CreateCompiledShaderInfo(shaderText);
                 shaderInfo.Path = assetPath;
-                shaderInfo.MaxLOD = ShaderUtil.GetLOD(shader);
-                shaderInfo.Variant = ShaderUtil.GetVariantCount(shader, true);
+                //shaderInfo.MaxLOD = ShaderUtil.GetLOD(shader);
+                //shaderInfo.Variant = ShaderUtil.GetVariantCount(shader, true);
                 shaderInfo.Property = ShaderUtil.GetPropertyCount(shader);
                 shaderInfo.RenderQueue = shader.renderQueue;
                 shaderInfo.Pass = compiledShaderInfo.GetPass();
@@ -278,7 +305,7 @@ namespace AssetViewer
         private string shaderName;
         // private string Property;
         private List<SubShader> subShaderList;
-        private ShaderUtil.ShaderCompilerPlatformType shaderCompilerPlatformType;
+        //private ShaderUtil.ShaderCompilerPlatformType shaderCompilerPlatformType;
 
         public static CompiledShaderInfo CreateCompiledShaderInfo(string shaderText)
         {

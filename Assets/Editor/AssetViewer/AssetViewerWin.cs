@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEngine;
-using EditorCommon;
 using System;
 
 namespace AssetViewer
@@ -24,7 +23,7 @@ namespace AssetViewer
         private ViewerType _currentMode = ViewerType.Texture;
         private KeyCode _pressedKey;
 
-        [MenuItem("Window/AssetViewer " + EditorHotkeys.Ctrl_ + "X")]
+        [MenuItem("Window/AssetViewer " + EditorCommon.EditorHotkeys.Ctrl_ + "X")]
         private static void Create()
         {
             AssetViewerWin resourceInfoWin = GetWindow<AssetViewerWin>();
